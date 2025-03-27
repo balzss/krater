@@ -25,7 +25,7 @@ copy(
     })),
     null,
     2
-  ).replace(/^[\t ]*"[^:\n\r]+(?<!\\)":/gm, (match) => match.replace(/"/g, '')).slice(1, -2).concat(',')
+  ).replace(/^[\t ]*"[^:\n\r]+(?<!\\)":/gm, (match) => match.replace(/"/g, '')).slice(2, -2).concat(',')
 )
  */
 
@@ -89,6 +89,46 @@ export const artists: Artist[] = [
     displayName: 'Rhythm & Sound',
     rymId: '[Artist11718]',
     rymUrl: 'https://rateyourmusic.com/artist/rhythm-and-sound',
+  },
+  {
+    displayName: 'Jan Jelinek',
+    rymId: '[Artist11189]',
+    rymUrl: 'https://rateyourmusic.com/artist/jan-jelinek',
+  },
+  {
+    displayName: 'Jon Hopkins',
+    rymId: '[Artist138451]',
+    rymUrl: 'https://rateyourmusic.com/artist/jon-hopkins',
+  },
+  {
+    displayName: 'Clark',
+    rymId: '[Artist25176]',
+    rymUrl: 'https://rateyourmusic.com/artist/clark_f1',
+  },
+  {
+    displayName: 'Smokepurpp',
+    rymId: '[Artist1224097]',
+    rymUrl: 'https://rateyourmusic.com/artist/smokepurpp',
+  },
+  {
+    displayName: 'Pop Smoke',
+    rymId: '[Artist1399827]',
+    rymUrl: 'https://rateyourmusic.com/artist/pop-smoke',
+  },
+  {
+    displayName: 'Denzel Curry',
+    rymId: '[Artist783766]',
+    rymUrl: 'https://rateyourmusic.com/artist/denzel-curry',
+  },
+  {
+    displayName: 'Intrusion',
+    rymId: '[Artist337636]',
+    rymUrl: 'https://rateyourmusic.com/artist/intrusion_f1',
+  },
+  {
+    displayName: 'Deepchord Presents Echospace',
+    rymId: '[Artist234382]',
+    rymUrl: 'https://rateyourmusic.com/artist/deepchord-presents-echospace',
   },
 ]
 
@@ -198,6 +238,78 @@ export const releases: Release[] = [
     cover: 'rhythm-and-sound-see-mi-yah-Cover-Art.webp',
     media: {
       spotify: 'https://open.spotify.com/album/3pk6hhImeji8Eovq724Sun',
+    },
+  },
+  {
+    artistRymIds: ['[Artist11189]'],
+    title: 'Loop-finding-jazz-records',
+    rymId: '[Album39421]',
+    cover: 'jan-jelinek-loop-finding-jazz-records-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6UK4EMYa7by9xwU4eeAoE4',
+    },
+  },
+  {
+    artistRymIds: ['[Artist138451]'],
+    title: 'Singularity',
+    rymId: '[Album9045088]',
+    cover: 'jon-hopkins-singularity-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1nvzBC1M3dlCMIxfUCBhlO',
+    },
+  },
+  {
+    artistRymIds: ['[Artist25176]'],
+    title: 'Body Riddle',
+    rymId: '[Album625814]',
+    cover: 'clark-body-riddle-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/04onGeB7bKwWHPPTXAiszV',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1224097]'],
+    title: 'Florida Jit',
+    rymId: '[Album10995144]',
+    cover: 'smokepurpp-florida-jit-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/3LAFsXbBJgFsh98uXIU2hB',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1399827]'],
+    title: 'Meet the Woo, Vol. 2',
+    rymId: '[Album11100300]',
+    cover: 'pop-smoke-meet-the-woo-vol-2-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/4MZnolldq7ciKKlbVDzLm5',
+    },
+  },
+  {
+    artistRymIds: ['[Artist783766]'],
+    title: 'Zuu',
+    rymId: '[Album10302259]',
+    cover: 'denzel-curry-zuu-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6PkSBdx19zarn4ae1D08gA',
+    },
+  },
+  {
+    artistRymIds: ['[Artist337636]'],
+    title: 'The Seduction of Silence',
+    rymId: '[Album2018066]',
+    cover: 'intrusion-the-seduction-of-silence-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0B5zNMsNTnaaXQVlfNA0Wd',
+    },
+  },
+  {
+    artistRymIds: ['[Artist234382]'],
+    title: 'Liumin',
+    rymId: '[Album2828068]',
+    cover: 'deepchord-presents-echospace-liumin-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/2sBtwfqFvOdUkRxs741VBW',
     },
   },
 ]
