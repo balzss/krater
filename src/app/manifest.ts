@@ -13,12 +13,12 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: '#1a1a1a',
     icons: [
       {
-        src: '/krater/krater.png',
+        src: '/krater/library-192.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        src: '/krater/krater.png',
+        src: '/krater/library-512.png',
         sizes: '512x512',
         type: 'image/png',
       },
