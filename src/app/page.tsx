@@ -31,17 +31,19 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8 w-full p-4 sm:p-16 justify-items-center">
-        {releases.map(({ artistRymIds, title, rymId, cover, media }) => (
-          <MusicTile
-            key={rymId}
-            cover={cover}
-            artists={artistRymIds.map(
-              (id) => artists.find((artist) => artist.rymId === id)?.displayName as string
-            )}
-            title={title}
-            media={media.spotify}
-          />
-        ))}
+        {releases
+          .sort(() => Math.random() - 0.5)
+          .map(({ artistRymIds, title, rymId, cover, media }) => (
+            <MusicTile
+              key={rymId}
+              cover={cover}
+              artists={artistRymIds.map(
+                (id) => artists.find((artist) => artist.rymId === id)?.displayName as string
+              )}
+              title={title}
+              media={media.spotify}
+            />
+          ))}
       </div>
     </div>
   )
