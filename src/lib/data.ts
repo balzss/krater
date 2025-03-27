@@ -1,10 +1,10 @@
-type Artist = {
+export type Artist = {
   rymId: string
   displayName: string
   rymUrl?: string
 }
 
-type Release = {
+export type Release = {
   artistRymIds: string[]
   title: string
   rymId?: string
