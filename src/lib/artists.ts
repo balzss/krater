@@ -284,4 +284,64 @@ export const artists: Artist[] = [
     rymId: '[Artist488168]',
     rymUrl: 'https://rateyourmusic.com/artist/forest-swords',
   },
+  {
+    displayName: 'Colin Stetson',
+    rymId: '[Artist120435]',
+    rymUrl: 'https://rateyourmusic.com/artist/colin-stetson',
+  },
+  {
+    displayName: 'Yagya',
+    rymId: '[Artist53999]',
+    rymUrl: 'https://rateyourmusic.com/artist/yagya',
+  },
+  {
+    displayName: 'Vladislav Delay',
+    rymId: '[Artist9185]',
+    rymUrl: 'https://rateyourmusic.com/artist/vladislav-delay',
+  },
+  {
+    displayName: 'Bugge Wesseltoft',
+    rymId: '[Artist8368]',
+    rymUrl: 'https://rateyourmusic.com/artist/bugge-wesseltoft',
+  },
+  {
+    displayName: 'Henrik Schwarz',
+    rymId: '[Artist155901]',
+    rymUrl: 'https://rateyourmusic.com/artist/henrik-schwarz',
+  },
+  {
+    displayName: 'BADBADNOTGOOD',
+    rymId: '[Artist729957]',
+    rymUrl: 'https://rateyourmusic.com/artist/badbadnotgood',
+  },
+  {
+    displayName: 'Ghostface Killah',
+    rymId: '[Artist2817]',
+    rymUrl: 'https://rateyourmusic.com/artist/ghostface-killah',
+  },
+  {
+    displayName: 'Killakikitt',
+    rymId: '[Artist420001]',
+    rymUrl: 'https://rateyourmusic.com/artist/killakikitt',
+  },
+  {
+    displayName: 'Crystal Castles',
+    rymId: '[Artist175798]',
+    rymUrl: 'https://rateyourmusic.com/artist/crystal-castles',
+  },
+  {
+    displayName: 'Janko Nilovic',
+    rymId: '[Artist21693]',
+    rymUrl: 'https://rateyourmusic.com/artist/janko_nilovic',
+  },
+  {
+    displayName: 'The Soul Surfers',
+    rymId: '[Artist735444]',
+    rymUrl: 'https://rateyourmusic.com/artist/the_soul_surfers',
+  },
+  {
+    displayName: 'Sumac Dub',
+    rymId: '[Artist1306951]',
+    rymUrl: 'https://rateyourmusic.com/artist/sumac-dub',
+  },
 ]

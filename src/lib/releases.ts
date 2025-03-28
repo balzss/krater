@@ -522,4 +522,94 @@ export const releases: Release[] = [
       spotify: 'https://open.spotify.com/album/74UnLsuHAp1505hHzwcjPR',
     },
   },
+  {
+    artistRymIds: ['[Artist120435]'],
+    title: 'New History Warfare Vol. 2: Judges',
+    rymId: '[Album3224419]',
+    cover: 'colin-stetson-new-history-warfare-vol-2-judges-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/78lkl1creFzx7oBXdiT1mI',
+    },
+  },
+  {
+    artistRymIds: ['[Artist53999]'],
+    title: 'Sleepygirls',
+    rymId: '[Album5406499]',
+    cover: 'yagya-sleepygirls-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1C04uwe7mOJ9ogiOCjnKqd',
+    },
+  },
+  {
+    artistRymIds: ['[Artist9185]'],
+    title: 'Entain',
+    rymId: '[Album40475]',
+    cover: 'vladislav-delay-entain-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/4KJcPcj5jViXSETwla3ZTg',
+    },
+  },
+  {
+    artistRymIds: ['[Artist8368]', '[Artist155901]'],
+    title: 'DUO',
+    rymId: '[Album3508935]',
+    cover: 'bugge-wesseltoft-and-henrik-schwarz-duo-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/5hhjqYwLRhquuzWpZkZWI5',
+    },
+  },
+  {
+    artistRymIds: ['[Artist729957]'],
+    title: 'III',
+    rymId: '[Album4768230]',
+    cover: 'badbadnotgood-iii-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/4E8q20fmm8onDCc7NK217d',
+    },
+  },
+  {
+    artistRymIds: ['[Artist729957]', '[Artist2817]'],
+    title: 'Sour Soul',
+    rymId: '[Album5918588]',
+    cover: 'badbadnotgood-and-ghostface-killah-sour-soul-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0ROuzdCU0C0SyXcC5DWHef',
+    },
+  },
+  {
+    artistRymIds: ['[Artist420001]'],
+    title: 'Ne szarakodj!',
+    rymId: '[Album2204626]',
+    cover: 'killakikitt-ne-szarakodj-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/508MXwbQoSVtHptihKF7t2',
+    },
+  },
+  {
+    artistRymIds: ['[Artist175798]'],
+    title: 'Crystal Castles',
+    rymId: '[Album1185583]',
+    cover: 'crystal-castles-crystal-castles-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/3LnVvIeiLCngvwEnbdxwCT',
+    },
+  },
+  {
+    artistRymIds: ['[Artist21693]', '[Artist735444]'],
+    title: 'Maze of Sounds',
+    rymId: '[Album12240556]',
+    cover: 'janko-nilovic-and-the-soul-surfers-maze-of-sounds-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6WWbQkQAv3YczhH34I3fv6',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1306951]'],
+    title: 'Le Jardin de Lucy',
+    rymId: '[Album9197700]',
+    cover: 'sumac-dub-le-jardin-de-lucy-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/2mD8SJXAG13hM3QAkyVO6K',
+    },
+  },
 ]
