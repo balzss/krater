@@ -130,6 +130,76 @@ export const artists: Artist[] = [
     rymId: '[Artist234382]',
     rymUrl: 'https://rateyourmusic.com/artist/deepchord-presents-echospace',
   },
+  {
+    displayName: 'Nala Sinephro',
+    rymId: '[Artist1623299]',
+    rymUrl: 'https://rateyourmusic.com/artist/nala-sinephro',
+  },
+  {
+    displayName: 'Jessie Ware',
+    rymId: '[Artist705952]',
+    rymUrl: 'https://rateyourmusic.com/artist/jessie-ware',
+  },
+  {
+    displayName: '杏里 [Anri]',
+    rymId: '[Artist81437]',
+    rymUrl: 'https://rateyourmusic.com/artist/%E6%9D%8F%E9%87%8C',
+  },
+  {
+    displayName: '大貫妙子 [Taeko Ohnuki]',
+    rymId: '[Artist158143]',
+    rymUrl: 'https://rateyourmusic.com/artist/%E5%A4%A7%E8%B2%AB%E5%A6%99%E5%AD%90',
+  },
+  {
+    displayName: 'William Onyeabor',
+    rymId: '[Artist243860]',
+    rymUrl: 'https://rateyourmusic.com/artist/william-onyeabor',
+  },
+  {
+    displayName: 'Floating Points',
+    rymId: '[Artist430173]',
+    rymUrl: 'https://rateyourmusic.com/artist/floating-points',
+  },
+  {
+    displayName: 'Luomo',
+    rymId: '[Artist11863]',
+    rymUrl: 'https://rateyourmusic.com/artist/luomo',
+  },
+  {
+    displayName: 'Deadbeat',
+    rymId: '[Artist31014]',
+    rymUrl: 'https://rateyourmusic.com/artist/deadbeat',
+  },
+  {
+    displayName: 'Yeat',
+    rymId: '[Artist1480594]',
+    rymUrl: 'https://rateyourmusic.com/artist/yeat',
+  },
+  {
+    displayName: 'Warpaint',
+    rymId: '[Artist329091]',
+    rymUrl: 'https://rateyourmusic.com/artist/warpaint',
+  },
+  {
+    displayName: 'The Microphones',
+    rymId: '[Artist808]',
+    rymUrl: 'https://rateyourmusic.com/artist/the-microphones',
+  },
+  {
+    displayName: 'Oneohtrix Point Never',
+    rymId: '[Artist351103]',
+    rymUrl: 'https://rateyourmusic.com/artist/oneohtrix-point-never',
+  },
+  {
+    displayName: 'Tim Hecker',
+    rymId: '[Artist14863]',
+    rymUrl: 'https://rateyourmusic.com/artist/tim-hecker',
+  },
+  {
+    displayName: 'Los Mirlos',
+    rymId: '[Artist252632]',
+    rymUrl: 'https://rateyourmusic.com/artist/los-mirlos',
+  },
 ]
 
 /* dev console release info -> copy to clipboard and paste it here
@@ -310,6 +380,132 @@ export const releases: Release[] = [
     cover: 'deepchord-presents-echospace-liumin-Cover-Art.webp',
     media: {
       spotify: 'https://open.spotify.com/album/2sBtwfqFvOdUkRxs741VBW',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1623299]'],
+    title: 'Endlessness',
+    rymId: '[Album15958943]',
+    cover: 'nala-sinephro-endlessness-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/51CQQ3tQLRZlZJZ5jcpoGE',
+    },
+  },
+  {
+    artistRymIds: ['[Artist705952]'],
+    title: "What's Your Pleasure?",
+    rymId: '[Album11181034]',
+    cover: 'jessie-ware-whats-your-pleasure-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1CTm3ARqDETSm7GfvNYNJp',
+    },
+  },
+  {
+    artistRymIds: ['[Artist81437]'],
+    title: 'Timely!!',
+    rymId: '[Album1835632]',
+    cover: '%E6%9D%8F%E9%87%8C-anri-timely-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/3OvZYx7AAGplmJjwD29JiV',
+    },
+  },
+  {
+    artistRymIds: ['[Artist158143]'],
+    title: 'Sunshower',
+    rymId: '[Album1039463]',
+    cover: '%E5%A4%A7%E8%B2%AB%E5%A6%99%E5%AD%90-taeko-ohnuki-sunshower-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/53YDN7b4vQ5MLMSPcnh9Os',
+    },
+  },
+  {
+    artistRymIds: ['[Artist243860]'],
+    title: 'Who is William Onyeabor?',
+    rymId: '[Album4695963]',
+    cover: 'william-onyeabor-who-is-william-onyeabor-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/2OZuC75dcQ0wO5aWVRQCIR',
+    },
+  },
+  {
+    artistRymIds: ['[Artist430173]'],
+    title: 'Crush',
+    rymId: '[Album10596058]',
+    cover: 'floating-points-crush-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1WwZwdTICfaZI51BIIEN9z',
+    },
+  },
+  {
+    artistRymIds: ['[Artist11863]'],
+    title: 'Vocalcity',
+    rymId: '[Album42338]',
+    cover: 'luomo-vocalcity-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0SYQ4x4DsodUOdJcWYmM5V',
+    },
+  },
+  {
+    artistRymIds: ['[Artist31014]'],
+    title: 'Drawn and Quartered',
+    rymId: '[Album3411350]',
+    cover: 'deadbeat-drawn-and-quartered-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0Q3uXaz8utr9SpMUjq2JVO',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1480594]'],
+    title: '2093',
+    rymId: '[Album15402489]',
+    cover: 'yeat-2093-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1jXYc5gip5tqCTDOotfY5L',
+    },
+  },
+  {
+    artistRymIds: ['[Artist329091]'],
+    title: 'Exquisite Corpse',
+    rymId: '[Album2052550]',
+    cover: 'warpaint-exquisite-corpse-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6oRX4P7faDMJAk0Of2uh5i',
+    },
+  },
+  {
+    artistRymIds: ['[Artist808]'],
+    title: 'The Glow Pt. 2',
+    rymId: '[Album2642]',
+    cover: 'the-microphones-the-glow-pt-2-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6QYoRO2sXThCORAifrP4Bl',
+    },
+  },
+  {
+    artistRymIds: ['[Artist351103]'],
+    title: 'R Plus Seven',
+    rymId: '[Album4612073]',
+    cover: 'oneohtrix-point-never-r-plus-seven-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/68PRq4zj7YXMwiUq6FNGvR',
+    },
+  },
+  {
+    artistRymIds: ['[Artist14863]'],
+    title: 'Ravedeath, 1972',
+    rymId: '[Album3208874]',
+    cover: 'tim-hecker-ravedeath-1972-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/6Iu8toVsvCc3I4INxYiVIy',
+    },
+  },
+  {
+    artistRymIds: ['[Artist252632]'],
+    title: 'Cumbia amazónica',
+    rymId: '[Album5332749]',
+    cover: 'los-mirlos-cumbia-amazonica-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/3Almc0ajaT7YXLxpn18QBL',
     },
   },
 ]
