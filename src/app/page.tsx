@@ -27,7 +27,7 @@ export default function Home() {
   }, [searchQuery])
 
   return (
-    <div className="min-h-screen flex items-center flex-col m-4 sm:my-12 sm:mx-16">
+    <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
       <SearchInput
         query={searchQuery}
         onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
