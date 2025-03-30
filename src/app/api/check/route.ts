@@ -15,40 +15,22 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url)
     const { searchParams } = url
-    const artistId = searchParams.get('artistId')
+    const artistIds = searchParams.get('artistId')?.split(',')
     const releaseId = searchParams.get('releaseId')
 
-    if (!artistId && !releaseId) {
+    if (!artistIds?.length && !releaseId) {
       return NextResponse.json(
-        { message: 'Please provide either an artistId or releaseId in the query string.' },
+        { message: 'Please provide either an artistIds or releaseId in the query string.' },
         { status: 400 }
       )
     }
 
-    if (artistId) {
-      // Check if the artist exists
-      const artist = findArtistById(artistId)
-      if (artist) {
-        return NextResponse.json({ message: 'Artist found', artist }, { status: 200 })
-      } else {
-        return NextResponse.json({ message: 'Artist not found' }, { status: 404 })
-      }
-    }
+    const missingArtists = artistIds?.filter((id) => !findArtistById(id)) || []
+    const missingRelease = releaseId && findReleaseById(releaseId) ? '' : releaseId
 
-    if (releaseId) {
-      // Check if the release exists
-      const release = findReleaseById(releaseId)
-      if (release) {
-        return NextResponse.json({ message: 'Release found', release }, { status: 200 })
-      } else {
-        return NextResponse.json({ message: 'Release not found' }, { status: 404 })
-      }
-    }
+    console.log(missingRelease)
 
-    return NextResponse.json(
-      { message: 'No valid artistId or releaseId provided' },
-      { status: 400 }
-    )
+    return NextResponse.json({ missingArtists, missingRelease }, { status: 200 })
   } catch (error) {
     console.error('Error checking for artist or release:', error)
     return NextResponse.json(
