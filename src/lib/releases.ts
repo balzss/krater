@@ -612,4 +612,101 @@ export const releases: Release[] = [
       spotify: 'https://open.spotify.com/album/2mD8SJXAG13hM3QAkyVO6K',
     },
   },
+  {
+    artistRymIds: ['[Artist874158]'],
+    title: 'Fuzz',
+    rymId: '[Album4638037]',
+    cover: 'fuzz-fuzz-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/1D3YttJsWvUUSvOVRbic0o',
+    },
+  },
+  {
+    artistRymIds: ['[Artist275852]'],
+    title: 'You No Fit Touch Am',
+    rymId: '[Album6476364]',
+    cover: 'dele-sosimi-you-no-fit-touch-am-Cover-Art.webp',
+    media: {},
+  },
+  {
+    artistRymIds: ['[Artist877332]'],
+    title: 'Comradely Objects',
+    rymId: '[Album14892412]',
+    cover: 'horse-lords-comradely-objects-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/77I9CjThngVCVpPtvC67yp',
+    },
+  },
+  {
+    artistRymIds: ['[Artist78]'],
+    title: 'Ege Bamyası',
+    rymId: '[Album231]',
+    cover: 'can-ege-bamyasi-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/3Qa2CdymyGvXkqoqIZykmT',
+    },
+  },
+  {
+    artistRymIds: ['[Artist946380]'],
+    title: 'In the Shower',
+    rymId: '[Album5827179]',
+    cover: 'homeshake-in-the-shower-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0mWXQOrqbigpDUGfnbW7ez',
+    },
+  },
+  {
+    artistRymIds: ['[Artist946380]'],
+    title: 'Midnight Snack',
+    rymId: '[Album6557137]',
+    cover: 'homeshake-midnight-snack-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/4p7OubIrnoRbhi3YUbN5Ib',
+    },
+  },
+  {
+    artistRymIds: ['[Artist476419]'],
+    title: 'Overgrown',
+    rymId: '[Album4405254]',
+    cover: 'james-blake-overgrown-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/53FEYOXnplxBWoQMmWn82U',
+    },
+  },
+  {
+    artistRymIds: ['[Artist430173]'],
+    title: 'Shadows',
+    rymId: '[Album3724177]',
+    cover: 'floating-points-shadows-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/5kxdPzutcONxecJmXUIj2c',
+    },
+  },
+  {
+    artistRymIds: ['[Artist20814]'],
+    title: 'Beg for Mercy',
+    rymId: '[Album82078]',
+    cover: 'g-unit-beg-for-mercy-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0BolFrIcCXXppUK50ETvgy',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1229495]', '[Artist1092982]'],
+    title: 'El origen',
+    rymId: '[Album8495034]',
+    cover: 'rodrigo-gallardo-and-nicola-cruz-el-origen-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/0wOHl1sUUJ5fw2YLCClpyr',
+    },
+  },
+  {
+    artistRymIds: ['[Artist1092982]'],
+    title: 'Cantos de visión',
+    rymId: '[Album8094218]',
+    cover: 'nicola-cruz-cantos-de-vision-Cover-Art.webp',
+    media: {
+      spotify: 'https://open.spotify.com/album/2FFMtf8Log72Ow5A3ExNv5',
+    },
+  },
 ]
