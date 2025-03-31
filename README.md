@@ -1,21 +1,20 @@
-[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/) 
+[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/)
 
 # Krater
 
-Krater is a toolset for creating and updating a static website with your music collection, designed with a specific philosophy in mind. It aims to mimic the experience of browsing a physical vinyl collection.
+Krater is a toolset for creating and updating a static website with your music collection, designed to mimic the experience of browsing a physical vinyl collection.
 
 ## Philosophy
 
 This project is **highly opinionated** and built around the way I like to organize and interact with my music:
 
-* **Vinyl Collection Analogy:** The core idea is to feel like flipping through record crates, focusing on the *release* as a whole.
-* **Release-Centric:** No individual tracks. Krater only cares about albums, EPs, singles – the complete release.
-* **Minimalism:** It only stores the basics: Release Name, Artist(s), Cover Art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
+* **Vinyl Analogy:** To feel like you are flipping through your record collection.
+* **Release-Centric:** No individual tracks or playlists. Krater only cares about albums, EPs, singles – the complete release.
+* **Minimalism:** Only store the basics: Release Name, Artist(s), Cover Art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
 
 ## Key Features
 
 * Displays your music collection with cover art.
-* Focuses on **releases**, not individual tracks.
 * Provides a "Random Release" feature for discovery.
 * Includes a Chrome extension to easily add releases from [Rate Your Music](https://rateyourmusic.com/) pages.
 * Generates a static website – easy to host for free on GitHub Pages, Netlify, Vercel, etc.
@@ -40,7 +39,7 @@ Use it with the understanding that it's an evolving personal project.
     * `src/lib/releases.ts`
     * `src/lib/artists.ts`
 2.  **Adding Releases:** You add releases manually by editing the data files. To simplify this, a Chrome extension is provided.
-3.  **Chrome Extension:** This helper allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover URL) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
+3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover URL) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
 4.  **Static Site Generation:** The project uses Next.js to build into a set of static HTML, CSS, and JavaScript files suitable for static hosting.
 5.  **Deployment:** These static files can be hosted anywhere.
 
@@ -70,7 +69,7 @@ Use it with the understanding that it's an evolving personal project.
     ```
     This will start the server at `http://localhost:3000/krater`.
 
-### Adding the Chrome Extension
+### Adding the Extension to Chrome
 
 1.  Open Google Chrome.
 2.  Go to `chrome://extensions/`.
