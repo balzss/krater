@@ -395,4 +395,84 @@ export const artists: Artist[] = [
     rymId: '[Artist1189385]',
     rymUrl: 'https://rateyourmusic.com/artist/ski-mask-the-slump-god',
   },
+  {
+    displayName: 'Flipp Dinero',
+    rymId: '[Artist1309272]',
+    rymUrl: 'https://rateyourmusic.com/artist/flipp-dinero',
+  },
+  {
+    displayName: 'GAS',
+    rymId: '[Artist11472]',
+    rymUrl: 'https://rateyourmusic.com/artist/gas',
+  },
+  {
+    displayName: 'Venetian Snares',
+    rymId: '[Artist15027]',
+    rymUrl: 'https://rateyourmusic.com/artist/venetian-snares',
+  },
+  {
+    displayName: 'Kendrick Lamar',
+    rymId: '[Artist542683]',
+    rymUrl: 'https://rateyourmusic.com/artist/kendrick-lamar',
+  },
+  {
+    displayName: 'Steve Reich and Musicians',
+    rymId: '[Artist1219137]',
+    rymUrl: 'https://rateyourmusic.com/artist/steve-reich-and-musicians',
+  },
+  {
+    displayName: 'Steve Reich',
+    rymId: '[Artist3688]',
+    rymUrl: 'https://rateyourmusic.com/artist/steve-reich',
+  },
+  {
+    displayName: 'King Gizzard and The Lizard Wizard',
+    rymId: '[Artist738214]',
+    rymUrl: 'https://rateyourmusic.com/artist/king-gizzard-and-the-lizard-wizard',
+  },
+  {
+    displayName: 'Armand Hammer',
+    rymId: '[Artist973990]',
+    rymUrl: 'https://rateyourmusic.com/artist/armand-hammer-1',
+  },
+  {
+    displayName: 'Burial',
+    rymId: '[Artist130801]',
+    rymUrl: 'https://rateyourmusic.com/artist/burial-3',
+  },
+  {
+    displayName: 'Evan Marc',
+    rymId: '[Artist376061]',
+    rymUrl: 'https://rateyourmusic.com/artist/evan-marc',
+  },
+  {
+    displayName: 'Steve Hillage',
+    rymId: '[Artist4845]',
+    rymUrl: 'https://rateyourmusic.com/artist/steve-hillage',
+  },
+  {
+    displayName: 'Mick Jenkins',
+    rymId: '[Artist1004057]',
+    rymUrl: 'https://rateyourmusic.com/artist/mick-jenkins',
+  },
+  {
+    displayName: 'Ghetto Kumbé',
+    rymId: '[Artist1190013]',
+    rymUrl: 'https://rateyourmusic.com/artist/ghetto-kumbe',
+  },
+  {
+    displayName: 'J.I.D',
+    rymId: '[Artist1009163]',
+    rymUrl: 'https://rateyourmusic.com/artist/j_i_d',
+  },
+  {
+    displayName: 'Sheff G',
+    rymId: '[Artist1269279]',
+    rymUrl: 'https://rateyourmusic.com/artist/sheff-g',
+  },
+  {
+    displayName: 'Stimming',
+    rymId: '[Artist321924]',
+    rymUrl: 'https://rateyourmusic.com/artist/stimming',
+  },
 ]

@@ -524,15 +524,6 @@ export const releases: Release[] = [
     },
   },
   {
-    artistRymIds: [`[Artist9185]`],
-    title: `Entain`,
-    rymId: `[Album40475]`,
-    cover: `vladislav-delay-entain-Cover-Art.webp`,
-    media: {
-      spotify: `https://open.spotify.com/album/4KJcPcj5jViXSETwla3ZTg`,
-    },
-  },
-  {
     artistRymIds: [`[Artist8368]`, `[Artist155901]`],
     title: `DUO`,
     rymId: `[Album3508935]`,
@@ -737,6 +728,240 @@ export const releases: Release[] = [
     cover: `young-thug-slime-season-3-Cover-Art.webp`,
     media: {
       spotify: `https://open.spotify.com/album/2z4c8M8aVzl7CTobIp36KF`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1309272]`],
+    title: `Love for Guala`,
+    rymId: `[Album10859809]`,
+    cover: `flipp-dinero-love-for-guala-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/3zMEkZNzS5yJDcnqPhIk10`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist11472]`],
+    title: `Pop`,
+    rymId: `[Album40477]`,
+    cover: `gas-pop-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/32Nl49izVyngH22kD1lrkk`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist15027]`],
+    title: `Rossz csillag alatt született`,
+    rymId: `[Album242672]`,
+    cover: `venetian-snares-rossz-csillag-alatt-szuletett-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1GcVuxKE16rUkpZiqfPId3`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist542683]`],
+    title: `GNX`,
+    rymId: `[Album16168278]`,
+    cover: `kendrick-lamar-gnx-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0hvT3yIEysuuvkK73vgdcW`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1219137]`, `[Artist3688]`],
+    title: `Music for 18 Musicians`,
+    rymId: `[Album127432]`,
+    cover: `steve-reich-and-musicians-music-for-18-musicians-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1w9O7mS9WEp5xlZUpYbDt9`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist738214]`],
+    title: `Nonagon Infinity`,
+    rymId: `[Album7226281]`,
+    cover: `king-gizzard-and-the-lizard-wizard-nonagon-infinity-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/438JijxKCWYrtvpB5A5071`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist14863]`],
+    title: `Haunt Me, Haunt Me Do It Again`,
+    rymId: `[Album53578]`,
+    cover: `tim-hecker-haunt-me-haunt-me-do-it-again-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/5MZRB9G4snRWIG0otfxJYq`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist14863]`],
+    title: `Harmony in Ultraviolet`,
+    rymId: `[Album626992]`,
+    cover: `tim-hecker-harmony-in-ultraviolet-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1U5x6wQtMJtbwM3NZRSvKT`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist973990]`, `[Artist45522]`],
+    title: `Haram`,
+    rymId: `[Album12728560]`,
+    cover: `armand-hammer-and-the-alchemist-haram-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0RPanQrJXRyTJoiq2trm7k`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist661586]`],
+    title: `Johann Sebastian Bachlava the Doctor`,
+    rymId: `[Album15712452]`,
+    cover: `action-bronson-johann-sebastian-bachlava-the-doctor-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0rTMVd3N7czUFdf1mBfNMt`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist220496]`],
+    title: `It's Almost Dry`,
+    rymId: `[Album14237082]`,
+    cover: `pusha-t-its-almost-dry-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/6o38CdD7CUlZDCFhjZYLDH`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist130801]`],
+    title: `Untrue`,
+    rymId: `[Album1064977]`,
+    cover: `burial-untrue-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/35c1EaK1UIzcEM9HXC7q2S`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist9185]`],
+    title: `Entain`,
+    rymId: `[Album15542560]`,
+    cover: `vladislav-delay-entain-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/4KJcPcj5jViXSETwla3ZTg`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist11718]`],
+    title: `Rhythm & Sound`,
+    rymId: `[Album41748]`,
+    cover: `rhythm-and-sound-rhythm-and-sound-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1gKsehEyIyBj5bUeSAEe8w`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist376061]`, `[Artist4845]`],
+    title: `Dreamtime Submersible`,
+    rymId: `[Album15460840]`,
+    cover: `evan-marc-and-steve-hillage-dreamtime-submersible-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/289WzRyEe4RsHf9Tv6WVEB`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist705952]`],
+    title: `That! Feels Good!`,
+    rymId: `[Album15119226]`,
+    cover: `jessie-ware-that-feels-good-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/17g3sAeWfpHSJlqMHuRAr6`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1004057]`],
+    title: `The Circus`,
+    rymId: `[Album10996626]`,
+    cover: `mick-jenkins-the-circus-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/4SnWrk06dIt4ynFRLpNX6e`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist476419]`],
+    title: `James Blake`,
+    rymId: `[Album3209572]`,
+    cover: `james-blake-james-blake-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0qY6lBQSi8IMJjHYDPdAqX`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1190013]`],
+    title: `Ghetto Kumbé`,
+    rymId: `[Album11335321]`,
+    cover: `ghetto-kumbe-ghetto-kumbe-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/22s9wUm9hVB4AqmqFfv99P`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist952957]`],
+    title: `Skinny`,
+    rymId: `[Album5801726]`,
+    cover: `bones-skinny-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0Wh0QKnKq6j7Tlkj7RYE9u`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist952957]`],
+    title: `Rotten`,
+    rymId: `[Album6018568]`,
+    cover: `bones-rotten-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/2jgKK8iIX83mPrCyDhvEdf`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1009163]`],
+    title: `The Forever Story`,
+    rymId: `[Album12724504]`,
+    cover: `j_i_d-the-forever-story-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/3QVjpIxcksDkJmOnvlOJjg`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1009163]`],
+    title: `The Never Story`,
+    rymId: `[Album8129125]`,
+    cover: `j_i_d-the-never-story-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1gPqbxhs90kppgOVxGOPzd`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1269279]`],
+    title: `The Unluccy Luccy Kid`,
+    rymId: `[Album10679608]`,
+    cover: `sheff-g-the-unluccy-luccy-kid-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/3Xvvi8uwGnuj9nF7fr2h39`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1269279]`],
+    title: `One and Only`,
+    rymId: `[Album11501567]`,
+    cover: `sheff-g-one-and-only-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/6lJqLqRmWGmsw8aLEoSlZ9`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist321924]`],
+    title: `Alpe Lusia`,
+    rymId: `[Album7360708]`,
+    cover: `stimming-alpe-lusia-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0qDn2aa1AYJCoJJGt4nUKn`,
     },
   },
 ]
