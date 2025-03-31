@@ -694,4 +694,49 @@ export const releases: Release[] = [
       spotify: `https://open.spotify.com/album/2FFMtf8Log72Ow5A3ExNv5`,
     },
   },
+  {
+    artistRymIds: [`[Artist791948]`],
+    title: `Picture You Staring`,
+    rymId: `[Album5582591]`,
+    cover: `tops-picture-you-staring-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/4XherhknNqBd7RsksYVqP5`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist857117]`],
+    title: `Rodeo`,
+    rymId: `[Album6232368]`,
+    cover: `travis-scott-rodeo-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/4PWBTB6NYSKQwfo79I3prg`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1189385]`],
+    title: `Stokeley`,
+    rymId: `[Album9777605]`,
+    cover: `ski-mask-the-slump-god-stokeley-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0z0z4DcXhHiobX5ZKAw8Qn`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist522551]`],
+    title: `So Much Fun`,
+    rymId: `[Album10480556]`,
+    cover: `young-thug-so-much-fun-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1bnHPO4dKK7IjvgrtVBcQh`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist522551]`],
+    title: `Slime Season 3`,
+    rymId: `[Album7257238]`,
+    cover: `young-thug-slime-season-3-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/2z4c8M8aVzl7CTobIp36KF`,
+    },
+  },
 ]

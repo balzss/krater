@@ -28,8 +28,6 @@ export async function GET(req: NextRequest) {
     const missingArtists = artistIds?.filter((id) => !findArtistById(id)) || []
     const missingRelease = releaseId && findReleaseById(releaseId) ? '' : releaseId
 
-    console.log(missingRelease)
-
     return NextResponse.json({ missingArtists, missingRelease }, { status: 200 })
   } catch (error) {
     console.error('Error checking for artist or release:', error)

@@ -375,4 +375,24 @@ export const artists: Artist[] = [
     rymId: '[Artist1092982]',
     rymUrl: 'https://rateyourmusic.com/artist/nicola-cruz',
   },
+  {
+    displayName: 'Young Thug',
+    rymId: '[Artist522551]',
+    rymUrl: 'https://rateyourmusic.com/artist/young-thug',
+  },
+  {
+    displayName: 'TOPS',
+    rymId: '[Artist791948]',
+    rymUrl: 'https://rateyourmusic.com/artist/tops-1',
+  },
+  {
+    displayName: 'Travis Scott',
+    rymId: '[Artist857117]',
+    rymUrl: 'https://rateyourmusic.com/artist/travis-scott-1',
+  },
+  {
+    displayName: 'Ski Mask the Slump God',
+    rymId: '[Artist1189385]',
+    rymUrl: 'https://rateyourmusic.com/artist/ski-mask-the-slump-god',
+  },
 ]
