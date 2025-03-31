@@ -964,4 +964,13 @@ export const releases: Release[] = [
       spotify: `https://open.spotify.com/album/0qDn2aa1AYJCoJJGt4nUKn`,
     },
   },
+  {
+    artistRymIds: [`[Artist49154]`],
+    title: `Getz / Gilberto`,
+    rymId: `[Album8758]`,
+    cover: `stan-getz-and-joao-gilberto-featuring-antonio-carlos-jobim-getz-gilberto-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/08HyQbnGbDvcZmEM5hPRrr`,
+    },
+  },
 ]

@@ -475,4 +475,9 @@ export const artists: Artist[] = [
     rymId: '[Artist321924]',
     rymUrl: 'https://rateyourmusic.com/artist/stimming',
   },
+  {
+    displayName: 'Stan Getz & João Gilberto featuring Antônio Carlos Jobim',
+    rymId: '[Artist49154]',
+    rymUrl: 'https://rateyourmusic.com/artist/stan_getz_and_joao_gilberto',
+  },
 ]
