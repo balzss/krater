@@ -1,18 +1,16 @@
+[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/) 
+
 # Krater
 
-[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/) Krater is a personal tool for displaying your music collection and getting random recommendations, designed with a specific philosophy in mind. It aims to mimic the experience of Browse a physical vinyl collection.
+Krater is a personal tool for displaying your music collection and getting random recommendations, designed with a specific philosophy in mind. It aims to mimic the experience of browsing a physical vinyl collection.
 
 ## Philosophy
 
 This project is **highly opinionated** and built around the way I like to organize and interact with my music:
 
 * **Vinyl Collection Analogy:** The core idea is to feel like flipping through record crates, focusing on the *release* as a whole.
-* **Release-Centric:** Forget individual tracks. Krater cares about albums, EPs, singles – the complete release.
+* **Release-Centric:** No individual tracks. Krater only cares about albums, EPs, singles – the complete release.
 * **Minimalism:** It only stores the basics: Release Name, Artist(s), Cover Art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
-
-## How I Use It
-
-My primary use case is simple: when I want to listen to music but don't know what, I open the random release page ("shuffle the crate") and browse until something fits my mood. It's a way to rediscover gems within my own collection.
 
 ## Key Features
 
