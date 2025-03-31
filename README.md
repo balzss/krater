@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Krater
+
+[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/) Krater is a personal tool for displaying your music collection and getting random recommendations, designed with a specific philosophy in mind. It aims to mimic the experience of Browse a physical vinyl collection.
+
+## Philosophy
+
+This project is **highly opinionated** and built around the way I like to organize and interact with my music:
+
+* **Vinyl Collection Analogy:** The core idea is to feel like flipping through record crates, focusing on the *release* as a whole.
+* **Release-Centric:** Forget individual tracks. Krater cares about albums, EPs, singles – the complete release.
+* **Minimalism:** It only stores the basics: Release Name, Artist(s), Cover Art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
+
+## How I Use It
+
+My primary use case is simple: when I want to listen to music but don't know what, I open the random release page ("shuffle the crate") and browse until something fits my mood. It's a way to rediscover gems within my own collection.
+
+## Key Features
+
+* Displays your music collection with cover art.
+* Focuses on **releases**, not individual tracks.
+* Provides a "Random Release" feature for discovery.
+* Includes a Chrome extension to easily add releases from [Rate Your Music](https://rateyourmusic.com/) pages.
+* Generates a static website – easy to host for free on GitHub Pages, Netlify, Vercel, etc.
+
+## Live Demo
+
+You can see an example of a deployed collection here: [https://balzss.github.io/krater/](https://balzss.github.io/krater/)
+
+## Project Status
+
+**Krater is very much a Work In Progress!**
+
+* The codebase changes frequently.
+* Some planned functionality might not be implemented or might be broken.
+* Breaking changes are possible.
+
+Use it with the understanding that it's an evolving personal project.
+
+## How It Works
+
+1.  **Data Storage:** All release and artist information is stored directly in TypeScript files:
+    * `src/lib/releases.ts`
+    * `src/lib/artists.ts`
+2.  **Adding Releases:** You add releases manually by editing the data files. To simplify this, a Chrome extension is provided.
+3.  **Chrome Extension:** This helper allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover URL) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
+4.  **Static Site Generation:** The project uses Next.js to build into a set of static HTML, CSS, and JavaScript files suitable for static hosting.
+5.  **Deployment:** These static files can be hosted anywhere.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* Node.js and npm (or pnpm/yarn) installed.
+* Git (for cloning).
+* Google Chrome (for the extension).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation & Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/balzss/krater.git](https://github.com/balzss/krater.git) # Replace with your repo URL if you fork it
+    cd krater
+    ```
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    # or pnpm install / yarn install
+    ```
+3.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+    This will usually start the server at `http://localhost:3000/krater`. Check the terminal output for the exact address.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Adding the Chrome Extension
 
-## Learn More
+1.  Open Google Chrome.
+2.  Go to `chrome://extensions/`.
+3.  Enable **"Developer mode"** using the toggle switch (usually in the top-right corner).
+4.  Click **"Load unpacked"**.
+5.  Navigate to the `chrome-extension` folder *within your cloned Krater project directory* and select it.
+6.  The Krater extension icon should appear in your browser toolbar.
 
-To learn more about Next.js, take a look at the following resources:
+### Adding Releases using the Extension
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.  **IMPORTANT:** Ensure your local development server (`npm run dev` at `http://localhost:3000`) is running. The extension sends data to this local server.
+2.  Navigate to a release page on `rateyourmusic.com`.
+3.  Click "Add to Krater" above the release title. It should attempt to extract the data and send it.
+4.  Check your `src/lib/releases.ts` file – the new release should be appended.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Manual Data Entry
 
-## Deploy on Vercel
+You can always directly edit `src/lib/releases.ts` and `src/lib/artists.ts` following the existing data structure.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  **Build the static site:**
+    ```bash
+    npm run build
+    ```
+2.  **Deploy the output:** The static files will be generated in the `build` directory by default but can be changed in `next.config.js` if needed.
+3.  Deploy the contents of the output directory (e.g., `build`) to your preferred static hosting provider (GitHub Pages, Netlify, Vercel, etc.).
+4.  For an example of deploying to GitHub Pages using GitHub Actions, see the `.github/workflows/deploy.yml` file in this repository.
+
+## Contributing
+
+While this is a personal project, feel free to open issues for bugs or suggestions. Pull requests might be considered, but keep in mind the "opinionated" nature of the project.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
