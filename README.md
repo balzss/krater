@@ -2,7 +2,7 @@
 
 # Krater
 
-Krater is a personal tool for displaying your music collection and getting random recommendations, designed with a specific philosophy in mind. It aims to mimic the experience of browsing a physical vinyl collection.
+Krater is a toolset for creating and updating a static website with your music collection, designed with a specific philosophy in mind. It aims to mimic the experience of browsing a physical vinyl collection.
 
 ## Philosophy
 
@@ -56,7 +56,7 @@ Use it with the understanding that it's an evolving personal project.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/balzss/krater.git](https://github.com/balzss/krater.git) # Replace with your repo URL if you fork it
+    git clone https://github.com/balzss/krater.git # Replace with your repo URL if you fork it
     cd krater
     ```
 2.  **Install dependencies:**
@@ -68,7 +68,7 @@ Use it with the understanding that it's an evolving personal project.
     ```bash
     npm run dev
     ```
-    This will usually start the server at `http://localhost:3000/krater`. Check the terminal output for the exact address.
+    This will start the server at `http://localhost:3000/krater`.
 
 ### Adding the Chrome Extension
 
@@ -89,6 +89,10 @@ Use it with the understanding that it's an evolving personal project.
 ### Manual Data Entry
 
 You can always directly edit `src/lib/releases.ts` and `src/lib/artists.ts` following the existing data structure.
+
+### Cover arts
+
+Cover arts are located at `public/covers/` and a reference is stored for each release. The chrome extension also downloads the image present in rateyourmusic but feel free to use something from a different source. Just make sure the file name is matching with the reference.
 
 ### Deployment
 
