@@ -85,6 +85,15 @@ function getArtistAndReleaseInfo() {
   }
 }
 
+async function removeRelease(releaseId) {
+  await fetch(`${apiRoot}/releases?rymId=${releaseId}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+    },
+  })
+}
+
 async function loadKrater() {
   const { releaseId, artists, artistIds } = getArtistAndReleaseInfo()
   const { missingArtists, missingRelease } = await checkArtistsAndRelease({ artistIds, releaseId })
@@ -92,7 +101,15 @@ async function loadKrater() {
 
   if (!missingRelease && (!missingArtists || !missingArtists.length)) {
     kraterBtn.innerText = 'Remove from Krater'
-    kraterBtn.onclick = () => alert('I cannot remove releases yet')
+    kraterBtn.onclick = async () => {
+      console.log('remove')
+      if (!window.confirm('Do you want to remove this release from Krater?')) {
+        return
+      }
+
+      await removeRelease(releaseId)
+      window.location.reload()
+    }
   }
 
   if (missingRelease) {
