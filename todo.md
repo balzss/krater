@@ -2,7 +2,7 @@
 
 ## 0.1 release (MVP)
 
-- [ ] update name, icon, description, etc for chrome extension
+- [x] update name, icon, description, etc for chrome extension
 - [ ] make removing releases via the extension work
 - [ ] add artist listing page, create artist filter, make artist names clickable on release tiles
 - [ ] create compact view (roughly half the current tile width)
