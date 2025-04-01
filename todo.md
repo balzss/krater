@@ -5,8 +5,8 @@
 - [x] update name, icon, description, etc for chrome extension
 - [x] make removing releases via the extension work
 - [x] add artist listing page, create artist filter, make artist names clickable on release tiles
+- [x] make navigation between pages simpler: home button
 - [ ] create compact view (roughly half the current tile width)
-- [ ] make navigation between pages simpler: back/menu button
 - [ ] create "manage" page for detecting missing artists/covers or other info and add "cleanup" function
 - [ ] add screenshots to readme
 

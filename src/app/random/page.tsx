@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Dices } from 'lucide-react'
+import { House, Dices } from 'lucide-react'
 import { releases, artists, Release } from '@/lib/data'
 import { MusicTile } from '@/components'
 
@@ -18,6 +18,14 @@ export default function RandomPage() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
+      <div className="flex items-center w-full max-w-sm gap-4 mb-4">
+        <a
+          href="/krater"
+          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
+        >
+          <House size={32} />
+        </a>
+      </div>
       <div className="w-full max-w-sm flex flex-col">
         {chosenRelease && (
           <MusicTile

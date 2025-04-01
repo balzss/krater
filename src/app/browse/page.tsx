@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { House } from 'lucide-react'
 import { releases, artists, Release } from '@/lib/data'
 import { MusicTile, SearchInput, ClearableTag } from '@/components'
 
@@ -35,10 +36,18 @@ function BrowsePageContent() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <SearchInput
-        query={searchQuery}
-        onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
-      />
+      <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6">
+        <a
+          href="/krater"
+          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
+        >
+          <House size={32} />
+        </a>
+        <SearchInput
+          query={searchQuery}
+          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+        />
+      </div>
       {artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">
           <ClearableTag

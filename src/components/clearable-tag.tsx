@@ -8,7 +8,7 @@ type ClearableTagProps = {
 
 export const ClearableTag: React.FC<ClearableTagProps> = ({ tagLabel, tagValue, href }) => {
   return (
-    <div className="inline-flex items-center align-middle text-lg font-medium px-3 py-2 rounded-lg gap-1 border border-gray-300">
+    <div className="inline-flex items-center align-middle text-lg font-medium px-3 py-2 rounded-lg gap-1 border border-gray-300 text-gray-300">
       <span>
         {tagLabel}: {tagValue}
       </span>
