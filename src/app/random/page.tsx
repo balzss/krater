@@ -13,6 +13,7 @@ export default function RandomPage() {
   }
 
   useEffect(() => {
+    document.title = 'Random Release | Krater'
     setRandomRelease()
   }, [])
 

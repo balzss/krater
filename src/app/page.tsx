@@ -1,7 +1,10 @@
-'use client'
-
+import { type Metadata } from 'next'
 import { Library, User, Dices } from 'lucide-react'
 import { releases, artists } from '@/lib/data'
+
+export const metadata: Metadata = {
+  title: 'Home | Krater',
+}
 
 export default function Home() {
   return (

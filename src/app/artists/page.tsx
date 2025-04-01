@@ -10,6 +10,10 @@ export default function ArtistsPage() {
   const [artistResults, setArtistResults] = useState<Artist[]>([])
 
   useEffect(() => {
+    document.title = 'Artists | Krater'
+  }, [])
+
+  useEffect(() => {
     if (!searchQuery) {
       setArtistResults(
         artists.sort((a, b) =>
@@ -24,6 +28,7 @@ export default function ArtistsPage() {
     )
     setArtistResults(filteredResults)
   }, [searchQuery])
+
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
       <div className="flex items-center w-full max-w-md gap-4 sm:gap-6 sm:mb-4">
