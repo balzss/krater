@@ -14,7 +14,10 @@ export default function Home() {
         Browse all {releases.length} releases
       </a>
 
-      <a className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-sm cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center">
+      <a
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-sm cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center"
+        href="/krater/artists"
+      >
         <User size={20} />
         View {artists.length} artists
       </a>

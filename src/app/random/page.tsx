@@ -23,8 +23,8 @@ export default function RandomPage() {
           <MusicTile
             key={chosenRelease.rymId}
             cover={chosenRelease.cover}
-            artists={chosenRelease.artistRymIds.map(
-              (id) => artists.find((artist) => artist.rymId === id)?.displayName as string
+            artists={chosenRelease.artistRymIds.map((id) =>
+              artists.find((artist) => artist.rymId === id)
             )}
             title={chosenRelease.title}
             media={chosenRelease.media.spotify}
