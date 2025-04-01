@@ -1,5 +1,5 @@
 import { type Metadata } from 'next'
-import { Library, User, Dices } from 'lucide-react'
+import { Library, User, Dices, Github, ExternalLink } from 'lucide-react'
 import { releases, artists } from '@/lib/data'
 
 export const metadata: Metadata = {
@@ -31,6 +31,16 @@ export default function Home() {
       >
         <Dices size={20} />
         Get a random suggestion
+      </a>
+
+      <a
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-sm cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center"
+        href="https://github.com/balzss/krater"
+        target="_blank"
+      >
+        <Github size={20} />
+        Github repo
+        <ExternalLink size={20} className="ml-auto" />
       </a>
     </div>
   )
