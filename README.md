@@ -62,7 +62,11 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
     npm install
     # or pnpm install / yarn install
     ```
-3.  **Run the development server:**
+3.  **Create local env file:**
+    ```bash
+    echo NEXT_PUBLIC_IS_LOCALHOST=true >> .env.local # in the project root
+    ```
+4.  **Run the development server:**
     ```bash
     npm run dev
     ```

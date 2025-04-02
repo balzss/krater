@@ -1,4 +1,3 @@
-import getConfig from 'next/config'
 import { type Metadata } from 'next'
 import { Library, User, Dices, Github, ExternalLink, Wrench } from 'lucide-react'
 import { releases, artists } from '@/lib/data'
@@ -9,8 +8,7 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  const { publicRuntimeConfig } = getConfig() || {}
-  const isStatic = publicRuntimeConfig?.isStaticExport
+  const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
@@ -26,7 +24,7 @@ export default function Home() {
         Get a random suggestion
       </MenuItem>
 
-      {!isStatic && (
+      {isLocalhost && (
         <MenuItem startIcon={Wrench} href="/krater/manage">
           Manage library
         </MenuItem>
