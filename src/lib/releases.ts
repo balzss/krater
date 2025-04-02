@@ -200,15 +200,6 @@ export const releases: Release[] = [
     },
   },
   {
-    artistRymIds: [`[Artist158143]`],
-    title: `Sunshower`,
-    rymId: `[Album1039463]`,
-    cover: `%E5%A4%A7%E8%B2%AB%E5%A6%99%E5%AD%90-taeko-ohnuki-sunshower-Cover-Art.webp`,
-    media: {
-      spotify: `https://open.spotify.com/album/53YDN7b4vQ5MLMSPcnh9Os`,
-    },
-  },
-  {
     artistRymIds: [`[Artist243860]`],
     title: `Who is William Onyeabor?`,
     rymId: `[Album4695963]`,
@@ -971,6 +962,24 @@ export const releases: Release[] = [
     cover: `stan-getz-and-joao-gilberto-featuring-antonio-carlos-jobim-getz-gilberto-Cover-Art.webp`,
     media: {
       spotify: `https://open.spotify.com/album/08HyQbnGbDvcZmEM5hPRrr`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist158143]`],
+    title: `Mignonne`,
+    rymId: `[Album1039457]`,
+    cover: `大貫妙子-taeko-ohnuki-mignonne-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/73nV06nTdsjMRNvD9ASFO5`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist158143]`],
+    title: `Sunshower`,
+    rymId: `[Album1039463]`,
+    cover: `大貫妙子-taeko-ohnuki-sunshower-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/53YDN7b4vQ5MLMSPcnh9Os`,
     },
   },
 ]
