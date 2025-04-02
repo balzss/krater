@@ -2,22 +2,23 @@
 
 # Krater
 
-Krater is a toolset for creating and updating a static website with your music collection, designed to mimic the experience of browsing a physical vinyl collection.
+Krater is a tool that brings the feeling of flipping through a physical vinyl collection to your digital library. Browse, search, and rediscover your favorite albums in a minimalist, self-hosted UI.
 
 ## Philosophy
 
 This project is **highly opinionated** and built around the way I like to organize and interact with my music:
 
-* **Vinyl Analogy:** To feel like you are flipping through your record collection.
-* **Release-Centric:** No individual tracks or playlists. Krater only cares about albums, EPs, singles – the complete release.
-* **Minimalism:** Only store the basics: Release Name, Artist(s), Cover Art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
+- **Vinyl Analogy:** To feel like you are flipping through your record collection.
+- **Albums Only** No individual tracks or playlists. Just full releases.
+- **Minimalism:** Store only what matters: release name, artist, cover art, and a link to listen (currently hardcoded for Spotify, but the structure allows for others).
 
 ## Key Features
 
-* Displays your music collection with cover art.
-* Provides a "Random Release" feature for discovery.
-* Includes a Chrome extension to easily add releases from [Rate Your Music](https://rateyourmusic.com/) pages.
-* Generates a static website – easy to host for free on GitHub Pages, Netlify, Vercel, etc.
+- Showcase Your Collection – Browse your albums visually, just like a record shelf.
+- Random Discovery – Not sure what to listen to? Get a random recommendation.
+- Static & Fast – Generate a static site that loads instantly with no backend required.
+- RYM Integration – Add albums from [Rate Your Music](https://rateyourmusic.com/) with a Chrome extension.
+- Effortless Hosting – Easily deploy on GitHub Pages, Netlify, or Vercel.
 
 ## Live Demo
 
@@ -25,13 +26,11 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
 
 ## Project Status
 
-**Krater is very much a Work In Progress!**
+**Krater is an evolving project!**
 
-* The codebase changes frequently.
-* Some planned functionality might not be implemented or might be broken.
-* Breaking changes are possible.
-
-Use it with the understanding that it's an evolving personal project.
+- Expect frequent updates and improvements.
+- Some features are still in development.
+- Breaking changes may happen as it matures.
 
 ## How It Works
 
@@ -39,7 +38,7 @@ Use it with the understanding that it's an evolving personal project.
     * `src/lib/releases.ts`
     * `src/lib/artists.ts`
 2.  **Adding Releases:** You add releases manually by editing the data files. To simplify this, a Chrome extension is provided.
-3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover URL) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
+3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover image) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
 4.  **Static Site Generation:** The project uses Next.js to build into a set of static HTML, CSS, and JavaScript files suitable for static hosting.
 5.  **Deployment:** These static files can be hosted anywhere.
 
@@ -84,6 +83,7 @@ Use it with the understanding that it's an evolving personal project.
 2.  Navigate to a release page on `rateyourmusic.com`.
 3.  Click "Add to Krater" above the release title. It should attempt to extract the data and send it.
 4.  Check your `src/lib/releases.ts` file – the new release should be appended.
+5.  You can also remove releases with the extension if already added
 
 ### Manual Data Entry
 
