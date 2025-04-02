@@ -480,4 +480,84 @@ export const artists: Artist[] = [
     rymId: '[Artist49154]',
     rymUrl: 'https://rateyourmusic.com/artist/stan_getz_and_joao_gilberto',
   },
+  {
+    displayName: 'Khun Narin Electric Phin Band',
+    rymId: '[Artist1053008]',
+    rymUrl: 'https://rateyourmusic.com/artist/khun_narin_electric_phin_band',
+  },
+  {
+    displayName: 'The Paradise Bangkok Molam International Band',
+    rymId: '[Artist1073203]',
+    rymUrl: 'https://rateyourmusic.com/artist/the-paradise-bangkok-molam-international-band',
+  },
+  {
+    displayName: 'Freddie Gibbs & Madlib',
+    rymId: '[Artist1417384]',
+    rymUrl: 'https://rateyourmusic.com/artist/freddie-gibbs-and-madlib',
+  },
+  {
+    displayName: 'Dreamville',
+    rymId: '[Artist1405529]',
+    rymUrl: 'https://rateyourmusic.com/artist/dreamville',
+  },
+  {
+    displayName: 'Ratatat',
+    rymId: '[Artist34099]',
+    rymUrl: 'https://rateyourmusic.com/artist/ratatat',
+  },
+  {
+    displayName: 'Django Django',
+    rymId: '[Artist550625]',
+    rymUrl: 'https://rateyourmusic.com/artist/django-django',
+  },
+  {
+    displayName: 'Dead Players',
+    rymId: '[Artist1147912]',
+    rymUrl: 'https://rateyourmusic.com/artist/dead-players',
+  },
+  {
+    displayName: 'Ocean Wisdom',
+    rymId: '[Artist1147925]',
+    rymUrl: 'https://rateyourmusic.com/artist/ocean-wisdom',
+  },
+  {
+    displayName: 'Seun Kuti and Egypt 80',
+    rymId: '[Artist226241]',
+    rymUrl: 'https://rateyourmusic.com/artist/seun-kuti-and-egypt-80',
+  },
+  {
+    displayName: 'Mars Red Sky',
+    rymId: '[Artist634534]',
+    rymUrl: 'https://rateyourmusic.com/artist/mars-red-sky',
+  },
+  {
+    displayName: 'The Growlers',
+    rymId: '[Artist429758]',
+    rymUrl: 'https://rateyourmusic.com/artist/the-growlers',
+  },
+  {
+    displayName: 'Sun Ra',
+    rymId: '[Artist100]',
+    rymUrl: 'https://rateyourmusic.com/artist/sun-ra',
+  },
+  {
+    displayName: 'Tommy Guerrero',
+    rymId: '[Artist15291]',
+    rymUrl: 'https://rateyourmusic.com/artist/tommy-guerrero',
+  },
+  {
+    displayName: 'Saltillo',
+    rymId: '[Artist140524]',
+    rymUrl: 'https://rateyourmusic.com/artist/saltillo',
+  },
+  {
+    displayName: 'Xploding Plastix',
+    rymId: '[Artist8142]',
+    rymUrl: 'https://rateyourmusic.com/artist/xploding-plastix',
+  },
+  {
+    displayName: 'Maxime Denuc',
+    rymId: '[Artist1493841]',
+    rymUrl: 'https://rateyourmusic.com/artist/maxime-denuc',
+  },
 ]

@@ -982,4 +982,175 @@ export const releases: Release[] = [
       spotify: `https://open.spotify.com/album/53YDN7b4vQ5MLMSPcnh9Os`,
     },
   },
+  {
+    artistRymIds: [`[Artist1053008]`],
+    title: `Electric Phin Band`,
+    rymId: `[Album5792068]`,
+    cover: `khun-narin-electric-phin-band-electric-phin-band-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/3HWbnSk5NnfzcAKDqAcqjw`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1073203]`],
+    title: `21st Century Molam`,
+    rymId: `[Album6030949]`,
+    cover: `the-paradise-bangkok-molam-international-band-21st-century-molam-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1LiJKyedYII7EeNgS67Hoa`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1417384]`],
+    title: `Piñata`,
+    rymId: `[Album4354997]`,
+    cover: `freddie-gibbs-and-madlib-pinata-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/43uErencdmuTRFZPG3zXL1`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1417384]`],
+    title: `Bandana`,
+    rymId: `[Album7381150]`,
+    cover: `freddie-gibbs-and-madlib-bandana-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/31KbO7WnDp2AjPdmRTJzdf`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1405529]`],
+    title: `Revenge of the Dreamers III`,
+    rymId: `[Album10430873]`,
+    cover: `dreamville-revenge-of-the-dreamers-iii-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/2n3quCZ0anEa46j2IveacI`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist34099]`],
+    title: `Classics`,
+    rymId: `[Album591978]`,
+    cover: `ratatat-classics-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/2n5wpk7KaHpp3mgUYqpF4f`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist34099]`],
+    title: `LP4: Let Your Bird Eat Its Beak`,
+    rymId: `[Album2771206]`,
+    cover: `ratatat-lp4-let-your-bird-eat-its-beak-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1xajCaNDa7AS7XfNs9fPPm`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist550625]`],
+    title: `Django Django`,
+    rymId: `[Album3818515]`,
+    cover: `django-django-django-django-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/14eyWalvjM7R9LpIGvHtr8`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1147912]`],
+    title: `Freshly Skeletal`,
+    rymId: `[Album6991407]`,
+    cover: `dead-players-freshly-skeletal-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/4S3CM37tmJuU3KWFvUEINu`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1147925]`],
+    title: `Wizville`,
+    rymId: `[Album9025168]`,
+    cover: `ocean-wisdom-wizville-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0rYK8GLayXydwsdgP0n9rN`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist226241]`],
+    title: `Black Times`,
+    rymId: `[Album9026396]`,
+    cover: `seun-kuti-and-egypt-80-black-times-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/6e6eXRU1Tb5ClhBRNtRcxK`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist634534]`],
+    title: `Stranded in Arcadia`,
+    rymId: `[Album5279775]`,
+    cover: `mars-red-sky-stranded-in-arcadia-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0TvpI2bl0oPoUX8r7rpjjd`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist429758]`],
+    title: `Hung at Heart`,
+    rymId: `[Album4230992]`,
+    cover: `the-growlers-hung-at-heart-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/74uwLpJjsBFaVJd0gKLm0p`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist100]`],
+    title: `Jazz in Silhouette`,
+    rymId: `[Album20441]`,
+    cover: `sun-ra-jazz-in-silhouette-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/1ERlUXheuF48aBAyr8t5lL`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist15291]`],
+    title: `Road to Knowhere`,
+    rymId: `[Album9639859]`,
+    cover: `tommy-guerrero-road-to-knowhere-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/5XNcBTBDka0LqtQ7FYJlVh`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist140524]`],
+    title: `Ganglion`,
+    rymId: `[Album589107]`,
+    cover: `saltillo-ganglion-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/07rbHTY7HYzzhhJVt2CBvo`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist382649]`],
+    title: `The Groove Sessions Vol. II`,
+    rymId: `[Album2251724]`,
+    cover: `chinese-man-the-groove-sessions-vol-ii-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/5sG4aODV6qWPX0J7omBcnC`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist8142]`],
+    title: `Amateur Girlfriends Go Proskirt Agents`,
+    rymId: `[Album28564]`,
+    cover: `xploding-plastix-amateur-girlfriends-go-proskirt-agents-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0PpqzVavZtr4XGjv1mqksc`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist1493841]`],
+    title: `Nachthorn`,
+    rymId: `[Album14940608]`,
+    cover: `maxime-denuc-nachthorn-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/0leFuQg79HX0GPmIhhV8rl`,
+    },
+  },
 ]

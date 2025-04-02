@@ -1,13 +1,17 @@
 const apiRoot = 'http://localhost:3000/krater/api'
 
 async function checkArtistsAndRelease({ artistIds, releaseId }) {
-  const result = await fetch(
-    `${apiRoot}/check?artistId=${artistIds.join(',')}&releaseId=${releaseId}`
-  )
-  const { missingArtists, missingRelease } = await result.json()
-  return {
-    missingArtists,
-    missingRelease,
+  try {
+    const result = await fetch(
+      `${apiRoot}/check?artistId=${artistIds.join(',')}&releaseId=${releaseId}`
+    )
+    const { missingArtists, missingRelease } = await result.json()
+    return {
+      missingArtists,
+      missingRelease,
+    }
+  } catch (error) {
+    return { error }
   }
 }
 
@@ -95,8 +99,16 @@ async function removeRelease(releaseId) {
 }
 
 async function loadKrater() {
+  console.log('load krater')
   const { releaseId, artists, artistIds } = getArtistAndReleaseInfo()
-  const { missingArtists, missingRelease } = await checkArtistsAndRelease({ artistIds, releaseId })
+  const { missingArtists, missingRelease, error } = await checkArtistsAndRelease({
+    artistIds,
+    releaseId,
+  })
+  if (error) {
+    console.error(error)
+    return
+  }
   const kraterBtn = createKraterBtn()
 
   if (!missingRelease && (!missingArtists || !missingArtists.length)) {
