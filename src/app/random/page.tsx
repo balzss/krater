@@ -37,6 +37,7 @@ export default function RandomPage() {
             )}
             title={chosenRelease.title}
             media={chosenRelease.media.spotify}
+            priority
           />
         )}
         <div className="flex justify-center m-6">

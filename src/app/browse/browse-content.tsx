@@ -58,13 +58,14 @@ export default function BrowsePageContent() {
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8 w-full justify-items-center m-4 sm:m-12">
-        {releaseResults.map(({ artistRymIds, title, rymId, cover, media }) => (
+        {releaseResults.map(({ artistRymIds, title, rymId, cover, media }, index) => (
           <MusicTile
             key={rymId}
             cover={cover}
             artists={artistRymIds.map((id) => artists.find((artist) => artist.rymId === id))}
             title={title}
             media={media.spotify}
+            priority={index < 8}
           />
         ))}
       </div>
