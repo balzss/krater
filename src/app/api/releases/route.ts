@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import { releases as initialReleases, type Release } from '@/lib/releases'
+import { releases as initialReleases, type Release } from '@/lib/data'
 import { readReleasesFileContent, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
 
 const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'releases.ts')

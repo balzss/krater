@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import { artists as initialArtists, type Artist } from '@/lib/artists'
+import { artists as initialArtists, type Artist } from '@/lib/data'
 
 const artistsFilePath = path.join(process.cwd(), 'src', 'lib', 'artists.ts')
 

@@ -3,6 +3,7 @@
 import { MouseEvent, useEffect, useState } from 'react'
 import { Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 // import { releases, artists } from '@/lib/data'
+import type { HealthIssues } from '../api/health/route'
 
 const apiRoot = '/krater/api'
 
@@ -44,10 +45,10 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
 
 export default function ManagePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [missingCovers, setMissingCovers] = useState([])
-  const [missingArtistsData, setMissingArtistsData] = useState([])
-  const [unusedArtistsData, setUnusedArtistsData] = useState([])
-  const [unusedCoversData, setUnusedCoversData] = useState([])
+  const [missingCovers, setMissingCovers] = useState<HealthIssues['missingCovers']>([])
+  const [missingArtistsData, setMissingArtistsData] = useState<HealthIssues['missingArtists']>([])
+  const [unusedArtistsData, setUnusedArtistsData] = useState<HealthIssues['unusedArtists']>([])
+  const [unusedCoversData, setUnusedCoversData] = useState<HealthIssues['unusedCovers']>([])
 
   const fetchHealtData = async () => {
     const response = await fetch('/krater/api/health')

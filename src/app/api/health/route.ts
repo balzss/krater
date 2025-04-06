@@ -5,6 +5,24 @@ import { releases, artists } from '@/lib/data'
 
 export const dynamic = 'force-static'
 
+export type HealthIssues = {
+  unusedCovers: string[]
+  unusedArtists: {
+    rymId: string
+    displayName: string
+  }[]
+  missingCovers: {
+    title: string
+    cover: string
+    rymId: string
+    rymUrl?: string
+  }[]
+  missingArtists: {
+    rymId: string
+    referencedIn: string[]
+  }[]
+}
+
 export async function GET() {
   try {
     const coversDir = path.join(process.cwd(), 'public', 'covers')
@@ -30,7 +48,7 @@ export async function GET() {
     const definedArtistRymIds = artists.map((artist) => artist.rymId)
 
     // Check 1: Find images in public/covers not referenced in releases.ts
-    const unusedCovers = coverFiles.filter((fileName) => !referencedCovers.includes(fileName))
+    const unusedCovers = coverFiles.filter((filename) => !referencedCovers.includes(filename))
 
     // Check 2: Find artists defined in artists.ts but not referenced in any release
     const unusedArtists = artists
@@ -52,14 +70,15 @@ export async function GET() {
         return { rymId, referencedIn: referencingReleases }
       })
 
+    const issues: HealthIssues = {
+      unusedCovers,
+      unusedArtists,
+      missingCovers,
+      missingArtists,
+    }
     return NextResponse.json({
       status: 'ok',
-      issues: {
-        unusedCovers,
-        unusedArtists,
-        missingCovers,
-        missingArtists,
-      },
+      issues,
       checkedAt: new Date().toISOString(),
     })
   } catch (error) {

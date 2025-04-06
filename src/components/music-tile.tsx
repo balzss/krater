@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import Image from 'next/image'
-import { type Artist } from '@/lib/artists'
+import { type Artist } from '@/lib/data'
 
 interface MusicTileProps {
   cover: string
