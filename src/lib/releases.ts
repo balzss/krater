@@ -191,15 +191,6 @@ export const releases: Release[] = [
     },
   },
   {
-    artistRymIds: [`[Artist81437]`],
-    title: `Timely!!`,
-    rymId: `[Album1835632]`,
-    cover: `%E6%9D%8F%E9%87%8C-anri-timely-Cover-Art.webp`,
-    media: {
-      spotify: `https://open.spotify.com/album/3OvZYx7AAGplmJjwD29JiV`,
-    },
-  },
-  {
     artistRymIds: [`[Artist243860]`],
     title: `Who is William Onyeabor?`,
     rymId: `[Album4695963]`,
@@ -1151,6 +1142,15 @@ export const releases: Release[] = [
     cover: `maxime-denuc-nachthorn-Cover-Art.webp`,
     media: {
       spotify: `https://open.spotify.com/album/0leFuQg79HX0GPmIhhV8rl`,
+    },
+  },
+  {
+    artistRymIds: [`[Artist81437]`],
+    title: `Timely!!`,
+    rymId: `[Album1835632]`,
+    cover: `杏里-anri-timely-Cover-Art.webp`,
+    media: {
+      spotify: `https://open.spotify.com/album/3OvZYx7AAGplmJjwD29JiV`,
     },
   },
 ]

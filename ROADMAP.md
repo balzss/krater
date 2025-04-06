@@ -6,9 +6,9 @@
 - [x] make removing releases via the extension work
 - [x] add artist listing page, create artist filter, make artist names clickable on release tiles
 - [x] make navigation between pages simpler: home button
-- [ ] create "manage" page for detecting missing artists/covers or other info and add "cleanup" function
+- [x] create "manage" page for detecting missing artists/covers or other info
+- [ ] add cleanup button to manage page
 - [ ] create compact view (roughly half the current tile width)
-- [ ] add screenshots to readme
 
 ## 1.0 stable release
 

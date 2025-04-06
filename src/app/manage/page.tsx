@@ -1,8 +1,44 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 // import { releases, artists } from '@/lib/data'
+
+type CheckResultProps = {
+  warningLabel: string
+  successLabel: string
+  warningItems: string[]
+  onItemClick?: (e: MouseEvent<HTMLButtonElement>, itemIndex: number) => void
+}
+
+function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: CheckResultProps) {
+  if (warningItems.length === 0) {
+    return (
+      <div className="max-w-lg w-full flex items-center gap-2">
+        <Check size={20} /> {successLabel}
+      </div>
+    )
+  }
+  return (
+    <div className="max-w-lg w-full">
+      <span className="flex items-center gap-2">
+        <TriangleAlert size={20} /> {warningLabel}
+      </span>
+      <ul className="ml-12">
+        {warningItems.map((item, index) => (
+          <li className="list-disc my-2 text-gray-400" key={item}>
+            <button
+              onClick={(e) => onItemClick?.(e, index)}
+              className="hover:underline cursor-pointer whitespace-nowrap"
+            >
+              {item}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 export default function ManagePage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -17,7 +53,6 @@ export default function ManagePage() {
     const fetchHealtData = async () => {
       const response = await fetch('/krater/api/health')
       const data = await response.json()
-      // Assuming the API response structure matches our expectations
       setMissingCovers(data?.issues?.missingCovers || [])
       setMissingArtistsData(data?.issues?.missingArtists || [])
       setUnusedArtistsData(data?.issues?.unusedArtists || [])
@@ -37,59 +72,35 @@ export default function ManagePage() {
       )}
       {!isLoading && (
         <>
-          <p className="flex items-center gap-2 max-w-lg w-full">
-            {missingCovers.length ? (
-              <>
-                <TriangleAlert size={20} />
-                {missingCovers.length} missing cover{missingCovers.length > 1 ? 's were ' : ' was '}
-                detected
-              </>
-            ) : (
-              <>
-                <Check size={20} /> No missing covers were detected
-              </>
+          <CheckResult
+            successLabel="No missing covers were detected"
+            warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+            warningItems={missingCovers.map((cover) => cover.title + ' / ' + cover.cover)}
+            onItemClick={(_e, i) => console.log(missingCovers[i])}
+          />
+
+          <CheckResult
+            successLabel="No covers were detected without any release associated"
+            warningLabel={`${unusedCoversData.length} cover${missingCovers.length > 1 ? 's were' : ' was'} detected without any release associated`}
+            warningItems={unusedCoversData}
+            onItemClick={(_e, i) => console.log(unusedCoversData[i])}
+          />
+
+          <CheckResult
+            successLabel="No releases were detected with missing artists"
+            warningLabel={`${missingArtistsData.length} relese ${missingArtistsData.length > 1 ? 's were ' : ' was '} detected with missing artist(s)`}
+            warningItems={missingArtistsData.map(
+              (missingArtist) => missingArtist.rymId + ' - ' + missingArtist.referencedIn
             )}
-          </p>
-          <p className="flex items-center gap-2 max-w-lg w-full">
-            {unusedCoversData.length ? (
-              <>
-                <TriangleAlert size={20} />
-                {unusedCoversData.length} cover{missingCovers.length > 1 ? 's were ' : ' was '}
-                detected without any release associated
-              </>
-            ) : (
-              <>
-                <Check size={20} /> No covers were detected without any release associated
-              </>
-            )}
-          </p>
-          <p className="flex items-center gap-2 max-w-lg w-full">
-            {missingArtistsData.length ? (
-              <>
-                <TriangleAlert size={20} />
-                {missingArtistsData.length} relese
-                {missingArtistsData.length > 1 ? 's were ' : ' was '} detected with missing
-                artist(s)
-              </>
-            ) : (
-              <>
-                <Check size={20} /> No releases were detected with missing artists
-              </>
-            )}
-          </p>
-          <p className="flex items-center gap-2 max-w-lg w-full">
-            {unusedArtistsData.length ? (
-              <>
-                <TriangleAlert size={20} />
-                {unusedArtistsData.length} artist
-                {unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release
-              </>
-            ) : (
-              <>
-                <Check size={20} /> No artists were detected without any release
-              </>
-            )}
-          </p>
+            onItemClick={(_e, i) => console.log(missingArtistsData[i])}
+          />
+
+          <CheckResult
+            successLabel="No artists were detected without any release"
+            warningLabel={`${unusedArtistsData.length} artist ${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
+            warningItems={unusedArtistsData.map((artist) => artist.displayName)}
+            onItemClick={(_e, i) => console.log(unusedArtistsData[i])}
+          />
         </>
       )}
     </div>
