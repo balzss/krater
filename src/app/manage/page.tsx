@@ -4,6 +4,8 @@ import { MouseEvent, useEffect, useState } from 'react'
 import { Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 // import { releases, artists } from '@/lib/data'
 
+const apiRoot = '/krater/api'
+
 type CheckResultProps = {
   warningLabel: string
   successLabel: string
@@ -47,21 +49,32 @@ export default function ManagePage() {
   const [unusedArtistsData, setUnusedArtistsData] = useState([])
   const [unusedCoversData, setUnusedCoversData] = useState([])
 
+  const fetchHealtData = async () => {
+    const response = await fetch('/krater/api/health')
+    const data = await response.json()
+    setMissingCovers(data?.issues?.missingCovers || [])
+    setMissingArtistsData(data?.issues?.missingArtists || [])
+    setUnusedArtistsData(data?.issues?.unusedArtists || [])
+    setUnusedCoversData(data?.issues?.unusedCovers || [])
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     document.title = 'Manage library | Krater'
-
-    const fetchHealtData = async () => {
-      const response = await fetch('/krater/api/health')
-      const data = await response.json()
-      setMissingCovers(data?.issues?.missingCovers || [])
-      setMissingArtistsData(data?.issues?.missingArtists || [])
-      setUnusedArtistsData(data?.issues?.unusedArtists || [])
-      setUnusedCoversData(data?.issues?.unusedCovers || [])
-      setIsLoading(false)
-    }
     setIsLoading(true)
     fetchHealtData()
   }, [])
+
+  const handleDeleteCover = async (filename: string) => {
+    if (!window.confirm(`Do you want to remove the cover file "${filename}"`)) return
+    await fetch(`${apiRoot}/covers?filename=${filename}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+    fetchHealtData()
+  }
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
@@ -83,7 +96,7 @@ export default function ManagePage() {
             successLabel="No covers were detected without any release associated"
             warningLabel={`${unusedCoversData.length} cover${missingCovers.length > 1 ? 's were' : ' was'} detected without any release associated`}
             warningItems={unusedCoversData}
-            onItemClick={(_e, i) => console.log(unusedCoversData[i])}
+            onItemClick={(_e, i) => handleDeleteCover(unusedCoversData[i])}
           />
 
           <CheckResult

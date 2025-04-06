@@ -1,43 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-// Assuming initialReleases is correctly read on import for baseline data.
-// WARNING: This pattern of reading/writing source is highly fragile.
 import { releases as initialReleases, type Release } from '@/lib/releases'
+import { readReleasesFileContent, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
 
 const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'releases.ts')
 const coversDir = path.join(process.cwd(), 'public', 'covers')
-
-/*
- * =============================================================================
- * 🚨 WARNING: Modifying source code files directly from an API is unconventional and risky! 🚨
- * Consider using a database or dedicated JSON file instead of rewriting TypeScript source.
- * Concurrency issues, build inconsistencies, and security risks are significant.
- * =============================================================================
- */
-
-// Helper: Ensure directory exists
-async function ensureDirectoryExists(dirPath: string) {
-  try {
-    await fs.mkdir(dirPath, { recursive: true })
-  } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code === 'EEXIST') {
-      return // Directory already exists, which is fine.
-    }
-    console.error(`Error creating directory ${dirPath}:`, error)
-    throw new Error(`Could not create directory: ${dirPath}`)
-  }
-}
-
-// Helper: Reads the raw content of the releases.ts file.
-async function readReleasesFileContent(): Promise<string> {
-  try {
-    return await fs.readFile(releasesFilePath, 'utf-8')
-  } catch (error: unknown) {
-    console.error('Error reading releases file:', error)
-    throw new Error('Could not read releases data file.')
-  }
-}
 
 // Helper: Writes the releases array back to the TS file.
 // WARNING: This string manipulation is fragile and prone to breaking.
@@ -104,22 +72,6 @@ async function writeReleasesToFile(releases: Release[]): Promise<void> {
   } catch (error: unknown) {
     console.error('Error writing releases file:', error)
     throw new Error('Could not write releases data file.')
-  }
-}
-
-// Helper: Delete cover file safely using the exact stored (should be decoded) filename
-async function deleteCoverFile(filename: string | undefined | null) {
-  if (!filename) return // No filename, nothing to delete
-  try {
-    // Filename should already be decoded and normalized as stored in releases.ts
-    const filePath = path.join(coversDir, filename)
-    await fs.unlink(filePath)
-    console.log(`Deleted cover file: ${filePath}`)
-  } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code !== 'ENOENT') {
-      // Only log errors other than "file not found"
-      console.error(`Error deleting cover file ${filename}:`, error)
-    }
   }
 }
 

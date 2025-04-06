@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { releases } from '@/lib/releases'
-import { artists } from '@/lib/artists'
+import { releases, artists } from '@/lib/data'
 
 export const dynamic = 'force-static'
 
