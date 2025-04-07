@@ -4,7 +4,7 @@ import path from 'path'
 import { releases as initialReleases, type Release } from '@/lib/data'
 import { readReleasesFileContent, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
 
-const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'releases.ts')
+const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'data', 'releases.ts')
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 
 // Helper: Writes the releases array back to the TS file.

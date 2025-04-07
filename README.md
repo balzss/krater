@@ -2,7 +2,7 @@
 
 # Krater
 
-Krater is a tool that brings the feeling of flipping through a physical vinyl collection to your digital library. Browse, search, and rediscover your favorite albums in a minimalist, self-hosted UI.
+Toolset for creating and updating a static website for your music collection, designed to mimic the experience of browsing a physical vinyl collection
 
 ## Philosophy
 

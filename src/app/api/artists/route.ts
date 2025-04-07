@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { artists as initialArtists, type Artist } from '@/lib/data'
 
-const artistsFilePath = path.join(process.cwd(), 'src', 'lib', 'artists.ts')
+const artistsFilePath = path.join(process.cwd(), 'src', 'lib', 'data', 'artists.ts')
 
 /*
  * =============================================================================
@@ -66,6 +66,7 @@ async function writeArtistsToFile(artists: Artist[]): Promise<void> {
 
   try {
     // Note: File writes might trigger dev server restarts.
+    console.log('write artists')
     await fs.writeFile(artistsFilePath, newFileContent, 'utf-8')
   } catch (error: unknown) {
     console.error('Error writing artists file:', error)
@@ -258,11 +259,10 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
     }
 
-    const currentArtists = [...initialArtists]
-    const initialLength = currentArtists.length
-    const filteredArtists = currentArtists.filter((a) => a.rymId !== rymIdToDelete)
+    const { artists } = await import('@/lib/data')
+    const filteredArtists = artists.filter((a) => a.rymId !== rymIdToDelete)
 
-    if (filteredArtists.length === initialLength) {
+    if (filteredArtists.length === artists.length) {
       return NextResponse.json(
         { message: `Artist with rymId '${rymIdToDelete}' not found.` },
         { status: 404 }

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { releases, artists } from '@/lib/data'
 
 export const dynamic = 'force-static'
 
@@ -12,8 +11,9 @@ export type HealthIssues = {
     displayName: string
   }[]
   missingCovers: {
-    title: string
-    cover: string
+    releaseTitle: string
+    releaseArtists: string
+    filename: string
     rymId: string
     rymUrl?: string
   }[]
@@ -25,6 +25,7 @@ export type HealthIssues = {
 
 export async function GET() {
   try {
+    const { releases, artists } = await import('@/lib/data')
     const coversDir = path.join(process.cwd(), 'public', 'covers')
     let coverFiles: string[] = []
     try {
@@ -58,7 +59,15 @@ export async function GET() {
     // Check 3: Find missing cover images (referenced in releases but seems missing on disk)
     const missingCovers = releases
       .filter((release) => !coverFiles.includes(release.cover))
-      .map(({ title, cover, rymId, rymUrl }) => ({ title, cover, rymId, rymUrl })) // Report the original URL-like name from releases.ts
+      .map(({ title, cover, rymId, rymUrl, artistRymIds }) => ({
+        releaseTitle: title,
+        filename: cover,
+        releaseArtists: artistRymIds
+          .map((artistRymId) => artists.find((a) => a.rymId === artistRymId)?.displayName)
+          .join(', '),
+        rymId,
+        rymUrl,
+      }))
 
     // Check 4: Find artists referenced in releases but not defined in artists.ts
     const missingArtists = referencedArtistRymIds

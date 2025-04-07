@@ -68,13 +68,27 @@ export default function ManagePage() {
 
   const handleDeleteCover = async (filename: string) => {
     if (!window.confirm(`Do you want to remove the cover file "${filename}"`)) return
+    setIsLoading(true)
     await fetch(`${apiRoot}/covers?filename=${filename}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
       },
     })
-    fetchHealtData()
+    await fetchHealtData()
+  }
+
+  const handleDeleteArtist = async (artistRymId: string, artistDisplayName: string) => {
+    if (!window.confirm(`Do you want to remove artist "${artistDisplayName}"`)) return
+    setIsLoading(true)
+    await fetch(`${apiRoot}/artists?rymId=${artistRymId}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+    // TODO fix stale data gets fetched after delete
+    await fetchHealtData()
   }
 
   return (
@@ -89,7 +103,9 @@ export default function ManagePage() {
           <CheckResult
             successLabel="No missing covers were detected"
             warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-            warningItems={missingCovers.map((cover) => cover.title + ' / ' + cover.cover)}
+            warningItems={missingCovers.map(
+              (cover) => `${cover.releaseArtists} - ${cover.releaseTitle} (${cover.filename})`
+            )}
             onItemClick={(_e, i) => console.log(missingCovers[i])}
           />
 
@@ -113,7 +129,9 @@ export default function ManagePage() {
             successLabel="No artists were detected without any release"
             warningLabel={`${unusedArtistsData.length} artist ${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
             warningItems={unusedArtistsData.map((artist) => artist.displayName)}
-            onItemClick={(_e, i) => console.log(unusedArtistsData[i])}
+            onItemClick={(_e, i) =>
+              handleDeleteArtist(unusedArtistsData[i].rymId, unusedArtistsData[i].displayName)
+            }
           />
         </>
       )}
