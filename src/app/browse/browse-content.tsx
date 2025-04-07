@@ -1,28 +1,36 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { House } from 'lucide-react'
-import { releases, artists, Release } from '@/lib/data'
+import { artists, Release } from '@/lib/data'
 import { MusicTile, SearchInput, ClearableTag } from '@/components'
+import { useFetchJson } from '@/hooks'
 
 export default function BrowsePageContent() {
-  const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [releaseResults, setReleaseResults] = useState<Release[]>([])
+  const {
+    data: releases,
+    loading: _relesesLoading,
+    error: _releasesError,
+  } = useFetchJson<Release[]>('/krater/data/releases.json')
 
+  const searchParams = useSearchParams()
   const artistParam = searchParams.get('a')
-  const releasesToList = artistParam
-    ? releases.filter((r) => r.artistRymIds.includes(artistParam))
-    : releases
 
-  useEffect(() => {
-    if (!searchQuery) {
-      setReleaseResults(releasesToList.sort(() => Math.random() - 0.5))
-      return
+  const filteredReleases = useMemo(() => {
+    if (!releases) return []
+
+    const result = artistParam
+      ? releases.filter((r) => r.artistRymIds.includes(artistParam))
+      : releases
+
+    if (searchQuery.trim() === '') {
+      return result.sort(() => Math.random() - 0.5)
     }
+
     const lowerSearchQuery = searchQuery.toLowerCase()
-    const filteredResults = releasesToList.filter((r) => {
+    return result.filter((r) => {
       const releaseArtists = r.artistRymIds
         .map((id) => artists.find((artist) => artist.rymId === id)?.displayName.toLowerCase())
         .join(' ')
@@ -31,8 +39,7 @@ export default function BrowsePageContent() {
         r.title.toLowerCase().includes(lowerSearchQuery)
       )
     })
-    setReleaseResults(filteredResults)
-  }, [searchQuery])
+  }, [releases, artistParam, searchQuery])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
@@ -58,7 +65,7 @@ export default function BrowsePageContent() {
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8 w-full justify-items-center m-4 sm:m-12">
-        {releaseResults.map(({ artistRymIds, title, rymId, cover, media }, index) => (
+        {filteredReleases.map(({ artistRymIds, title, rymId, cover, media }, index) => (
           <MusicTile
             key={rymId}
             cover={cover}

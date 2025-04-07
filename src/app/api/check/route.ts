@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { artists, releases } from '@/lib/data'
+import { artists } from '@/lib/data'
+import { readReleasesFile } from '@/lib/server'
+
+export const dynamic = 'force-static'
 
 // Check if the artist exists
 function findArtistById(rymId: string) {
   return artists.find((artist) => artist.rymId === rymId)
-}
-
-// Check if the release exists
-function findReleaseById(rymId: string) {
-  return releases.find((release) => release.rymId === rymId)
 }
 
 export async function GET(req: NextRequest) {
@@ -25,8 +23,11 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const releases = await readReleasesFile()
+
     const missingArtists = artistIds?.filter((id) => !findArtistById(id)) || []
-    const missingRelease = releaseId && findReleaseById(releaseId) ? '' : releaseId
+    const missingRelease =
+      releaseId && releases.find((release) => release.rymId === releaseId) ? '' : releaseId
 
     return NextResponse.json({ missingArtists, missingRelease }, { status: 200 })
   } catch (error) {
@@ -40,5 +41,3 @@ export async function GET(req: NextRequest) {
     )
   }
 }
-
-export const revalidate = 60 // The route will revalidate every 60 seconds

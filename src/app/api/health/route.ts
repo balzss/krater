@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
+import { readReleasesFile } from '@/lib/server'
 
 export const dynamic = 'force-static'
 
@@ -25,7 +26,8 @@ export type HealthIssues = {
 
 export async function GET() {
   try {
-    const { releases, artists } = await import('@/lib/data')
+    const releases = await readReleasesFile()
+    const { artists } = await import('@/lib/data')
     const coversDir = path.join(process.cwd(), 'public', 'covers')
     let coverFiles: string[] = []
     try {

@@ -1,21 +1,29 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { House, Dices } from 'lucide-react'
-import { releases, artists, Release } from '@/lib/data'
+import { artists, type Release } from '@/lib/data'
 import { MusicTile } from '@/components'
+import { useFetchJson } from '@/hooks'
 
 export default function RandomPage() {
+  const {
+    data: releases,
+    loading: _releasesLoading,
+    error: _releasesError,
+  } = useFetchJson<Release[]>('/krater/data/releases.json')
   const [chosenRelease, setChosenRelease] = useState<Release | null>()
-  const setRandomRelease = () => {
+
+  const setRandomRelease = useCallback(() => {
+    if (!releases) return
     const randomRelease = releases[Math.floor(Math.random() * releases.length)]
     setChosenRelease(randomRelease)
-  }
+  }, [releases])
 
   useEffect(() => {
     document.title = 'Random Release | Krater'
     setRandomRelease()
-  }, [])
+  }, [setRandomRelease])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">

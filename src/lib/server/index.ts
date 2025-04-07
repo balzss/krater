@@ -1,8 +1,9 @@
 import path from 'path'
 import fs from 'fs/promises'
+import type { Release } from '@/lib/data'
 
 const coversDir = path.join(process.cwd(), 'public', 'covers')
-const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'releases.ts')
+const releasesFilePath = path.join(process.cwd(), 'public', 'data', 'releases.json')
 
 export async function deleteCoverFile(filename: string | undefined | null) {
   if (!filename) return // No filename, nothing to delete
@@ -30,11 +31,17 @@ export async function ensureDirectoryExists(dirPath: string) {
   }
 }
 
-export async function readReleasesFileContent(): Promise<string> {
+export async function readReleasesFile(): Promise<Release[]> {
   try {
-    return await fs.readFile(releasesFilePath, 'utf-8')
+    const releasesJson = await fs.readFile(releasesFilePath, 'utf8')
+    const releasesData = JSON.parse(releasesJson)
+    return releasesData
   } catch (error: unknown) {
     console.error('Error reading releases file:', error)
     throw new Error('Could not read releases data file.')
   }
+}
+
+export async function writeReleasesToFile(releases: Release[]): Promise<void> {
+  await fs.writeFile(releasesFilePath, JSON.stringify(releases, null, 2), 'utf-8')
 }

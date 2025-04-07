@@ -560,4 +560,9 @@ export const artists: Artist[] = [
     rymId: '[Artist1493841]',
     rymUrl: 'https://rateyourmusic.com/artist/maxime-denuc',
   },
+  {
+    displayName: 'Gia Margaret',
+    rymId: '[Artist1313742]',
+    rymUrl: 'https://rateyourmusic.com/artist/gia-margaret',
+  },
 ]

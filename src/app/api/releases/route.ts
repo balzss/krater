@@ -1,102 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import { releases as initialReleases, type Release } from '@/lib/data'
-import { readReleasesFileContent, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
+import {
+  writeReleasesToFile,
+  readReleasesFile,
+  deleteCoverFile,
+  ensureDirectoryExists,
+} from '@/lib/server'
+import type { Release } from '@/lib/data'
 
-const releasesFilePath = path.join(process.cwd(), 'src', 'lib', 'data', 'releases.ts')
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 
-// Helper: Writes the releases array back to the TS file.
-// WARNING: This string manipulation is fragile and prone to breaking.
-async function writeReleasesToFile(releases: Release[]): Promise<void> {
-  const fileContent = await readReleasesFileContent()
-  const startMarker = 'export const releases: Release[] = ['
-  const endMarker = ']'
-  // Find the start of the array definition more robustly
-  const startIndex = fileContent.indexOf(startMarker)
-  // Find the closing bracket of the array definition
-  // This is simplistic and might fail with nested structures or comments
-  const endIndex = fileContent.lastIndexOf(endMarker, fileContent.length)
-
-  if (startIndex === -1 || endIndex === -1 || startIndex >= endIndex) {
-    console.error(
-      `File parsing markers not found correctly. Start index: ${startIndex}, End index: ${endIndex}. Content preview: ${fileContent.substring(0, 200)}`
-    )
-    throw new Error('Could not find releases array definition markers in src/lib/releases.ts.')
-  }
-
-  let newArrayString = '\n'
-  releases.forEach((release) => {
-    // Basic validation or default values
-    const title = release.title?.replace(/`/g, '\\`') ?? ''
-    const rymId = release.rymId?.replace(/`/g, '\\`') ?? ''
-    const cover = release.cover?.replace(/`/g, '\\`') ?? '' // Use the processed filename
-    const rymUrl = release.rymUrl ? `'${release.rymUrl.replace(/'/g, "\\'")}'` : undefined
-    const artistRymIds = release.artistRymIds ?? []
-    const media = release.media ?? {}
-
-    const artistRymIdsString = `[${artistRymIds.map((id) => `\`${id?.replace(/`/g, '\\`') ?? ''}\``).join(', ')}]`
-
-    const mediaEntries = Object.entries(media).map(([key, value]) => {
-      // Ensure value is a string before replacing backticks
-      const stringValue = typeof value === 'string' ? value : String(value)
-      const formattedValue = `\`${stringValue.replace(/`/g, '\\`')}\``
-      return `      ${key}: ${formattedValue},` // Consistent indentation
-    })
-    // Ensure proper formatting even if media is empty
-    const mediaString =
-      Object.keys(media).length > 0 ? `{\n${mediaEntries.join(',\n')}\n    }` : '{}'
-
-    newArrayString += `  {\n` // 2 spaces indentation for object start
-    newArrayString += `    artistRymIds: ${artistRymIdsString},\n` // 4 spaces for properties
-    newArrayString += `    title: \`${title}\`,\n`
-    newArrayString += `    rymId: \`${rymId}\`,\n`
-    if (rymUrl) newArrayString += `    rymUrl: ${rymUrl},\n`
-    newArrayString += `    cover: \`${cover}\`,\n` // Store the decoded, normalized filename
-    newArrayString += `    media: ${mediaString},\n`
-    newArrayString += `  },\n` // 2 spaces for object end
-  })
-  // Remove trailing comma and add newline for the last element if needed
-  if (newArrayString.endsWith(',\n')) {
-    newArrayString = newArrayString.slice(0, -2) + '\n'
-  }
-
-  const newFileContent =
-    fileContent.substring(0, startIndex + startMarker.length) +
-    newArrayString + // Add the formatted array content
-    fileContent.substring(endIndex) // Add the rest of the file from the closing bracket
-
-  try {
-    await fs.writeFile(releasesFilePath, newFileContent, 'utf-8')
-  } catch (error: unknown) {
-    console.error('Error writing releases file:', error)
-    throw new Error('Could not write releases data file.')
-  }
-}
-
-// --- API Route Handlers ---
-
-// GET: Return all releases (Reads from the imported, potentially stale data)
+// GET: Return all releases
 export async function GET(_req: NextRequest) {
   try {
-    // NOTE: This returns the data as it was when the server started/module was loaded.
-    // It does NOT reflect changes made by POST/PUT/DELETE without a server restart
-    // unless complex cache invalidation is implemented. Consider reading the file here
-    // or using a proper data source if real-time data is needed.
-    return NextResponse.json(initialReleases)
+    const releasesData = await readReleasesFile()
+    return NextResponse.json(releasesData)
   } catch (error: unknown) {
     console.error('[API RELEASES GET] Error:', error)
     return NextResponse.json({ message: 'Failed to fetch releases' }, { status: 500 })
   }
 }
 
-// POST: Add a new release with optional cover image upload
+// POST: Add a new release
 export async function POST(req: NextRequest) {
   try {
+    const releasesData = await readReleasesFile()
     await ensureDirectoryExists(coversDir)
     const formData = await req.formData()
-    const releaseData: Partial<Release> = {}
+    const newReleaseData: Partial<Release> = {}
     let coverFile: File | null = null
     let rawCoverFilenameFromForm: string | undefined = undefined // Store the raw filename from form
     let finalDecodedCoverFilename = '' // To store the decoded & normalized name
@@ -107,19 +39,19 @@ export async function POST(req: NextRequest) {
         if (key === 'coverImage') coverFile = value
       } else {
         if (key === 'title' || key === 'rymId' || key === 'rymUrl') {
-          releaseData[key] = value
+          newReleaseData[key] = value
         } else if (key === 'cover') {
           // Store the raw filename from the form first
           rawCoverFilenameFromForm = value
         } else if (key === 'artistRymIds') {
           try {
-            releaseData.artistRymIds = JSON.parse(value)
+            newReleaseData.artistRymIds = JSON.parse(value)
           } catch {
             throw new Error('Invalid JSON format for artistRymIds')
           }
         } else if (key === 'media') {
           try {
-            releaseData.media = JSON.parse(value)
+            newReleaseData.media = JSON.parse(value)
           } catch {
             throw new Error('Invalid JSON format for media')
           }
@@ -152,23 +84,21 @@ export async function POST(req: NextRequest) {
     }
 
     // Assign the processed filename to the data object
-    releaseData.cover = finalDecodedCoverFilename
+    newReleaseData.cover = finalDecodedCoverFilename
 
     // --- Validation ---
     if (
-      !releaseData.title ||
-      !releaseData.rymId ||
-      !releaseData.artistRymIds ||
-      !releaseData.media
+      !newReleaseData.title ||
+      !newReleaseData.rymId ||
+      !newReleaseData.artistRymIds ||
+      !newReleaseData.media
     ) {
       throw new Error('Missing required fields: title, rymId, artistRymIds, media')
     }
-    // Use initialReleases for read-only checks to avoid race conditions if possible
-    // NOTE: This check uses potentially stale data loaded at server start.
-    if (initialReleases.some((r) => r.rymId === releaseData.rymId)) {
-      throw new Error(`Release with rymId ${releaseData.rymId} already exists.`)
+    if (releasesData.some((r) => r.rymId === newReleaseData.rymId)) {
+      throw new Error(`Release with rymId ${newReleaseData.rymId} already exists.`)
     }
-    if (!Array.isArray(releaseData.artistRymIds) || releaseData.artistRymIds.length === 0) {
+    if (!Array.isArray(newReleaseData.artistRymIds) || newReleaseData.artistRymIds.length === 0) {
       throw new Error('artistRymIds must be a non-empty array.')
     }
 
@@ -194,19 +124,16 @@ export async function POST(req: NextRequest) {
     // --- Create and Save Release Data ---
     const newRelease: Release = {
       // Ensure all required fields are present and correctly typed
-      title: releaseData.title!,
-      rymId: releaseData.rymId!,
-      artistRymIds: releaseData.artistRymIds!,
+      title: newReleaseData.title!,
+      rymId: newReleaseData.rymId!,
+      artistRymIds: newReleaseData.artistRymIds!,
       cover: finalDecodedCoverFilename, // ** Store the DECODED and NORMALIZED filename **
-      media: releaseData.media!,
-      rymUrl: releaseData.rymUrl, // Optional
+      media: newReleaseData.media!,
+      rymUrl: newReleaseData.rymUrl, // Optional
     }
 
-    // NOTE: Modifying data based on potentially stale initialReleases.
-    // This is NOT safe in concurrent environments or across multiple server instances.
-    const currentReleases = [...initialReleases] // Create a mutable copy from the potentially stale import
-    currentReleases.push(newRelease)
-    await writeReleasesToFile(currentReleases) // Write the modified array back to the source file
+    const updatedReleases = [...releasesData, newRelease]
+    await writeReleasesToFile(updatedReleases)
 
     return NextResponse.json(
       { message: 'Release added successfully', release: newRelease },
@@ -250,6 +177,7 @@ export async function POST(req: NextRequest) {
 // PUT: Update an existing release, optionally updating/replacing the cover image
 export async function PUT(req: NextRequest) {
   try {
+    const releasesData = await readReleasesFile()
     await ensureDirectoryExists(coversDir)
     const formData = await req.formData()
     const updateData: Partial<Release> & { targetRymId?: string } = {}
@@ -312,16 +240,14 @@ export async function PUT(req: NextRequest) {
     }
 
     // --- Find Existing Release ---
-    // Read current state just before modifying - still not perfectly safe
-    const currentReleases = [...initialReleases] // Again, potentially stale read
-    const releaseIndex = currentReleases.findIndex((r) => r.rymId === updateData.targetRymId)
+    const releaseIndex = releasesData.findIndex((r) => r.rymId === updateData.targetRymId)
     if (releaseIndex === -1) {
       return NextResponse.json(
         { message: `Release with rymId ${updateData.targetRymId} not found.` },
         { status: 404 }
       )
     }
-    const originalRelease = currentReleases[releaseIndex]
+    const originalRelease = releasesData[releaseIndex]
     // The old filename stored should already be decoded/normalized if POST was fixed
     const oldCoverFilename = originalRelease.cover
 
@@ -378,8 +304,8 @@ export async function PUT(req: NextRequest) {
     }
     delete updatedReleaseData.targetRymId // Remove temporary field
 
-    currentReleases[releaseIndex] = updatedReleaseData as Release // Update the array
-    await writeReleasesToFile(currentReleases)
+    releasesData[releaseIndex] = updatedReleaseData as Release // Update the array
+    await writeReleasesToFile(releasesData)
 
     return NextResponse.json(
       { message: 'Release updated successfully', release: updatedReleaseData },
@@ -428,9 +354,8 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
     }
 
-    // Read current state just before modifying
-    const currentReleases = [...initialReleases] // Still potentially stale
-    const releaseIndex = currentReleases.findIndex((r) => r.rymId === rymIdToDelete)
+    const releasesData = await readReleasesFile()
+    const releaseIndex = releasesData.findIndex((r) => r.rymId === rymIdToDelete)
 
     if (releaseIndex === -1) {
       return NextResponse.json(
@@ -439,24 +364,16 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    const releaseToDelete = currentReleases[releaseIndex]
-    // Assumes 'cover' field now stores the decoded/normalized name correctly
+    const releaseToDelete = releasesData[releaseIndex]
     const coverFilenameToDelete = releaseToDelete.cover
+    const filteredReleases = releasesData.filter((_, index) => index !== releaseIndex)
 
-    // Filter out the release
-    const filteredReleases = currentReleases.filter((_, index) => index !== releaseIndex)
-
-    // Write updated data file *first*
     await writeReleasesToFile(filteredReleases)
-
-    // Delete associated cover image file using the stored (decoded) name
     await deleteCoverFile(coverFilenameToDelete)
 
     return NextResponse.json(
       {
         message: `Release with rymId '${rymIdToDelete}' deleted successfully.`,
-        // Returning the filtered list might be large, maybe just return success?
-        // releases: filteredReleases, // Consider removing this for large datasets
       },
       { status: 200 }
     )
