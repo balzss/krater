@@ -16,7 +16,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 }) => {
   return (
     <a
-      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-sm cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center"
+      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-sm cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center h-12"
       {...rest}
     >
       {StartIcon && <StartIcon size={20} />}

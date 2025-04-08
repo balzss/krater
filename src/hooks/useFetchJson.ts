@@ -6,7 +6,11 @@ interface UseFetchJsonReturn<T> {
   error: Error | null
 }
 
-function useFetchJson<T>(filePath: string): UseFetchJsonReturn<T> {
+type HookOptions = {
+  randomize?: boolean
+}
+
+function useFetchJson<T>(filePath: string, options: HookOptions = {}): UseFetchJsonReturn<T> {
   const [data, setData] = useState<T | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error | null>(null)
@@ -34,7 +38,11 @@ function useFetchJson<T>(filePath: string): UseFetchJsonReturn<T> {
         }
 
         const jsonData = (await response.json()) as T // Type assertion
-        setData(jsonData)
+        if (options.randomize && Array.isArray(jsonData)) {
+          setData(jsonData.sort(() => Math.random() - 0.5))
+        } else {
+          setData(jsonData)
+        }
       } catch (err) {
         if (err instanceof Error) {
           // Type guard for error
@@ -62,7 +70,7 @@ function useFetchJson<T>(filePath: string): UseFetchJsonReturn<T> {
       controller.abort()
       setLoading(false)
     }
-  }, [filePath])
+  }, [filePath, options.randomize])
 
   return { data, loading, error }
 }

@@ -44,16 +44,16 @@ export default function BrowsePageContent() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
       <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6">
+        <SearchInput
+          query={searchQuery}
+          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+        />
         <a
           href="/krater"
           className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
         >
           <House size={32} />
         </a>
-        <SearchInput
-          query={searchQuery}
-          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
-        />
       </div>
       {artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">

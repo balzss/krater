@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
-import { House, Dices } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { House, Dices, Undo2 } from 'lucide-react'
 import { artists, type Release } from '@/lib/data'
 import { MusicTile } from '@/components'
 import { useFetchJson } from '@/hooks'
@@ -9,53 +9,62 @@ import { useFetchJson } from '@/hooks'
 export default function RandomPage() {
   const {
     data: releases,
-    loading: _releasesLoading,
+    loading: releasesLoading,
     error: _releasesError,
-  } = useFetchJson<Release[]>('/krater/data/releases.json')
-  const [chosenRelease, setChosenRelease] = useState<Release | null>()
-
-  const setRandomRelease = useCallback(() => {
-    if (!releases) return
-    const randomRelease = releases[Math.floor(Math.random() * releases.length)]
-    setChosenRelease(randomRelease)
-  }, [releases])
+  } = useFetchJson<Release[]>('/krater/data/releases.json', { randomize: true })
+  const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
 
   useEffect(() => {
     document.title = 'Random Release | Krater'
-    setRandomRelease()
-  }, [setRandomRelease])
+  }, [])
+
+  const handleUndoButton = () => {
+    if (chosenReleaseIndex > 0) setChosenReleaseIndex((prevIndex) => prevIndex - 1)
+  }
+
+  const handleRollButton = () => {
+    if (!releases?.length) return
+    setChosenReleaseIndex((prevIndex) => (prevIndex + 1) % releases?.length)
+  }
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <div className="flex items-center w-full max-w-sm gap-4 mb-4">
-        <a
-          href="/krater"
-          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
-        >
-          <House size={32} />
-        </a>
-      </div>
       <div className="w-full max-w-sm flex flex-col">
-        {chosenRelease && (
-          <MusicTile
-            key={chosenRelease.rymId}
-            cover={chosenRelease.cover}
-            artists={chosenRelease.artistRymIds.map((id) =>
-              artists.find((artist) => artist.rymId === id)
-            )}
-            title={chosenRelease.title}
-            media={chosenRelease.media.spotify}
-            priority
-          />
+        {!releasesLoading && releases && (
+          <>
+            <MusicTile
+              key={releases[chosenReleaseIndex].rymId}
+              cover={releases[chosenReleaseIndex].cover}
+              artists={releases[chosenReleaseIndex].artistRymIds.map((id) =>
+                artists.find((artist) => artist.rymId === id)
+              )}
+              title={releases[chosenReleaseIndex].title}
+              media={releases[chosenReleaseIndex].media.spotify}
+              priority
+            />
+            <div className="flex justify-between m-6">
+              <button
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200 disabled:cursor-not-allowed disabled:text-neutral-500"
+                onClick={handleUndoButton}
+                disabled={chosenReleaseIndex === 0}
+              >
+                <Undo2 size={48} />
+              </button>
+              <button
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200"
+                onClick={handleRollButton}
+              >
+                <Dices size={48} />
+              </button>
+              <a
+                href="/krater"
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200"
+              >
+                <House size={48} />
+              </a>
+            </div>
+          </>
         )}
-        <div className="flex justify-center m-6">
-          <button
-            className="p-3 duration-300 transform transition hover:scale-105 cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200"
-            onClick={setRandomRelease}
-          >
-            <Dices className="w-12 h-12" />
-          </button>
-        </div>
       </div>
     </div>
   )

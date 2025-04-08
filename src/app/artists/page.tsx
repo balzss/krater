@@ -32,16 +32,16 @@ export default function ArtistsPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
       <div className="flex items-center w-full max-w-md gap-4 sm:gap-6 sm:mb-4">
+        <SearchInput
+          query={searchQuery}
+          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+        />
         <a
           href="/krater"
           className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
         >
           <House size={32} />
         </a>
-        <SearchInput
-          query={searchQuery}
-          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
-        />
       </div>
       {artistResults.map((artist) => (
         <a
