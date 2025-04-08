@@ -1,9 +1,10 @@
 import path from 'path'
 import fs from 'fs/promises'
-import type { Release } from '@/lib/data'
+import type { Release, Artist } from '@/lib/data'
 
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 const releasesFilePath = path.join(process.cwd(), 'public', 'data', 'releases.json')
+const artistsFilePath = path.join(process.cwd(), 'public', 'data', 'artists.json')
 
 export async function deleteCoverFile(filename: string | undefined | null) {
   if (!filename) return // No filename, nothing to delete
@@ -44,4 +45,19 @@ export async function readReleasesFile(): Promise<Release[]> {
 
 export async function writeReleasesToFile(releases: Release[]): Promise<void> {
   await fs.writeFile(releasesFilePath, JSON.stringify(releases, null, 2), 'utf-8')
+}
+
+export async function readArtistsFile(): Promise<Artist[]> {
+  try {
+    const artistsJson = await fs.readFile(artistsFilePath, 'utf8')
+    const artistsData = JSON.parse(artistsJson)
+    return artistsData
+  } catch (error: unknown) {
+    console.error('Error reading artists file:', error)
+    throw new Error('Could not read artists data file.')
+  }
+}
+
+export async function writeArtistsToFile(artists: Artist[]): Promise<void> {
+  await fs.writeFile(artistsFilePath, JSON.stringify(artists, null, 2), 'utf-8')
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { Library, User, Dices, Github, ExternalLink, Wrench, Loader } from 'lucide-react'
-import { type Release, artists } from '@/lib/data'
+import type { Release, Artist } from '@/lib/data'
 import { MenuItem } from '@/components'
 import { useFetchJson } from '@/hooks'
 
@@ -12,6 +12,11 @@ export function MainPageContent() {
     loading: releasesLoading,
     error: _releasesError,
   } = useFetchJson<Release[]>('/krater/data/releases.json')
+  const {
+    data: artists,
+    loading: artistsLoading,
+    error: _artistsError,
+  } = useFetchJson<Artist[]>('/krater/data/artists.json')
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
@@ -19,8 +24,8 @@ export function MainPageContent() {
         {!releasesLoading && `Browse all ${releases?.length || 0} releases`}
       </MenuItem>
 
-      <MenuItem startIcon={User} href="/krater/artists">
-        View {artists.length} artists
+      <MenuItem startIcon={artistsLoading ? Loader : User} href="/krater/artists">
+        {!artistsLoading && `View ${artists?.length} artists`}
       </MenuItem>
 
       <MenuItem startIcon={Dices} href="/krater/random">

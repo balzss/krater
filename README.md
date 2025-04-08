@@ -34,11 +34,11 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
 
 ## How It Works
 
-1.  **Data Storage:** All release and artist information is stored directly in TypeScript files:
-    * `src/lib/releases.ts`
-    * `src/lib/artists.ts`
+1.  **Data Storage:** All release and artist information is stored in JSON files:
+    * `public/data/releases.json`
+    * `public/data/artists.json`
 2.  **Adding Releases:** You add releases manually by editing the data files. To simplify this, a Chrome extension is provided.
-3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover image) to your *local* Krater dev server, which then attempts to add it to your `releases.ts` file.
+3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover image) to your *local* Krater dev server, which then attempts to add it to your `releases.json` file.
 4.  **Static Site Generation:** The project uses Next.js to build into a set of static HTML, CSS, and JavaScript files suitable for static hosting.
 5.  **Deployment:** These static files can be hosted anywhere.
 
@@ -86,12 +86,12 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
 1.  **IMPORTANT:** Ensure your local development server (`npm run dev` at `http://localhost:3000`) is running. The extension sends data to this local server.
 2.  Navigate to a release page on `rateyourmusic.com`.
 3.  Click "Add to Krater" above the release title. It should attempt to extract the data and send it.
-4.  Check your `src/lib/releases.ts` file – the new release should be appended.
+4.  Check your `public/data/releases.json` file – the new release should be appended.
 5.  You can also remove releases with the extension if already added
 
 ### Manual Data Entry
 
-You can always directly edit `src/lib/releases.ts` and `src/lib/artists.ts` following the existing data structure.
+You can always directly edit `public/data/releases.json` and `public/data/artists.json` following the existing data structure.
 
 ### Cover arts
 

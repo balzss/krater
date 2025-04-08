@@ -3,9 +3,9 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { House } from 'lucide-react'
-import { artists, Release } from '@/lib/data'
 import { MusicTile, SearchInput, ClearableTag } from '@/components'
 import { useFetchJson } from '@/hooks'
+import type { Artist, Release } from '@/lib/data'
 
 export default function BrowsePageContent() {
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -14,12 +14,17 @@ export default function BrowsePageContent() {
     loading: _relesesLoading,
     error: _releasesError,
   } = useFetchJson<Release[]>('/krater/data/releases.json')
+  const {
+    data: artists,
+    loading: _artistsLoading,
+    error: _artistsError,
+  } = useFetchJson<Artist[]>('/krater/data/artists.json')
 
   const searchParams = useSearchParams()
   const artistParam = searchParams.get('a')
 
   const filteredReleases = useMemo(() => {
-    if (!releases) return []
+    if (!releases || !artists) return []
 
     const result = artistParam
       ? releases.filter((r) => r.artistRymIds.includes(artistParam))
@@ -39,7 +44,7 @@ export default function BrowsePageContent() {
         r.title.toLowerCase().includes(lowerSearchQuery)
       )
     })
-  }, [releases, artistParam, searchQuery])
+  }, [releases, artistParam, searchQuery, artists])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
@@ -55,7 +60,7 @@ export default function BrowsePageContent() {
           <House size={32} />
         </a>
       </div>
-      {artistParam && (
+      {artists && artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">
           <ClearableTag
             href="/krater/browse"
@@ -65,16 +70,17 @@ export default function BrowsePageContent() {
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-8 w-full justify-items-center m-4 sm:m-12">
-        {filteredReleases.map(({ artistRymIds, title, rymId, cover, media }, index) => (
-          <MusicTile
-            key={rymId}
-            cover={cover}
-            artists={artistRymIds.map((id) => artists.find((artist) => artist.rymId === id))}
-            title={title}
-            media={media.spotify}
-            priority={index < 8}
-          />
-        ))}
+        {artists &&
+          filteredReleases.map(({ artistRymIds, title, rymId, cover, media }, index) => (
+            <MusicTile
+              key={rymId}
+              cover={cover}
+              artists={artistRymIds.map((id) => artists.find((artist) => artist.rymId === id))}
+              title={title}
+              media={media.spotify}
+              priority={index < 8}
+            />
+          ))}
       </div>
     </div>
   )

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { House, Dices, Undo2 } from 'lucide-react'
-import { artists, type Release } from '@/lib/data'
 import { MusicTile } from '@/components'
 import { useFetchJson } from '@/hooks'
+import type { Artist, Release } from '@/lib/data'
 
 export default function RandomPage() {
   const {
@@ -12,6 +12,12 @@ export default function RandomPage() {
     loading: releasesLoading,
     error: _releasesError,
   } = useFetchJson<Release[]>('/krater/data/releases.json', { randomize: true })
+  const {
+    data: artists,
+    loading: artistsLoading,
+    error: _artistsError,
+  } = useFetchJson<Artist[]>('/krater/data/artists.json')
+
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
 
   useEffect(() => {
@@ -30,7 +36,7 @@ export default function RandomPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
       <div className="w-full max-w-sm flex flex-col">
-        {!releasesLoading && releases && (
+        {!releasesLoading && releases && !artistsLoading && artists && (
           <>
             <MusicTile
               key={releases[chosenReleaseIndex].rymId}

@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import Image from 'next/image'
-import { type Artist } from '@/lib/data'
+import type { Artist } from '@/lib/data'
 
 interface MusicTileProps {
   cover: string
@@ -38,10 +38,14 @@ const MusicTile: React.FC<MusicTileProps> = ({
         </a>
         <p className="text-sm text-gray-600">
           {artists.map((artist, index) => (
-            <Fragment key={artist?.rymId}>
-              <a className="hover:text-gray-500" href={`/krater/browse?a=${artist?.rymId}`}>
-                {artist?.displayName}
-              </a>
+            <Fragment key={artist?.rymId || index}>
+              {artist ? (
+                <a className="hover:text-gray-500" href={`/krater/browse?a=${artist?.rymId}`}>
+                  {artist?.displayName}
+                </a>
+              ) : (
+                <span>Unknown</span>
+              )}
               {index < artists.length - 1 ? ', ' : ''}
             </Fragment>
           ))}

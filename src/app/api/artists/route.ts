@@ -1,80 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
-import { artists as initialArtists, type Artist } from '@/lib/data'
+import { readArtistsFile, writeArtistsToFile } from '@/lib/server'
+import type { Artist } from '@/lib/data'
 
-const artistsFilePath = path.join(process.cwd(), 'src', 'lib', 'data', 'artists.ts')
-
-/*
- * =============================================================================
- * 🚨 WARNING: Modifying source code directly from an API is unconventional and risky! 🚨
- * =============================================================================
- * - Concurrency issues, build process interference, scalability limits (serverless),
- * and potential security risks are associated with this pattern.
- * - Consider databases, separate data files (JSON), or external APIs instead.
- * - This implementation is primarily for demonstration or specific local tooling.
- * =============================================================================
- */
-
-// Reads the raw content of the artists.ts file.
-async function readArtistsFileContent(): Promise<string> {
-  try {
-    return await fs.readFile(artistsFilePath, 'utf-8')
-  } catch (error: unknown) {
-    console.error('Error reading artists file:', error)
-    throw new Error('Could not read artists data file.')
-  }
-}
-
-// Rewrites the artists.ts file with the provided artists array.
-async function writeArtistsToFile(artists: Artist[]): Promise<void> {
-  const fileContent = await readArtistsFileContent()
-  console.log(fileContent)
-
-  // FRAGILE: Relies on specific string markers in the source file.
-  const startMarker = 'export const artists: Artist[] = ['
-  const endMarker = ']'
-
-  const startIndex = fileContent.indexOf(startMarker)
-  const endIndex = fileContent.lastIndexOf(endMarker, fileContent.length)
-
-  if (startIndex === -1 || endIndex === -1 || startIndex >= endIndex) {
-    console.error(
-      `File parsing markers not found correctly. Start index: ${startIndex}, End index: ${endIndex}`
-    )
-    throw new Error('Could not find artists array definition markers in src/lib/artists.ts.')
-  }
-
-  // Construct the string for the new array data
-  let newArrayString = '\n'
-  artists.forEach((artist) => {
-    const displayName = artist.displayName.replace(/'/g, "\\'")
-    const rymId = artist.rymId.replace(/'/g, "\\'")
-    const rymUrl = artist.rymUrl ? artist.rymUrl.replace(/'/g, "\\'") : null
-    newArrayString += `  {\n`
-    newArrayString += `    displayName: '${displayName}',\n`
-    newArrayString += `    rymId: '${rymId}',\n`
-    if (rymUrl) newArrayString += `    rymUrl: '${rymUrl}',\n`
-    newArrayString += `  },\n`
-  })
-
-  // Rebuild the file content string
-  const newFileContent =
-    fileContent.substring(0, startIndex + startMarker.length) +
-    newArrayString +
-    fileContent.substring(endIndex)
-
-  try {
-    // Note: File writes might trigger dev server restarts.
-    console.log('write artists')
-    await fs.writeFile(artistsFilePath, newFileContent, 'utf-8')
-  } catch (error: unknown) {
-    console.error('Error writing artists file:', error)
-    throw new Error('Could not write artists data file.')
-  }
-}
-
-// Interface for the PUT response payload structure
 interface PutResponsePayload {
   message: string
   updated: Artist[]
@@ -83,12 +10,11 @@ interface PutResponsePayload {
 }
 
 export const dynamic = 'force-static'
-// --- API Route Handlers ---
 
 export async function GET(_req: NextRequest) {
   try {
-    // Return the initially imported artists array for GET requests.
-    return NextResponse.json(initialArtists)
+    const artists = await readArtistsFile()
+    return NextResponse.json(artists)
   } catch (error: unknown) {
     console.error('[API ARTISTS GET] Error:', error)
     return NextResponse.json({ message: 'Failed to fetch artists' }, { status: 500 })
@@ -116,8 +42,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const currentArtists = [...initialArtists]
-    const currentRymIds = new Set(currentArtists.map((a) => a.rymId))
+    const artists = await readArtistsFile()
+    const currentRymIds = new Set(artists.map((a) => a.rymId))
     const addedArtists: Artist[] = []
     const skippedArtists: { artist: Artist; reason: string }[] = []
 
@@ -135,13 +61,13 @@ export async function POST(req: NextRequest) {
         {
           message: 'No new artists were added (duplicates or invalid data skipped).',
           skipped: skippedArtists,
-          artists: currentArtists,
+          artists: artists,
         },
         { status: 200 }
       )
     }
 
-    const finalArtists = [...currentArtists, ...addedArtists]
+    const finalArtists = [...artists, ...addedArtists]
     await writeArtistsToFile(finalArtists)
 
     return NextResponse.json(
@@ -193,7 +119,8 @@ export async function PUT(req: NextRequest) {
       )
     }
 
-    const currentArtists = [...initialArtists]
+    const artists = await readArtistsFile()
+    const currentArtists = [...artists]
     let updated = false
     const updatedArtistsResult: Artist[] = []
     const notFoundIds: string[] = []
@@ -259,7 +186,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
     }
 
-    const { artists } = await import('@/lib/data')
+    const artists = await readArtistsFile()
     const filteredArtists = artists.filter((a) => a.rymId !== rymIdToDelete)
 
     if (filteredArtists.length === artists.length) {

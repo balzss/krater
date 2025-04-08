@@ -9,4 +9,8 @@ export type Release = {
   }
 }
 
-export { artists, type Artist } from './artists'
+export type Artist = {
+  displayName: string
+  rymId: string
+  rymUrl?: string
+}

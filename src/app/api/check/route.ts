@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { artists } from '@/lib/data'
-import { readReleasesFile } from '@/lib/server'
+import { readReleasesFile, readArtistsFile } from '@/lib/server'
 
 export const dynamic = 'force-static'
-
-// Check if the artist exists
-function findArtistById(rymId: string) {
-  return artists.find((artist) => artist.rymId === rymId)
-}
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,8 +18,10 @@ export async function GET(req: NextRequest) {
     }
 
     const releases = await readReleasesFile()
+    const artists = await readArtistsFile()
 
-    const missingArtists = artistIds?.filter((id) => !findArtistById(id)) || []
+    const missingArtists =
+      artistIds?.filter((id) => !artists.findIndex((a) => a.rymId === id)) || []
     const missingRelease =
       releaseId && releases.find((release) => release.rymId === releaseId) ? '' : releaseId
 

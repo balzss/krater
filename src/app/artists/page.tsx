@@ -3,17 +3,24 @@
 import { useState, useEffect } from 'react'
 import { House } from 'lucide-react'
 import { SearchInput } from '@/components'
-import { artists, type Artist } from '@/lib/data'
+import { type Artist } from '@/lib/data'
+import { useFetchJson } from '@/hooks'
 
 export default function ArtistsPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [artistResults, setArtistResults] = useState<Artist[]>([])
+  const {
+    data: artists,
+    loading: _artistsLoading,
+    error: _artistsError,
+  } = useFetchJson<Artist[]>('/krater/data/artists.json')
 
   useEffect(() => {
     document.title = 'Artists | Krater'
   }, [])
 
   useEffect(() => {
+    if (!artists) return
     if (!searchQuery) {
       setArtistResults(
         artists.sort((a, b) =>
@@ -27,7 +34,7 @@ export default function ArtistsPage() {
       artist.displayName.toLowerCase().includes(lowerSearchQuery)
     )
     setArtistResults(filteredResults)
-  }, [searchQuery])
+  }, [searchQuery, artists])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
