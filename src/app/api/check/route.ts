@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
     const releases = await readReleasesFile()
     const artists = await readArtistsFile()
 
-    const missingArtists =
-      artistIds?.filter((id) => !artists.findIndex((a) => a.rymId === id)) || []
+    const missingArtists = artistIds?.filter((id) => !artists.find((a) => a.rymId === id)) || []
+
     const missingRelease =
       releaseId && releases.find((release) => release.rymId === releaseId) ? '' : releaseId
 
