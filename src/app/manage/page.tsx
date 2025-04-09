@@ -1,8 +1,7 @@
 'use client'
 
 import { MouseEvent, useEffect, useState } from 'react'
-import { Check, TriangleAlert, LoaderCircle } from 'lucide-react'
-// import { releases, artists } from '@/lib/data'
+import { House, Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 import type { HealthIssues } from '../api/health/route'
 
 const apiRoot = '/krater/api'
@@ -32,7 +31,7 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
           <li className="list-disc my-2 text-gray-400" key={item}>
             <button
               onClick={(e) => onItemClick?.(e, index)}
-              className="hover:underline cursor-pointer whitespace-nowrap"
+              className="hover:underline cursor-pointer block text-start"
             >
               {item}
             </button>
@@ -87,12 +86,19 @@ export default function ManagePage() {
         Accept: 'application/json',
       },
     })
-    // TODO fix stale data gets fetched after delete
     await fetchHealtData()
   }
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
+      <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6 justify-end">
+        <a
+          href="/krater"
+          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
+        >
+          <House size={32} />
+        </a>
+      </div>
       {isLoading && (
         <p className="flex items-center gap-2 max-w-lg w-full">
           <LoaderCircle size={20} className="animate-spin" /> Fetching data...
@@ -110,17 +116,17 @@ export default function ManagePage() {
           />
 
           <CheckResult
-            successLabel="No covers were detected without any release associated"
-            warningLabel={`${unusedCoversData.length} cover${missingCovers.length > 1 ? 's were' : ' was'} detected without any release associated`}
+            successLabel="No unused covers were detected"
+            warningLabel={`${unusedCoversData.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
             warningItems={unusedCoversData}
             onItemClick={(_e, i) => handleDeleteCover(unusedCoversData[i])}
           />
 
           <CheckResult
-            successLabel="No releases were detected with missing artists"
-            warningLabel={`${missingArtistsData.length} relese ${missingArtistsData.length > 1 ? 's were ' : ' was '} detected with missing artist(s)`}
+            successLabel="No missing artists were detected"
+            warningLabel={`${missingArtistsData.length} missing artist${missingArtistsData.length > 1 ? 's were ' : ' was '} detected`}
             warningItems={missingArtistsData.map(
-              (missingArtist) => missingArtist.rymId + ' - ' + missingArtist.referencedIn
+              (missingArtist) => missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
             )}
             onItemClick={(_e, i) => console.log(missingArtistsData[i])}
           />

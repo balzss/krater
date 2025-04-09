@@ -7,7 +7,8 @@ interface UseFetchJsonReturn<T> {
 }
 
 type HookOptions = {
-  randomize?: boolean
+  sort?: 'asc' | 'desc' | 'random'
+  sortKey?: string
 }
 
 function useFetchJson<T>(filePath: string, options: HookOptions = {}): UseFetchJsonReturn<T> {
@@ -15,6 +16,7 @@ function useFetchJson<T>(filePath: string, options: HookOptions = {}): UseFetchJ
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<Error | null>(null)
 
+  const { sort, sortKey } = options
   useEffect(() => {
     const controller = new AbortController()
     const signal = controller.signal
@@ -37,12 +39,28 @@ function useFetchJson<T>(filePath: string, options: HookOptions = {}): UseFetchJ
           throw new TypeError('Received non-JSON response')
         }
 
-        const jsonData = (await response.json()) as T // Type assertion
-        if (options.randomize && Array.isArray(jsonData)) {
-          setData(jsonData.sort(() => Math.random() - 0.5))
-        } else {
+        const jsonData = await response.json()
+        let sortedData
+        const dataToSort = [...jsonData] as T
+
+        if (!sort || !sortKey || !Array.isArray(dataToSort)) {
           setData(jsonData)
+          return
         }
+        switch (sort) {
+          case 'asc':
+            sortedData = dataToSort.sort((a, b) => a[sortKey].localeCompare(String(b[sortKey!])))
+            break
+          case 'desc':
+            sortedData = dataToSort.sort((a, b) => b[sortKey].localeCompare(a[sortKey]))
+            break
+          case 'random':
+            sortedData = dataToSort.sort(() => Math.random() - 0.5)
+            break
+          default:
+            sortedData = dataToSort
+        }
+        setData(sortedData)
       } catch (err) {
         if (err instanceof Error) {
           // Type guard for error
@@ -70,7 +88,7 @@ function useFetchJson<T>(filePath: string, options: HookOptions = {}): UseFetchJ
       controller.abort()
       setLoading(false)
     }
-  }, [filePath, options.randomize])
+  }, [filePath, sort, sortKey])
 
   return { data, loading, error }
 }

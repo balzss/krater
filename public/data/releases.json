@@ -1,18 +1,6 @@
 [
   {
     "artistRymIds": [
-      "[Artist661586]",
-      "[Artist45522]"
-    ],
-    "title": "Lamb Over Rice",
-    "rymId": "[Album10820731]",
-    "cover": "action-bronson-and-the-alchemist-lamb-over-rice-Cover-Art.webp",
-    "media": {
-      "spotify": "https://open.spotify.com/album/3BPX4x5EQOd9vzpPC2rMrm"
-    }
-  },
-  {
-    "artistRymIds": [
       "[Artist684375]"
     ],
     "title": "Flight of the Ancients",
@@ -31,7 +19,8 @@
     "cover": "studio-west-coast-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/545TSuBXtKERt6xHTpQDSA"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/studio/west-coast/"
   },
   {
     "artistRymIds": [
@@ -76,7 +65,8 @@
     "cover": "jpegmafia-and-danny-brown-scaring-the-hoes-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/3u20OXh03DjCUzbf8XcGTq"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/jpegmafia-danny-brown/scaring-the-hoes/"
   },
   {
     "artistRymIds": [
@@ -110,7 +100,8 @@
     "cover": "rhythm-and-sound-see-mi-yah-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/3pk6hhImeji8Eovq724Sun"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/rhythm-and-sound/see-mi-yah/"
   },
   {
     "artistRymIds": [
@@ -176,7 +167,8 @@
     "cover": "denzel-curry-zuu-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/6PkSBdx19zarn4ae1D08gA"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/denzel-curry/zuu/"
   },
   {
     "artistRymIds": [
@@ -209,7 +201,8 @@
     "cover": "nala-sinephro-endlessness-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/51CQQ3tQLRZlZJZ5jcpoGE"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/nala-sinephro/endlessness/"
   },
   {
     "artistRymIds": [
@@ -220,7 +213,8 @@
     "cover": "jessie-ware-whats-your-pleasure-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1CTm3ARqDETSm7GfvNYNJp"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/jessie-ware/whats-your-pleasure/"
   },
   {
     "artistRymIds": [
@@ -242,7 +236,8 @@
     "cover": "floating-points-crush-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1WwZwdTICfaZI51BIIEN9z"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/floating-points/crush/"
   },
   {
     "artistRymIds": [
@@ -286,7 +281,8 @@
     "cover": "warpaint-exquisite-corpse-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/6oRX4P7faDMJAk0Of2uh5i"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/warpaint/exquisite-corpse/"
   },
   {
     "artistRymIds": [
@@ -319,7 +315,8 @@
     "cover": "tim-hecker-ravedeath-1972-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/6Iu8toVsvCc3I4INxYiVIy"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/tim-hecker/ravedeath-1972/"
   },
   {
     "artistRymIds": [
@@ -352,7 +349,8 @@
     "cover": "chinese-man-the-groove-sessions-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/6xe3lv1DBAh6Ef7BrBs0WE"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/chinese-man/the-groove-sessions/"
   },
   {
     "artistRymIds": [
@@ -374,7 +372,8 @@
     "cover": "denzel-curry-melt-my-eyez-see-your-future-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/7KtyUeiJidoZO0ybxBXw0Q"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/denzel-curry/melt-my-eyez-see-your-future/"
   },
   {
     "artistRymIds": [
@@ -429,7 +428,8 @@
     "cover": "bones-garbage-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/0GtIxp5YqAAWPK2Gtggu1y"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/garbage/"
   },
   {
     "artistRymIds": [
@@ -440,7 +440,8 @@
     "cover": "bones-paidprogramming2-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/3sLfs0vKItAey8AzqYEWVX"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/paidprogramming2/"
   },
   {
     "artistRymIds": [
@@ -495,7 +496,8 @@
     "cover": "playboi-carti-die-lit-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/7dAm8ShwJLFm9SaJ6Yc58O"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/playboi-carti/die-lit/"
   },
   {
     "artistRymIds": [
@@ -528,7 +530,8 @@
     "cover": "battles-gloss-drop-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1O58FiA79FsPVDezRyTlU3"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/battles/gloss-drop/"
   },
   {
     "artistRymIds": [
@@ -539,7 +542,8 @@
     "cover": "battles-mirrored-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/0X8vBD8h1Ga9eLT8jx9VCC"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/battles/mirrored/"
   },
   {
     "artistRymIds": [
@@ -621,17 +625,6 @@
   },
   {
     "artistRymIds": [
-      "[Artist729957]"
-    ],
-    "title": "III",
-    "rymId": "[Album4768230]",
-    "cover": "badbadnotgood-iii-Cover-Art.webp",
-    "media": {
-      "spotify": "https://open.spotify.com/album/4E8q20fmm8onDCc7NK217d"
-    }
-  },
-  {
-    "artistRymIds": [
       "[Artist729957]",
       "[Artist2817]"
     ],
@@ -651,7 +644,8 @@
     "cover": "killakikitt-ne-szarakodj-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/508MXwbQoSVtHptihKF7t2"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/killakikitt/ne_szarakodj_/"
   },
   {
     "artistRymIds": [
@@ -740,7 +734,8 @@
     "cover": "homeshake-in-the-shower-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/0mWXQOrqbigpDUGfnbW7ez"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/homeshake/in-the-shower/"
   },
   {
     "artistRymIds": [
@@ -751,7 +746,8 @@
     "cover": "homeshake-midnight-snack-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/4p7OubIrnoRbhi3YUbN5Ib"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/homeshake/midnight-snack/"
   },
   {
     "artistRymIds": [
@@ -773,7 +769,8 @@
     "cover": "floating-points-shadows-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/5kxdPzutcONxecJmXUIj2c"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/floating-points/shadows/"
   },
   {
     "artistRymIds": [
@@ -851,7 +848,8 @@
     "cover": "young-thug-so-much-fun-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1bnHPO4dKK7IjvgrtVBcQh"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/young-thug/so-much-fun/"
   },
   {
     "artistRymIds": [
@@ -862,7 +860,8 @@
     "cover": "young-thug-slime-season-3-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/2z4c8M8aVzl7CTobIp36KF"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/young-thug/slime-season-3/"
   },
   {
     "artistRymIds": [
@@ -940,7 +939,8 @@
     "cover": "tim-hecker-haunt-me-haunt-me-do-it-again-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/5MZRB9G4snRWIG0otfxJYq"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/tim-hecker/haunt-me-haunt-me-do-it-again/"
   },
   {
     "artistRymIds": [
@@ -963,17 +963,6 @@
     "cover": "armand-hammer-and-the-alchemist-haram-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/0RPanQrJXRyTJoiq2trm7k"
-    }
-  },
-  {
-    "artistRymIds": [
-      "[Artist661586]"
-    ],
-    "title": "Johann Sebastian Bachlava the Doctor",
-    "rymId": "[Album15712452]",
-    "cover": "action-bronson-johann-sebastian-bachlava-the-doctor-Cover-Art.webp",
-    "media": {
-      "spotify": "https://open.spotify.com/album/0rTMVd3N7czUFdf1mBfNMt"
     }
   },
   {
@@ -1018,19 +1007,8 @@
     "cover": "rhythm-and-sound-rhythm-and-sound-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1gKsehEyIyBj5bUeSAEe8w"
-    }
-  },
-  {
-    "artistRymIds": [
-      "[Artist376061]",
-      "[Artist4845]"
-    ],
-    "title": "Dreamtime Submersible",
-    "rymId": "[Album15460840]",
-    "cover": "evan-marc-and-steve-hillage-dreamtime-submersible-Cover-Art.webp",
-    "media": {
-      "spotify": "https://open.spotify.com/album/289WzRyEe4RsHf9Tv6WVEB"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/comp/rhythm-and-sound/rhythm-and-sound/"
   },
   {
     "artistRymIds": [
@@ -1041,7 +1019,8 @@
     "cover": "jessie-ware-that-feels-good-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/17g3sAeWfpHSJlqMHuRAr6"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/jessie-ware/that-feels-good/"
   },
   {
     "artistRymIds": [
@@ -1052,7 +1031,8 @@
     "cover": "mick-jenkins-the-circus-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/4SnWrk06dIt4ynFRLpNX6e"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/mick-jenkins/the-circus/"
   },
   {
     "artistRymIds": [
@@ -1085,7 +1065,8 @@
     "cover": "bones-skinny-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/0Wh0QKnKq6j7Tlkj7RYE9u"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/skinny/"
   },
   {
     "artistRymIds": [
@@ -1096,7 +1077,8 @@
     "cover": "bones-rotten-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/2jgKK8iIX83mPrCyDhvEdf"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/rotten/"
   },
   {
     "artistRymIds": [
@@ -1173,7 +1155,8 @@
     "cover": "大貫妙子-taeko-ohnuki-mignonne-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/73nV06nTdsjMRNvD9ASFO5"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/%E5%A4%A7%E8%B2%AB%E5%A6%99%E5%AD%90/mignonne/"
   },
   {
     "artistRymIds": [
@@ -1184,7 +1167,8 @@
     "cover": "大貫妙子-taeko-ohnuki-sunshower-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/53YDN7b4vQ5MLMSPcnh9Os"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/%E5%A4%A7%E8%B2%AB%E5%A6%99%E5%AD%90/sunshower/"
   },
   {
     "artistRymIds": [
@@ -1250,7 +1234,8 @@
     "cover": "ratatat-classics-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/2n5wpk7KaHpp3mgUYqpF4f"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/ratatat/classics/"
   },
   {
     "artistRymIds": [
@@ -1261,7 +1246,8 @@
     "cover": "ratatat-lp4-let-your-bird-eat-its-beak-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/1xajCaNDa7AS7XfNs9fPPm"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/ratatat/lp4-let-your-bird-eat-its-beak/"
   },
   {
     "artistRymIds": [
@@ -1371,7 +1357,8 @@
     "cover": "chinese-man-the-groove-sessions-vol-ii-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/5sG4aODV6qWPX0J7omBcnC"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/chinese-man/the-groove-sessions-vol-ii/"
   },
   {
     "artistRymIds": [
@@ -1410,11 +1397,74 @@
     "title": "Mia Gargaret",
     "rymId": "[Album11422691]",
     "artistRymIds": [
-      "[Artist1313742]"
+      "[Album11422691]"
     ],
     "cover": "gia-margaret-mia-gargaret-Cover-Art.webp",
     "media": {
       "spotify": "https://open.spotify.com/album/43KIzoQHJi9cLJMfcjlUIP"
-    }
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/gia-margaret/mia-gargaret/"
+  },
+  {
+    "title": "WILKES",
+    "rymId": "[Album9484731]",
+    "artistRymIds": [
+      "[Artist1325740]"
+    ],
+    "cover": "sam-wilkes-wilkes-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2eIIziDvAkkXGCZi4RQvXE"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/sam-wilkes/wilkes/"
+  },
+  {
+    "title": "III",
+    "rymId": "[Album4768230]",
+    "artistRymIds": [
+      "[Artist729957]"
+    ],
+    "cover": "badbadnotgood-iii-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/4E8q20fmm8onDCc7NK217d"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/badbadnotgood/iii/"
+  },
+  {
+    "title": "Lamb Over Rice",
+    "rymId": "[Album10820731]",
+    "artistRymIds": [
+      "[Artist661586]",
+      "[Artist45522]"
+    ],
+    "cover": "action-bronson-and-the-alchemist-lamb-over-rice-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/3BPX4x5EQOd9vzpPC2rMrm"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/action-bronson-the-alchemist/lamb-over-rice/"
+  },
+  {
+    "title": "Johann Sebastian Bachlava the Doctor",
+    "rymId": "[Album15712452]",
+    "artistRymIds": [
+      "[Artist661586]"
+    ],
+    "cover": "action-bronson-johann-sebastian-bachlava-the-doctor-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/0rTMVd3N7czUFdf1mBfNMt"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/action-bronson/johann-sebastian-bachlava-the-doctor/"
+  },
+  {
+    "title": "Dreamtime Submersible",
+    "rymId": "[Album1826338]",
+    "artistRymIds": [
+      "[Artist376061]",
+      "[Artist4845]"
+    ],
+    "cover": "evan-marc-and-steve-hillage-dreamtime-submersible-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/289WzRyEe4RsHf9Tv6WVEB"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/evan-marc-steve-hillage/dreamtime-submersible/"
   }
 ]

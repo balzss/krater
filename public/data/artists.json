@@ -1,10 +1,5 @@
 [
   {
-    "displayName": "Action Bronson",
-    "rymId": "[Artist661586]",
-    "rymUrl": "https://rateyourmusic.com/artist/action-bronson"
-  },
-  {
     "displayName": "The Alchemist",
     "rymId": "[Artist45522]",
     "rymUrl": "https://rateyourmusic.com/artist/the-alchemist-2"
@@ -558,5 +553,15 @@
     "displayName": "Gia Margaret",
     "rymId": "[Artist1313742]",
     "rymUrl": "https://rateyourmusic.com/artist/gia-margaret"
+  },
+  {
+    "displayName": "Sam Wilkes",
+    "rymId": "[Artist1325740]",
+    "rymUrl": "https://rateyourmusic.com/artist/sam-wilkes"
+  },
+  {
+    "displayName": "Action Bronson",
+    "rymId": "[Artist661586]",
+    "rymUrl": "https://rateyourmusic.com/artist/action-bronson"
   }
 ]

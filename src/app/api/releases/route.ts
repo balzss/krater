@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
           rawCoverFilenameFromForm = value
         } else if (key === 'artistRymIds') {
           try {
+            console.log(value)
             newReleaseData.artistRymIds = JSON.parse(value)
           } catch {
             throw new Error('Invalid JSON format for artistRymIds')
@@ -180,28 +181,29 @@ export async function PUT(req: NextRequest) {
     const releasesData = await readReleasesFile()
     await ensureDirectoryExists(coversDir)
     const formData = await req.formData()
-    const updateData: Partial<Release> & { targetRymId?: string } = {}
+    const updateData: Partial<Release> = {}
     let coverFile: File | null = null
     let rawNewCoverFilename: string | undefined = undefined // Raw filename from 'cover' field
     let finalDecodedNewCoverFilename: string | undefined = undefined // Decoded & normalized new filename
 
     // --- Extract Data ---
-    if (!formData.has('targetRymId')) {
-      throw new Error("Missing 'targetRymId' field in form data to identify the release to update.")
+    if (!formData.has('rymId')) {
+      throw new Error("Missing 'rymId' field in form data to identify the release to update.")
     }
-    updateData.targetRymId = formData.get('targetRymId') as string
+    updateData.rymId = formData.get('rymId') as string
 
     for (const [key, value] of formData.entries()) {
       if (value instanceof File) {
         if (key === 'coverImage') coverFile = value
       } else {
-        if (key === 'targetRymId') continue
+        if (key === 'rymId') continue
         if (key === 'title' || key === 'rymId' || key === 'rymUrl') {
           updateData[key] = value
         } else if (key === 'cover') {
           rawNewCoverFilename = value // Store raw filename if provided
         } else if (key === 'artistRymIds') {
           try {
+            console.log(value)
             updateData.artistRymIds = JSON.parse(value)
           } catch {
             throw new Error('Invalid JSON format for artistRymIds')
@@ -240,10 +242,10 @@ export async function PUT(req: NextRequest) {
     }
 
     // --- Find Existing Release ---
-    const releaseIndex = releasesData.findIndex((r) => r.rymId === updateData.targetRymId)
+    const releaseIndex = releasesData.findIndex((r) => r.rymId === updateData.rymId)
     if (releaseIndex === -1) {
       return NextResponse.json(
-        { message: `Release with rymId ${updateData.targetRymId} not found.` },
+        { message: `Release with rymId ${updateData.rymId} not found.` },
         { status: 404 }
       )
     }
@@ -302,8 +304,6 @@ export async function PUT(req: NextRequest) {
       ...originalRelease,
       ...updateData, // Overwrite with new values where provided
     }
-    delete updatedReleaseData.targetRymId // Remove temporary field
-
     releasesData[releaseIndex] = updatedReleaseData as Release // Update the array
     await writeReleasesToFile(releasesData)
 

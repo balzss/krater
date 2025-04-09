@@ -11,7 +11,7 @@ export default function RandomPage() {
     data: releases,
     loading: releasesLoading,
     error: _releasesError,
-  } = useFetchJson<Release[]>('/krater/data/releases.json', { randomize: true })
+  } = useFetchJson<Release[]>('/krater/data/releases.json', { sort: 'random', sortKey: 'title' })
   const {
     data: artists,
     loading: artistsLoading,
