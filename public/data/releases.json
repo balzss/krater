@@ -1580,5 +1580,377 @@
       "spotify": "https://open.spotify.com/album/7Lou3RDk6NswmbzBMhro24"
     },
     "rymUrl": "https://rateyourmusic.com/release/album/boards-of-canada/geogaddi/"
+  },
+  {
+    "title": "Silent Shout",
+    "rymId": "[Album474362]",
+    "artistRymIds": [
+      "[Artist18880]"
+    ],
+    "cover": "the-knife-silent-shout-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/6rdNbdV3T4muFFFSjGdOj9"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/the-knife/silent-shout/"
+  },
+  {
+    "title": "The Lemon of Pink",
+    "rymId": "[Album97717]",
+    "artistRymIds": [
+      "[Artist8845]"
+    ],
+    "cover": "the-books-the-lemon-of-pink-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/1JxWnsOCOeYeAeDwInNww4"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/the-books/the-lemon-of-pink/"
+  },
+  {
+    "title": "Sicodélicos",
+    "rymId": "[Album8526530]",
+    "artistRymIds": [
+      "[Artist252598]"
+    ],
+    "cover": "los-destellos-sicodelicos-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/5UBnoa7wdR6WVRXh4Boj12"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/comp/los-destellos/sicodelicos/"
+  },
+  {
+    "title": "Space Is Only Noise",
+    "rymId": "[Album3225786]",
+    "artistRymIds": [
+      "[Artist545468]"
+    ],
+    "cover": "nicolas-jaar-space-is-only-noise-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/0tUJcqDuXHNkaPKLN0lQhT"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/nicolas-jaar/space-is-only-noise/"
+  },
+  {
+    "title": "Psychic",
+    "rymId": "[Album4801178]",
+    "artistRymIds": [
+      "[Artist363833]"
+    ],
+    "cover": "darkside-psychic-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2Q7l5NR9ZY8gfkkTtBnlBt"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/darkside/psychic/"
+  },
+  {
+    "title": "Prender el alma",
+    "rymId": "[Album6881006]",
+    "artistRymIds": [
+      "[Artist1092982]"
+    ],
+    "cover": "nicola-cruz-prender-el-alma-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/3qayyVd2DD1T9uXwOZoHsP"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/nicola-cruz/prender-el-alma/"
+  },
+  {
+    "title": "In Rainbows",
+    "rymId": "[Album1052924]",
+    "artistRymIds": [
+      "[Artist42]"
+    ],
+    "cover": "radiohead-in-rainbows-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/7eyQXxuf2nGj9d2367Gi5f"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/radiohead/in-rainbows/"
+  },
+  {
+    "title": "The Sun's Tirade",
+    "rymId": "[Album7645729]",
+    "artistRymIds": [
+      "[Artist974837]"
+    ],
+    "cover": "isaiah-rashad-the-suns-tirade-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/6jjX8mGrsWtrpYpFhGMrg1"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/isaiah-rashad/the-suns-tirade/"
+  },
+  {
+    "title": "GO:OD AM",
+    "rymId": "[Album6662444]",
+    "artistRymIds": [
+      "[Artist452135]"
+    ],
+    "cover": "mac-miller-go_od-am-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2Tyx5dLhHYkx6zeAdVaTzN"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/mac-miller/go_od-am/"
+  },
+  {
+    "title": "Pray for Paris",
+    "rymId": "[Album11311491]",
+    "artistRymIds": [
+      "[Artist1058725]"
+    ],
+    "cover": "westside-gunn-pray-for-paris-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/6nfJMRoIjyRwk3ZTHNm0PY"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/westside-gunn/pray-for-paris/"
+  },
+  {
+    "title": "1999",
+    "rymId": "[Album3929972]",
+    "artistRymIds": [
+      "[Artist807866]"
+    ],
+    "cover": "joey-bada-1999-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/5ra51AaWF3iVebyhlZ1aqq"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/joey-bada/1999/"
+  },
+  {
+    "title": "My Life 4Hunnid",
+    "rymId": "[Album11451834]",
+    "artistRymIds": [
+      "[Artist433321]"
+    ],
+    "cover": "yg-my-life-4hunnid-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/3g2sgN6wC92EwuEA9hLbH0"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/yg/my-life-4hunnid/"
+  },
+  {
+    "title": "Still Striving",
+    "rymId": "[Album8474617]",
+    "artistRymIds": [
+      "[Artist763976]"
+    ],
+    "cover": "a_ap-ferg-still-striving-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/0tQ7Iu6EicQTPyhYRNWjaT"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/a_ap-ferg/still-striving/"
+  },
+  {
+    "title": "QUARTERTHING",
+    "rymId": "[Album9502348]",
+    "artistRymIds": [
+      "[Artist977624]"
+    ],
+    "cover": "joey-purp-quarterthing-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/0ffPsL9V1eNMi54MEHMehn"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/joey-purp/quarterthing/"
+  },
+  {
+    "title": "An XTRA UUGLY Mixtape",
+    "rymId": "[Album8714590]",
+    "artistRymIds": [
+      "[Artist849237]"
+    ],
+    "cover": "duckwrth-an-xtra-uugly-mixtape-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2Qxg5B6lYfFr4h3DUJK8kX"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/duckwrth/an-xtra-uugly-mixtape/"
+  },
+  {
+    "title": "The Falling Man",
+    "rymId": "[Album10285595]",
+    "artistRymIds": [
+      "[Artist849237]"
+    ],
+    "cover": "duckwrth-the-falling-man-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2LB3zTuRknMcwppJrFZay0"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/duckwrth/the-falling-man/"
+  },
+  {
+    "title": "Midnight",
+    "rymId": "[Album7299350]",
+    "artistRymIds": [
+      "[Artist383052]"
+    ],
+    "cover": "dan-lissvik-midnight-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/56qqKBJnW9laoBJj7cDphY"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/dan-lissvik/midnight/"
+  },
+  {
+    "title": "Drone Logic",
+    "rymId": "[Album4712010]",
+    "artistRymIds": [
+      "[Artist794742]"
+    ],
+    "cover": "daniel-avery-drone-logic-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/40CBXF9jJwK21mrqlmBr92"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/daniel-avery/drone-logic/"
+  },
+  {
+    "title": "In Between",
+    "rymId": "[Album2742257]",
+    "artistRymIds": [
+      "[Artist492578]"
+    ],
+    "cover": "marek-hemmann-in-between-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/2dxytgIq0LQjqSoprWoHdU"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/marek_hemmann/in_between/"
+  },
+  {
+    "title": "Insides",
+    "rymId": "[Album6141495]",
+    "artistRymIds": [
+      "[Artist794706]"
+    ],
+    "cover": "fort-romeau-insides-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/65O1TmeGXgrhMoBkwsQCBQ"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/fort-romeau/insides/"
+  },
+  {
+    "title": "Poverty",
+    "rymId": "[Album5966764]",
+    "artistRymIds": [
+      "[Artist348990]"
+    ],
+    "cover": "motorama-poverty-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/1U3Oexe1mJld5CIs4qdLVs"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/motorama/poverty/"
+  },
+  {
+    "title": "No Panic No Pain",
+    "rymId": "[Album12315317]",
+    "artistRymIds": [
+      "[Artist1278382]"
+    ],
+    "cover": "flohio-no-panic-no-pain-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/7K0LNLvjx54vssCWX26PzR"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/mixtape/flohio/no-panic-no-pain/"
+  },
+  {
+    "title": "Drop 6",
+    "rymId": "[Album11430285]",
+    "artistRymIds": [
+      "[Artist1047209]"
+    ],
+    "cover": "little-simz-drop-6-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/6QrGmXbUtjyekuW83gXBBb"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/ep/little-simz/drop-6/"
+  },
+  {
+    "title": "Twins",
+    "rymId": "[Album4081421]",
+    "artistRymIds": [
+      "[Artist362490]"
+    ],
+    "cover": "ty-segall-twins-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/6E0TeTpb3ZcbEkRmK4Chjd"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/ty-segall/twins/"
+  },
+  {
+    "title": "Currents",
+    "rymId": "[Album6363797]",
+    "artistRymIds": [
+      "[Artist369450]"
+    ],
+    "cover": "tame-impala-currents-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/79dL7FLiJFOO0EoehUHQBv"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/tame-impala/currents/"
+  },
+  {
+    "title": "Nocturne",
+    "rymId": "[Album4046889]",
+    "artistRymIds": [
+      "[Artist523160]"
+    ],
+    "cover": "wild-nothing-nocturne-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/7xVdAgW8GzXIbmyfwGa9M9"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/wild-nothing/nocturne/"
+  },
+  {
+    "title": "Oshin",
+    "rymId": "[Album3949987]",
+    "artistRymIds": [
+      "[Artist755519]"
+    ],
+    "cover": "diiv-oshin-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/1hSONHeTOofdeh2uoFBLgv"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/diiv/oshin/"
+  },
+  {
+    "title": "Beach Fossils",
+    "rymId": "[Album2766198]",
+    "artistRymIds": [
+      "[Artist470775]"
+    ],
+    "cover": "beach-fossils-beach-fossils-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/0CKh6tOBbML2fqazPIbkVW"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/beach-fossils/beach-fossils/"
+  },
+  {
+    "title": "Attack on Memory",
+    "rymId": "[Album3716361]",
+    "artistRymIds": [
+      "[Artist525706]"
+    ],
+    "cover": "cloud-nothings-attack-on-memory-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/11n13oYsSDt4Vl9fT3UxPk"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/cloud-nothings/attack-on-memory/"
+  },
+  {
+    "title": "Face Tat",
+    "rymId": "[Album2208810]",
+    "artistRymIds": [
+      "[Artist334931]"
+    ],
+    "cover": "zach-hill-face-tat-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/4YM04MdeuE7h3mziHsvy9v"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/zach-hill/face-tat/"
+  },
+  {
+    "title": "Station",
+    "rymId": "[Album1210273]",
+    "artistRymIds": [
+      "[Artist103693]"
+    ],
+    "cover": "russian-circles-station-Cover-Art.webp",
+    "media": {
+      "spotify": "https://open.spotify.com/album/4YMCNSRMOzAyFfC4ToQ60x"
+    },
+    "rymUrl": "https://rateyourmusic.com/release/album/russian-circles/station/"
   }
 ]
