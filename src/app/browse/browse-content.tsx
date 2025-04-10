@@ -57,7 +57,7 @@ export default function BrowsePageContent() {
           href="/krater"
           className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
         >
-          <House size={32} />
+          <House size={40} />
         </a>
       </div>
       {artists && artistParam && (

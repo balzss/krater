@@ -25,7 +25,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist252287]"
     ],
     "title": "Leyenda amazónica",
     "rymId": "[Album7288107]",
@@ -37,7 +37,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist798]"
     ],
     "title": "Endtroducing.....",
     "rymId": "[Album2612]",
@@ -49,7 +49,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist220496]"
     ],
     "title": "DAYTONA",
     "rymId": "[Album9275699]",
@@ -267,7 +267,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist31014]"
     ],
     "title": "Drawn and Quartered",
     "rymId": "[Album3411350]",
@@ -303,7 +303,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist808]"
     ],
     "title": "The Glow Pt. 2",
     "rymId": "[Album2642]",
@@ -351,7 +351,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist1149]"
     ],
     "title": "The Richest Man in Babylon",
     "rymId": "[Album31708]",
@@ -411,7 +411,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist797]"
     ],
     "title": "Since I Left You",
     "rymId": "[Album2611]",
@@ -651,8 +651,8 @@
   },
   {
     "artistRymIds": [
-      "",
-      ""
+      "[Artist8368]",
+      "[Artist155901]"
     ],
     "title": "DUO",
     "rymId": "[Album3508935]",
@@ -750,7 +750,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist877332]"
     ],
     "title": "Comradely Objects",
     "rymId": "[Album14892412]",
@@ -798,7 +798,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist476419]"
     ],
     "title": "Overgrown",
     "rymId": "[Album4405254]",
@@ -859,7 +859,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist791948]"
     ],
     "title": "Picture You Staring",
     "rymId": "[Album5582591]",
@@ -967,8 +967,8 @@
   },
   {
     "artistRymIds": [
-      "",
-      ""
+      "[Artist1219137]",
+      "[Artist3688]"
     ],
     "title": "Music for 18 Musicians",
     "rymId": "[Album127432]",
@@ -1029,7 +1029,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist220496]"
     ],
     "title": "It's Almost Dry",
     "rymId": "[Album14237082]",
@@ -1089,7 +1089,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist476419]"
     ],
     "title": "James Blake",
     "rymId": "[Album3209572]",
@@ -1329,7 +1329,7 @@
   },
   {
     "artistRymIds": [
-      ""
+      "[Artist1147912]"
     ],
     "title": "Freshly Skeletal",
     "rymId": "[Album6991407]",
@@ -1475,7 +1475,7 @@
     "title": "Mia Gargaret",
     "rymId": "[Album11422691]",
     "artistRymIds": [
-      "[Album11422691]"
+      "[Artist1313742]"
     ],
     "cover": "gia-margaret-mia-gargaret-Cover-Art.webp",
     "media": {

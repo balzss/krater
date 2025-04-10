@@ -96,7 +96,7 @@ export default function ManagePage() {
           href="/krater"
           className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
         >
-          <House size={32} />
+          <House size={40} />
         </a>
       </div>
       {isLoading && (
@@ -133,7 +133,7 @@ export default function ManagePage() {
 
           <CheckResult
             successLabel="No artists were detected without any release"
-            warningLabel={`${unusedArtistsData.length} artist ${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
+            warningLabel={`${unusedArtistsData.length} artist${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
             warningItems={unusedArtistsData.map((artist) => artist.displayName)}
             onItemClick={(_e, i) =>
               handleDeleteArtist(unusedArtistsData[i].rymId, unusedArtistsData[i].displayName)
