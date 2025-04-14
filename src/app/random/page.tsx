@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { House, Dices, Undo2 } from 'lucide-react'
-import { MusicTile } from '@/components'
+import { MusicTile, ActionButton } from '@/components'
 import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
@@ -49,25 +49,14 @@ export default function RandomPage() {
               priority
             />
             <div className="flex justify-between m-6">
-              <button
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon) disabled:cursor-not-allowed disabled:opacity-25"
+              <ActionButton
                 onClick={handleUndoButton}
+                icon={Undo2}
                 disabled={chosenReleaseIndex === 0}
-              >
-                <Undo2 size={48} />
-              </button>
-              <button
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon)"
-                onClick={handleRollButton}
-              >
-                <Dices size={48} />
-              </button>
-              <a
-                href="/krater"
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon)"
-              >
-                <House size={48} />
-              </a>
+                size={48}
+              />
+              <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
+              <ActionButton href="/krater" icon={House} size={48} />
             </div>
           </>
         )}

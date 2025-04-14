@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { House } from 'lucide-react'
-import { MusicTile, SearchInput, ClearableTag } from '@/components'
+import { MusicTile, SearchInput, ClearableTag, ActionButton } from '@/components'
 import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
@@ -48,14 +48,12 @@ export default function BrowsePageContent() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6">
+      <div className="flex items-center w-full max-w-lg gap-2 sm:gap-4">
         <SearchInput
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <a href="/krater" className="flex justify-center items-center text-(--icon)">
-          <House size={40} />
-        </a>
+        <ActionButton href="/krater" size={40} icon={House} />
       </div>
       {artists && artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">

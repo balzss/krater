@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { House } from 'lucide-react'
-import { SearchInput, MenuItem } from '@/components'
+import { SearchInput, MenuItem, ActionButton } from '@/components'
 import { type Artist } from '@/lib/data'
 import { useFetchJson } from '@/hooks'
 
@@ -38,14 +38,12 @@ export default function ArtistsPage() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
-      <div className="flex items-center w-full max-w-md gap-4 sm:gap-6 sm:mb-4">
+      <div className="flex items-center w-full max-w-md gap-2 sm:gap-4 sm:mb-4">
         <SearchInput
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <a href="/krater" className="flex justify-center items-center text-(--icon)">
-          <House size={40} />
-        </a>
+        <ActionButton href="/krater" size={40} icon={House} />
       </div>
       {artistResults.map((artist) => (
         <MenuItem key={artist.rymId} href={`/krater/browse?a=${artist.rymId}`} className="max-w-md">

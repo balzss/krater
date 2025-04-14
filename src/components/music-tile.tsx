@@ -18,8 +18,13 @@ const MusicTile: React.FC<MusicTileProps> = ({
   priority = false,
 }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl max-w-sm w-full">
-      <a className="flex relative w-full aspect-square cursor-pointer" href={media} target="_blank">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300">
+      <a
+        className="flex relative w-full aspect-square cursor-pointer"
+        href={media}
+        target="_blank"
+        tabIndex={-1}
+      >
         <Image
           fill
           src={'/krater/covers/' + cover}

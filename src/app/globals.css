@@ -5,6 +5,7 @@
   --foreground: #171717;
   --card: #ffffff;
   --icon: #333;
+  --icon-hover: #555;
 }
 
 @theme inline {
@@ -19,6 +20,7 @@
     --foreground: #ededed;
     --card: var(--background);
     --icon: #ccc;
+    --icon-hover: #fff;
   }
 
 body {
