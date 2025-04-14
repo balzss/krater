@@ -92,10 +92,7 @@ export default function ManagePage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
       <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6 justify-end">
-        <a
-          href="/krater"
-          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
-        >
+        <a href="/krater" className="flex justify-center items-center text-(--icon)">
           <House size={40} />
         </a>
       </div>

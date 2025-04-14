@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { House } from 'lucide-react'
-import { SearchInput } from '@/components'
+import { SearchInput, MenuItem } from '@/components'
 import { type Artist } from '@/lib/data'
 import { useFetchJson } from '@/hooks'
 
@@ -43,21 +43,14 @@ export default function ArtistsPage() {
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <a
-          href="/krater"
-          className="h-8 w-8 flex justify-center items-center text-gray-300 hover:text-gray-400"
-        >
+        <a href="/krater" className="flex justify-center items-center text-(--icon)">
           <House size={40} />
         </a>
       </div>
       {artistResults.map((artist) => (
-        <a
-          key={artist.rymId}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent max-w-md cursor-pointer duration-300 transform transition hover:scale-103 ease-in-out flex gap-2 items-center"
-          href={`/krater/browse?a=${artist.rymId}`}
-        >
+        <MenuItem key={artist.rymId} href={`/krater/browse?a=${artist.rymId}`} className="max-w-md">
           {artist.displayName}
-        </a>
+        </MenuItem>
       ))}
     </div>
   )

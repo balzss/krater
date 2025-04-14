@@ -50,21 +50,21 @@ export default function RandomPage() {
             />
             <div className="flex justify-between m-6">
               <button
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200 disabled:cursor-not-allowed disabled:text-neutral-500"
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon) disabled:cursor-not-allowed disabled:opacity-25"
                 onClick={handleUndoButton}
                 disabled={chosenReleaseIndex === 0}
               >
                 <Undo2 size={48} />
               </button>
               <button
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200"
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon)"
                 onClick={handleRollButton}
               >
                 <Dices size={48} />
               </button>
               <a
                 href="/krater"
-                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-neutral-300 hover:text-neutral-200"
+                className="p-3 duration-150 transform transition cursor-pointer ease-in-out text-(--icon)"
               >
                 <House size={48} />
               </a>

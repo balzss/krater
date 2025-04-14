@@ -25,7 +25,7 @@ const SearchInput: React.FC<SearchInputProps & InputHTMLAttributes<HTMLInputElem
         {...rest}
         type="text"
         placeholder="Search..."
-        className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
+        className="w-full pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent bg-(--card) h-12"
         value={query}
         onKeyDown={handleKeyDown}
         onChange={(e) => onQueryChange(e.target.value)}
@@ -35,7 +35,7 @@ const SearchInput: React.FC<SearchInputProps & InputHTMLAttributes<HTMLInputElem
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
           onClick={() => onQueryChange('')}
         >
-          <X size={20} />
+          <X size={24} />
         </button>
       )}
     </div>
