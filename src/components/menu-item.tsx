@@ -1,5 +1,6 @@
 import type { ReactNode, ComponentProps } from 'react'
 import type { LucideIcon } from 'lucide-react'
+import Link from 'next/link'
 
 type BaseMenuItemProps = {
   children: ReactNode
@@ -38,9 +39,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
   if ('href' in rest && typeof rest.href === 'string') {
     return (
-      <a {...rest} className={className}>
+      <Link {...rest} className={className}>
         {content}
-      </a>
+      </Link>
     )
   }
   return (

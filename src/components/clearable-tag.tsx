@@ -1,4 +1,5 @@
 import { X } from 'lucide-react'
+import Link from 'next/link'
 
 type ClearableTagProps = {
   tagLabel: string
@@ -12,12 +13,12 @@ export const ClearableTag: React.FC<ClearableTagProps> = ({ tagLabel, tagValue, 
       <span>
         {tagLabel}: {tagValue}
       </span>
-      <a
+      <Link
         href={href}
         className="flex-shrink-0 ml-1 -mr-1 h-6 w-6 rounded-full inline-flex items-center justify-center focus:outline-none focus:bg-blue-300 focus:text-blue-800 transition-colors duration-150 ease-in-out cursor-pointer hover:bg-gray-700"
       >
         <X strokeWidth={2.5} size={16} />
-      </a>
+      </Link>
     </div>
   )
 }

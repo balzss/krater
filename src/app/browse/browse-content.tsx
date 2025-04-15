@@ -7,18 +7,20 @@ import { MusicTile, SearchInput, ClearableTag, ActionButton } from '@/components
 import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+
 export default function BrowsePageContent() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const {
     data: releases,
     loading: _relesesLoading,
     error: _releasesError,
-  } = useFetchJson<Release[]>('/krater/data/releases.json')
+  } = useFetchJson<Release[]>(`${basePath}/data/releases.json`)
   const {
     data: artists,
     loading: _artistsLoading,
     error: _artistsError,
-  } = useFetchJson<Artist[]>('/krater/data/artists.json')
+  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
 
   const searchParams = useSearchParams()
   const artistParam = searchParams.get('a')
@@ -53,12 +55,12 @@ export default function BrowsePageContent() {
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <ActionButton href="/krater" size={40} icon={House} />
+        <ActionButton href="/" size={40} icon={House} />
       </div>
       {artists && artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">
           <ClearableTag
-            href="/krater/browse"
+            href="/browse"
             tagLabel="Artist"
             tagValue={artists.find((a) => a.rymId === artistParam)?.displayName as string}
           />

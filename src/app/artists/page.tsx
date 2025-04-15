@@ -6,6 +6,8 @@ import { SearchInput, MenuItem, ActionButton } from '@/components'
 import { type Artist } from '@/lib/data'
 import { useFetchJson } from '@/hooks'
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+
 export default function ArtistsPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [artistResults, setArtistResults] = useState<Artist[]>([])
@@ -13,7 +15,7 @@ export default function ArtistsPage() {
     data: artists,
     loading: _artistsLoading,
     error: _artistsError,
-  } = useFetchJson<Artist[]>('/krater/data/artists.json')
+  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
 
   useEffect(() => {
     document.title = 'Artists | Krater'
@@ -43,10 +45,10 @@ export default function ArtistsPage() {
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <ActionButton href="/krater" size={40} icon={House} />
+        <ActionButton href="/" size={40} icon={House} />
       </div>
       {artistResults.map((artist) => (
-        <MenuItem key={artist.rymId} href={`/krater/browse?a=${artist.rymId}`} className="max-w-md">
+        <MenuItem key={artist.rymId} href={`/browse?a=${artist.rymId}`} className="max-w-md">
           {artist.displayName}
         </MenuItem>
       ))}

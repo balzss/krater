@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { FC } from 'react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -20,9 +21,9 @@ export const ActionButton: FC<ActionButtonProps> = ({
     'p-2 duration-150 transition cursor-pointer ease-in-out text-(--icon) disabled:cursor-not-allowed disabled:opacity-25 hover:text-(--icon-hover) disabled:text-(--icon)'
   if (href) {
     return (
-      <a className={className} href={href}>
+      <Link className={className} href={href}>
         <Icon size={size} />
-      </a>
+      </Link>
     )
   }
   return (

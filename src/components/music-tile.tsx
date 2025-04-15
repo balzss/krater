@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Artist } from '@/lib/data'
 
 interface MusicTileProps {
@@ -17,9 +18,11 @@ const MusicTile: React.FC<MusicTileProps> = ({
   media = '',
   priority = false,
 }) => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300">
-      <a
+      <Link
         className="flex relative w-full aspect-square cursor-pointer"
         href={media}
         target="_blank"
@@ -27,27 +30,27 @@ const MusicTile: React.FC<MusicTileProps> = ({
       >
         <Image
           fill
-          src={'/krater/covers/' + cover}
+          src={`${basePath}/covers/${cover}`}
           alt={title}
           className=" transform transition hover:scale-103 ease-in-out duration-300 "
           priority={priority}
         />
-      </a>
+      </Link>
       <div className="p-4">
-        <a
+        <Link
           className="text-lg font-bold text-gray-900 cursor-pointer hover:underline"
           href={media}
           target="_blank"
         >
           {title}
-        </a>
+        </Link>
         <p className="text-sm text-gray-600">
           {artists.map((artist, index) => (
             <Fragment key={artist?.rymId || index}>
               {artist ? (
-                <a className="hover:text-gray-500" href={`/krater/browse?a=${artist?.rymId}`}>
+                <Link className="hover:text-gray-500" href={`/browse?a=${artist?.rymId}`}>
                   {artist?.displayName}
-                </a>
+                </Link>
               ) : (
                 <span>Unknown</span>
               )}

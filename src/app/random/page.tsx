@@ -7,16 +7,20 @@ import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
 export default function RandomPage() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
   const {
     data: releases,
     loading: releasesLoading,
     error: _releasesError,
-  } = useFetchJson<Release[]>('/krater/data/releases.json', { sort: 'random', sortKey: 'title' })
+  } = useFetchJson<Release[]>(`${basePath}/data/releases.json`, {
+    sort: 'random',
+    sortKey: 'title',
+  })
   const {
     data: artists,
     loading: artistsLoading,
     error: _artistsError,
-  } = useFetchJson<Artist[]>('/krater/data/artists.json')
+  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
 
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
 
@@ -56,7 +60,7 @@ export default function RandomPage() {
                 size={48}
               />
               <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
-              <ActionButton href="/krater" icon={House} size={48} />
+              <ActionButton href="/" icon={House} size={48} />
             </div>
           </>
         )}

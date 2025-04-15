@@ -7,21 +7,23 @@ import type { Release, Artist } from '@/lib/data'
 import { MenuItem } from '@/components'
 import { useFetchJson } from '@/hooks'
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
+
 export function MainPageContent() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
-  const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
   const {
     data: releases,
     loading: releasesLoading,
     error: _releasesError,
-  } = useFetchJson<Release[]>('/krater/data/releases.json')
+  } = useFetchJson<Release[]>(`${basePath}/data/releases.json`)
   const {
     data: artists,
     loading: artistsLoading,
     error: _artistsError,
-  } = useFetchJson<Artist[]>('/krater/data/artists.json')
+  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
 
   const handleSwitchTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark')
@@ -52,20 +54,20 @@ export function MainPageContent() {
         </MenuItem>
 
         {isLocalhost && (
-          <MenuItem startIcon={Wrench} href="/krater/manage">
+          <MenuItem startIcon={Wrench} href={`/manage`}>
             Manage library
           </MenuItem>
         )}
 
-        <MenuItem startIcon={artistsLoading ? Loader : User} href="/krater/artists">
+        <MenuItem startIcon={artistsLoading ? Loader : User} href="/artists">
           {!artistsLoading && `View ${artists?.length} artists`}
         </MenuItem>
 
-        <MenuItem startIcon={releasesLoading ? Loader : Library} href="/krater/browse">
+        <MenuItem startIcon={releasesLoading ? Loader : Library} href="/browse">
           {!releasesLoading && `Browse all ${releases?.length || 0} releases`}
         </MenuItem>
 
-        <MenuItem startIcon={Dices} href="/krater/random">
+        <MenuItem startIcon={Dices} href="/random">
           Get a random suggestion
         </MenuItem>
       </div>

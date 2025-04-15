@@ -5,7 +5,8 @@ import { House, Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 import type { HealthIssues } from '../api/health/route'
 import { ActionButton } from '@/components'
 
-const apiRoot = '/krater/api'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const apiRoot = `${basePath}/api`
 
 type CheckResultProps = {
   warningLabel: string
@@ -93,7 +94,7 @@ export default function ManagePage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
       <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6 justify-end">
-        <ActionButton href="/krater" size={40} icon={House} />
+        <ActionButton href="/" size={40} icon={House} />
       </div>
       {isLoading && (
         <p className="flex items-center gap-2 max-w-lg w-full">

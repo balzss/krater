@@ -1,11 +1,16 @@
 import type { NextConfig } from 'next'
 
+const basePath = '/krater'
+
 const nextConfig: NextConfig = {
   distDir: 'build',
   output: 'export',
-  basePath: '/krater',
+  basePath,
   images: {
     unoptimized: true,
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
   },
   async headers() {
     return [
