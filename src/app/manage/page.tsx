@@ -5,7 +5,7 @@ import { House, Check, TriangleAlert, LoaderCircle } from 'lucide-react'
 import type { HealthIssues } from '../api/health/route'
 import { ActionButton } from '@/components'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiRoot = `${basePath}/api`
 
 type CheckResultProps = {
@@ -52,7 +52,7 @@ export default function ManagePage() {
   const [unusedCoversData, setUnusedCoversData] = useState<HealthIssues['unusedCovers']>([])
 
   const fetchHealtData = async () => {
-    const response = await fetch('/krater/api/health')
+    const response = await fetch(`${apiRoot}/health`)
     const data = await response.json()
     setMissingCovers(data?.issues?.missingCovers || [])
     setMissingArtistsData(data?.issues?.missingArtists || [])

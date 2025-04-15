@@ -7,7 +7,7 @@ import { MusicTile, SearchInput, ClearableTag, ActionButton } from '@/components
 import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export default function BrowsePageContent() {
   const [searchQuery, setSearchQuery] = useState<string>('')

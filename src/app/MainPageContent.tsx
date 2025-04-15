@@ -7,7 +7,7 @@ import type { Release, Artist } from '@/lib/data'
 import { MenuItem } from '@/components'
 import { useFetchJson } from '@/hooks'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
 
 export function MainPageContent() {

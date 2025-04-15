@@ -1,6 +1,6 @@
 import type { NextConfig } from 'next'
 
-const basePath = '/krater'
+const basePath = ''
 
 const nextConfig: NextConfig = {
   distDir: 'build',

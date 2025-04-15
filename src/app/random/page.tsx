@@ -7,7 +7,7 @@ import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
 export default function RandomPage() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
   const {
     data: releases,
     loading: releasesLoading,

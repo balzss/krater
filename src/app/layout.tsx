@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

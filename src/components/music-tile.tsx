@@ -18,7 +18,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
   media = '',
   priority = false,
 }) => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300">

@@ -6,7 +6,7 @@ import { SearchInput, MenuItem, ActionButton } from '@/components'
 import { type Artist } from '@/lib/data'
 import { useFetchJson } from '@/hooks'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 export default function ArtistsPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
