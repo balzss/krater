@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         // matching all API routes
         source: '/api/:path*',
         headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=86400, max-age=86400, must-revalidate',
+          },
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Allow-Origin', value: '*' },
           { key: 'Access-Control-Allow-Methods', value: 'GET,DELETE,PATCH,POST,PUT' },

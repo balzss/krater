@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'Krater Music Collection',
     short_name: 'Krater',
     description: 'Music Collection and Recommandations',
-    start_url: basePath,
+    start_url: basePath || '/',
     display: 'standalone',
     background_color: '#1a1a1a',
     theme_color: '#1a1a1a',
