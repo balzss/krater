@@ -9,6 +9,7 @@ interface MusicTileProps {
   title: string
   media?: string
   priority?: boolean
+  className?: string
 }
 
 const MusicTile: React.FC<MusicTileProps> = ({
@@ -17,11 +18,14 @@ const MusicTile: React.FC<MusicTileProps> = ({
   title,
   media = '',
   priority = false,
+  className = '',
 }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300">
+    <div
+      className={`bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300 ${className}`}
+    >
       <Link
         className="flex relative w-full aspect-square cursor-pointer"
         href={media}
