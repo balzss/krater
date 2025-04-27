@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Dices, Undo2 } from 'lucide-react'
-import { MusicTile, ActionButton } from '@/components'
+import { MusicTile, ActionButton, SpotifyPlayButton } from '@/components'
 import { useFetchJson } from '@/hooks'
 import type { Artist, Release } from '@/lib/data'
 
@@ -60,6 +60,7 @@ export default function CardPage() {
               size={48}
             />
             <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
+            <SpotifyPlayButton albumUrl={releases[chosenReleaseIndex].media.spotify || ''} />
           </div>
         </div>
       )}

@@ -1,9 +1,10 @@
 'use client'
 
 import { MouseEvent, useEffect, useState } from 'react'
-import { House, Check, TriangleAlert, LoaderCircle } from 'lucide-react'
-import type { HealthIssues } from '../api/health/route'
-import { ActionButton } from '@/components'
+import { House, Check, TriangleAlert, LoaderCircle, Sun, Moon } from 'lucide-react'
+import type { HealthIssues } from '@/app/api/health/route'
+import { MenuItem } from '@/components'
+import { useTheme } from 'next-themes'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiRoot = `${basePath}/api`
@@ -44,12 +45,16 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
   )
 }
 
-export default function ManagePage() {
+const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
+
+export default function ConfigPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [missingCovers, setMissingCovers] = useState<HealthIssues['missingCovers']>([])
   const [missingArtistsData, setMissingArtistsData] = useState<HealthIssues['missingArtists']>([])
   const [unusedArtistsData, setUnusedArtistsData] = useState<HealthIssues['unusedArtists']>([])
   const [unusedCoversData, setUnusedCoversData] = useState<HealthIssues['unusedCovers']>([])
+
+  const { theme, setTheme } = useTheme()
 
   const fetchHealtData = async () => {
     const response = await fetch(`${apiRoot}/health`)
@@ -62,7 +67,7 @@ export default function ManagePage() {
   }
 
   useEffect(() => {
-    document.title = 'Manage library | Krater'
+    document.title = 'Config | Krater'
     setIsLoading(true)
     fetchHealtData()
   }, [])
@@ -91,18 +96,31 @@ export default function ManagePage() {
     await fetchHealtData()
   }
 
+  const handleSwitchTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }
+
   return (
-    <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-8">
-      <div className="flex items-center w-full max-w-lg gap-4 sm:gap-6 justify-end">
-        <ActionButton href="/" size={40} icon={House} />
+    <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-6">
+      <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
+        <MenuItem startIcon={House} href="/">
+          Return to home
+        </MenuItem>
+        {theme && (
+          <MenuItem startIcon={theme === 'dark' ? Sun : Moon} onClick={handleSwitchTheme}>
+            Switch to {theme === 'dark' ? 'light' : 'dark'} theme
+          </MenuItem>
+        )}
       </div>
+
       {isLoading && (
         <p className="flex items-center gap-2 max-w-lg w-full">
           <LoaderCircle size={20} className="animate-spin" /> Fetching data...
         </p>
       )}
-      {!isLoading && (
+      {!isLoading && isLocalhost && (
         <>
+          <h2 className="text-2xl font-bold w-full max-w-lg mt-6">Library health check:</h2>
           <CheckResult
             successLabel="No missing covers were detected"
             warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
