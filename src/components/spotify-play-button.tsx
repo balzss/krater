@@ -113,7 +113,12 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
       })
 
       // Redirect the user
-      window.location.href = `${SPOTIFY_AUTHORIZE_ENDPOINT}?${params.toString()}`
+      if (window.top) {
+        window.top.location.href = `${SPOTIFY_AUTHORIZE_ENDPOINT}?${params.toString()}`
+      } else {
+        // Fallback if not in an iframe
+        window.location.href = `${SPOTIFY_AUTHORIZE_ENDPOINT}?${params.toString()}`
+      }
     } catch (err) {
       console.error('Error initiating Spotify connection:', err)
       setError('Failed to start Spotify connection.')
