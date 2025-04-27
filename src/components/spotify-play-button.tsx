@@ -128,7 +128,7 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
           localStorage.removeItem(POPUP_CALLBACK_SIGNAL_KEY)
           // Don't set isLoading false here, wait for message
         }
-      }, 1000)
+      }, 5000)
     } catch (err) {
       console.error('Error initiating Spotify connection:', err)
       setError(err instanceof Error ? err.message : 'Failed to start Spotify connection.')
