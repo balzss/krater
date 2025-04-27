@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { ActionButton } from '@/components'
+import { Play, Plug, Ellipsis } from 'lucide-react'
 
 const CLIENT_ID = '47802db6dc5249cbaa5dba475f04cc4d'
-const REDIRECT_URI = 'https://krater.bsaros.com/card'
+const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
+const REDIRECT_URI = isLocalhost ? 'http://localhost:3000/card' : 'https://krater.bsaros.com/card'
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize'
 const SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token'
 const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1'
@@ -305,17 +308,13 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
   return (
     <div>
       {error && <p>Error: {error}</p>}
-      {isLoading && <p>Loading...</p>}
-      {!accessToken ? (
-        <button onClick={handleConnect} disabled={isLoading}>
-          {isLoading ? 'Connecting...' : 'Connect to Spotify'}
-        </button>
+      {isLoading ? (
+        <ActionButton onClick={handleConnect} icon={Ellipsis} size={48} />
+      ) : !accessToken ? (
+        <ActionButton onClick={handleConnect} icon={Plug} size={48} />
       ) : (
-        <button onClick={handlePlay} disabled={isLoading || !albumUrl}>
-          {isLoading ? 'Starting...' : 'Play Album on Spotify'}
-        </button>
+        <ActionButton onClick={handlePlay} icon={Play} size={48} />
       )}
-      {!albumUrl && accessToken && <p>Please provide an Album URL.</p>}
     </div>
   )
 }
