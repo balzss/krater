@@ -109,10 +109,8 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
       const codeVerifier = generateCodeVerifier(128)
       const codeChallenge = await generateCodeChallenge(codeVerifier)
 
-      // 2. NO LONGER Store verifier in localStorage for callback.
-      //    We will pass it via the 'state' parameter instead.
+      // 2. Pass verifier via 'state' parameter.
       // console.log("Main Window: Generated verifier:", codeVerifier); // Debug log
-      // localStorage.setItem('spotify_code_verifier', codeVerifier); // REMOVED
 
       // Clear any leftover signal from previous attempts
       localStorage.removeItem(POPUP_CALLBACK_SIGNAL_KEY)
@@ -125,10 +123,7 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         scope: SCOPES, // Permissions requested
         code_challenge_method: 'S256', // PKCE method
         code_challenge: codeChallenge, // The generated challenge
-        // --- STATE PARAMETER CHANGE ---
-        // Pass the code verifier in the state parameter. Spotify will return it.
-        state: codeVerifier,
-        // --- END STATE PARAMETER CHANGE ---
+        state: codeVerifier, // Pass the verifier in the state parameter
       })
       const authUrl = `${SPOTIFY_AUTHORIZE_ENDPOINT}?${params.toString()}`
 
@@ -165,8 +160,6 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
           // Only set error if no signal was found above
           setError('Login cancelled or popup closed prematurely.')
           setIsLoading(false) // Update loading state
-          // No need to remove verifier from localStorage here anymore
-          // localStorage.removeItem('spotify_code_verifier'); // REMOVED
         }
       }, 1000) // Check every second
     } catch (err) {
@@ -174,8 +167,6 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
       console.error('Error initiating Spotify connection:', err)
       setError(err instanceof Error ? err.message : 'Failed to start Spotify connection.')
       setIsLoading(false)
-      // No need to remove verifier from localStorage here anymore
-      // localStorage.removeItem('spotify_code_verifier'); // REMOVED
     }
   }
 
@@ -188,7 +179,6 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
     const code = urlParams.get('code')
     const errorParam = urlParams.get('error')
 
-    // --- STATE PARAMETER CHANGE ---
     // Retrieve the verifier from the 'state' parameter returned by Spotify in the URL.
     const state = urlParams.get('state')
     console.log(
@@ -196,7 +186,6 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
       state
     )
     const codeVerifier = state // Use the state value as the verifier
-    // --- END STATE PARAMETER CHANGE ---
 
     // Ensure this code is running in a window opened by our main app
     if (!window.opener) {
@@ -204,11 +193,13 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         'handlePopupCallback called but window.opener is null. Not in expected popup context.'
       )
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'error')
-      window.close()
+      // Don't close here if opener is missing, might prevent debugging
+      // window.close();
       return // Exit if not in a popup context
     }
 
     // Clean the URL in the popup (remove code/error/state params)
+    // This might interfere with seeing the params if debugging quickly, consider commenting out if needed
     window.history.replaceState({}, document.title, window.location.pathname)
 
     // Handle case where Spotify returned an error
@@ -218,9 +209,8 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         { type: POST_MESSAGE_TYPE_SPOTIFY_TOKEN, error: `Spotify login failed: ${errorParam}` },
         window.location.origin
       )
-      // No verifier to remove from localStorage
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'error') // Signal completion (error)
-      window.close() // Close the popup
+      // window.close(); // Don't close automatically for debugging
       return
     }
 
@@ -231,13 +221,11 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         { type: POST_MESSAGE_TYPE_SPOTIFY_TOKEN, error: 'Authorization code missing.' },
         window.location.origin
       )
-      // No verifier to remove from localStorage
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'error')
-      window.close()
+      // window.close(); // Don't close automatically for debugging
       return
     }
 
-    // --- STATE PARAMETER CHANGE ---
     // Handle case where the code verifier (from state) is missing
     if (!codeVerifier) {
       console.error('handlePopupCallback: Code verifier missing from state parameter.') // Debug log
@@ -246,10 +234,9 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         window.location.origin
       )
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'error')
-      window.close()
+      // window.close(); // Don't close automatically for debugging
       return
     }
-    // --- END STATE PARAMETER CHANGE ---
 
     console.log(
       'handlePopupCallback: Code and verifier (from state) found. Proceeding with token exchange.'
@@ -287,8 +274,9 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
           // Try to parse JSON for more details
           const errorData = JSON.parse(errorText)
           errorDesc = errorData.error_description || errorDesc
-        } catch (_e) {
+        } catch (e) {
           /* Ignore if not JSON */
+          console.warn(e)
         }
         throw new Error(`Token exchange failed: ${errorDesc}`)
       }
@@ -311,7 +299,6 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         window.location.origin
       ) // Specify the target origin for security
 
-      // No verifier to remove from localStorage
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'success') // Signal completion (success)
     } catch (err) {
       // Handle errors during the token exchange
@@ -322,12 +309,11 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
         { type: POST_MESSAGE_TYPE_SPOTIFY_TOKEN, error: errorMsg },
         window.location.origin
       )
-      // No verifier to remove from localStorage
       localStorage.setItem(POPUP_CALLBACK_SIGNAL_KEY, 'error') // Signal completion (error)
     } finally {
-      console.log('handlePopupCallback: Closing popup.') // Debug log
-      // Close the popup window regardless of success or failure
-      window.close()
+      console.log('handlePopupCallback: Reached finally block. NOT closing popup for debugging.') // Debug log
+      // Temporarily disable closing the popup to allow inspection
+      // window.close(); // <--- KEPT COMMENTED OUT FOR DEBUGGING
     }
   }, []) // useCallback with empty dependency array as it doesn't depend on component state/props
 
