@@ -100,6 +100,14 @@ export default function ConfigPage() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
+        <LoaderCircle size={20} className="animate-spin" /> Fetching data...
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-6">
       <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
@@ -113,12 +121,7 @@ export default function ConfigPage() {
         )}
       </div>
 
-      {isLoading && (
-        <p className="flex items-center gap-2 max-w-lg w-full">
-          <LoaderCircle size={20} className="animate-spin" /> Fetching data...
-        </p>
-      )}
-      {!isLoading && isLocalhost && (
+      {isLocalhost && (
         <>
           <h2 className="text-2xl font-bold w-full max-w-lg mt-6">Library health check:</h2>
           <CheckResult

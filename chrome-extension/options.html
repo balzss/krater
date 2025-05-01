@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Krater Extension Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body { font-family: sans-serif; padding: 10px; min-width: 350px; display: flex; justify-content: center }
+      label { display: block; margin-top: 10px; font-weight: bold;}
+      input[type="text"] { width: 95%; padding: 5px; margin-top: 3px;}
+      #status { margin-top: 16px; color: green; font-style: italic; }
+      button { margin-top: 16px; padding: 8px 15px; cursor: pointer;}
+      .container {
+        max-width: 600px;
+        width: 100%;
+      }
+      .switch-container { display: flex; align-items: center; margin-top: 16px; gap: 6px}
+      .switch-container label { margin-right: 10px; margin-top: 0; font-weight: bold; }
+      .hint { font-size: 0.9em; color: #555; margin-top: 3px; }
+      .switch-container > input {margin: 0}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Krater Extension Settings</h2>
+
+      <label for="apiUrl">Krater API URL:</label>
+      <input type="text" id="apiUrl" placeholder="e.g., http://localhost:3000/api">
+      <div class="hint">The base URL for the Krater API your extension will connect to.</div>
+
+      <div class="switch-container">
+        <input type="checkbox" id="isEnabled">
+        <label for="isEnabled">Enable Extension</label>
+      </div>
+      <div class="hint">Enable or disable the Krater button on RateYourMusic pages.</div>
+
+
+      <button id="save">Save Settings</button>
+      <div id="status"></div>
+
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

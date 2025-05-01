@@ -10,7 +10,7 @@
   },
   "permissions": [
     "activeTab",
-    "http://localhost:3000/*"
+    "storage"
   ],
   "action": {
     "default_icon": {
@@ -22,7 +22,12 @@
   "content_scripts": [
     {
       "matches": ["https://rateyourmusic.com/release/*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "css": ["styles.css"]
     }
-  ]
+  ],
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  }
 }

@@ -1,0 +1,69 @@
+.krater-button {
+  /* Reset most browser/page styles to prevent interference */
+  all: unset;
+
+  /* Common styles */
+  display: inline-block; /* Allows margin/padding and sits inline */
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-family: sans-serif; /* Or match RYM's font if desired */
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  border: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease; /* Smooth transitions */
+  box-sizing: border-box; /* Include padding/border in element's total width/height */
+  line-height: 1.2; /* Ensure text vertical alignment */
+}
+
+/* Hover effect for all buttons */
+.krater-button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* Disabled state for all buttons */
+.krater-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Specific button types/states */
+.krater-button-add {
+  background-color: #006ED1;
+}
+.krater-button-add:hover:not(:disabled) {
+  background-color: #005DBF;
+}
+
+.krater-button-remove {
+  background-color: #F93D3D;
+}
+.krater-button-remove:hover:not(:disabled) {
+  background-color: #d32f2f; /* Slightly darker red on hover */
+}
+
+.krater-button-refresh {
+  background-color: #2196F3; /* Blue for refresh/info */
+  margin-left: 12px; /* Keep the margin from inline style */
+}
+.krater-button-refresh:hover:not(:disabled) {
+  background-color: #1e88e5; /* Slightly darker blue on hover */
+}
+
+.krater-button-loading,
+.krater-button-pending { /* Style for when action is in progress */
+  background-color: #757575; /* Grey */
+}
+
+.krater-button-error {
+  background-color: #ff9800; /* Orange/Amber for error */
+  color: #212121; /* Darker text for contrast */
+}
+
+/* Optional: Add a specific class if needed when the refresh button is added */
+.krater-action-button + .krater-button-refresh {
+    margin-left: 12px;
+}

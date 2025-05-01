@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, s-maxage=86400, max-age=86400, must-revalidate',
+            value: 'no-cache, no-store, max-age=0, must-revalidate',
           },
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Allow-Origin', value: '*' },
