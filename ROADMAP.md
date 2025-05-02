@@ -8,7 +8,7 @@
 - [x] make navigation between pages simpler: home button
 - [x] create "manage" page for detecting missing artists/covers or other info
 - [x] add "undo" button to random page
-- [ ] add cleanup buttons to manage page
+- [x] add cleanup buttons to manage page
 - [ ] TODO: fix manage page when release has empty artists
 - [ ] code cleanup
 - [ ] create release on github and expand the getting started guide

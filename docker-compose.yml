@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/balzss/krater:latest
+    container_name: krater-music-collection
+    ports:
+      # Map host port 3000 to container port 3000
+      # Users can change the host port (left side) if 3000 is taken on their machine
+      - "3000:3000"
+    environment:
+      # Pass environment variables needed at runtime
+      NODE_ENV: production
+    volumes:
+      - krater_data:/app/public/data
+    restart: unless-stopped # Automatically restart the container unless manually stopped
+    # Optional: Define a network if you plan to add more services later
+    # networks:
+    #   - app-network
+
+# Define Named Volumes
+volumes:
+  krater_data: # The data for the 'app' service's /app/data directory will be stored here
+
+# Optional: Define Networks if used above
+# networks:
+#   app-network:
+#     driver: bridge
+
+
