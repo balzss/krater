@@ -363,20 +363,20 @@ function initializeKraterExtension() {
   // Get settings from storage
   chrome.storage.sync.get(
     // Set defaults: enabled=true, apiUrl=localhost
-    { apiUrl: 'http://localhost:3000/api', isEnabled: true },
+    { apiUrl: 'http://localhost:3000', isEnabled: true },
     (items) => {
       console.log('Krater Extension Settings Loaded:', items)
+      const apiUrl = `${items.apiUrl}/api`
       if (items.isEnabled) {
         // If extension is enabled, run the main logic when the page finishes loading
         // Check if DOM is already ready or wait for 'load'
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
-          loadKrater(items.apiUrl)
+          loadKrater(apiUrl)
         } else {
-          window.addEventListener('load', () => loadKrater(items.apiUrl), { once: true }) // Use {once: true}
+          window.addEventListener('load', () => loadKrater(apiUrl), { once: true })
         }
       } else {
         console.log('Krater Extension is disabled via settings.')
-        // Do nothing, don't add the button or run any logic
       }
     }
   )

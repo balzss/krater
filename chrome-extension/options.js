@@ -1,7 +1,7 @@
 // Saves options to chrome.storage.sync
 function saveOptions() {
-  const apiUrl = document.getElementById('apiUrl').value
-  const cleanedApiUrl = apiUrl.replace(/\/+$/, '') + '/api' // Remove trailing slashes and add /api subpath
+  const apiUrl = document.getElementById('baseUrl').value
+  const cleanedApiUrl = apiUrl.replace(/\/+$/, '') // Remove trailing slashes
   const isEnabled = document.getElementById('isEnabled').checked
 
   chrome.storage.sync.set({ apiUrl: cleanedApiUrl, isEnabled: isEnabled }, () => {
@@ -9,9 +9,9 @@ function saveOptions() {
     const status = document.getElementById('status')
     status.textContent = 'Options saved.'
     // Reflect the cleaned URL back in the input field
-    document.getElementById('apiUrl').value = cleanedApiUrl
+    document.getElementById('baseUrl').value = cleanedApiUrl
     setTimeout(() => {
-      status.textContent = ''
+      status.innerHTML = '&nbsp;'
     }, 1500)
   })
 }
@@ -22,7 +22,7 @@ function restoreOptions() {
   chrome.storage.sync.get(
     { apiUrl: 'http://localhost:3000/api', isEnabled: true }, // Default values
     (items) => {
-      document.getElementById('apiUrl').value = items.apiUrl
+      document.getElementById('baseUrl').value = items.apiUrl
       document.getElementById('isEnabled').checked = items.isEnabled
     }
   )

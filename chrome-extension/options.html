@@ -5,37 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
       body { font-family: sans-serif; padding: 10px; min-width: 350px; display: flex; justify-content: center; font-size: 100%; }
-      label { display: block; margin-top: 10px; font-weight: bold;}
-      input[type="text"] { width: 95%; padding: 5px; margin-top: 3px;}
-      #status { margin-top: 16px; color: green; font-style: italic; }
+      label { display: block; font-weight: bold;}
+      /* --- Modified to include password type --- */
+      input[type="text"], input[type="password"] {
+         width: 95%; padding: 5px; margin-top: 3px;
+      }
+      /* --- End Modification --- */
+      #status { margin-top: 4px; font-size: 0.8rem; color: green;}
       button { margin-top: 16px; padding: 8px 15px; cursor: pointer;}
       .container {
         max-width: 600px;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
       .switch-container { display: flex; align-items: center; margin-top: 16px; gap: 4px}
       .switch-container label { margin-right: 10px; margin-top: 0; font-weight: bold; }
-      .hint { font-size: 0.9em; color: #555; margin-top: 3px; }
+      .hint { font-size: 0.8em; color: #555; margin-top: 4px; }
       .switch-container > input {margin: 0}
+
+      .docs-link-container {
+        text-align: center; /* Center the link text */
+        font-size: 0.8em; /* Make it slightly smaller */
+      }
+      .docs-link-container a {
+         color: #007bff; /* Standard link blue, or choose your own */
+         text-decoration: none; /* Optional: remove underline */
+      }
+       .docs-link-container a:hover {
+         text-decoration: underline; /* Add underline on hover */
+      }
+
     </style>
   </head>
   <body>
     <div class="container">
       <h2>Krater Extension Settings</h2>
 
-      <label for="baseUrl">Krater URL:</label>
-      <input type="text" id="baseUrl" placeholder="e.g., http://localhost:3000">
-      <div class="hint">The base URL for the Krater API your extension will connect to.</div>
-
-      <div class="switch-container">
-        <input type="checkbox" id="isEnabled">
-        <label for="isEnabled">Enable Extension</label>
+      <div>
+        <label for="baseUrl">Krater URL:</label>
+        <input type="text" id="baseUrl" placeholder="e.g., http://localhost:3000">
+        <div class="hint">The base URL for the Krater API your extension will connect to</div>
       </div>
-      <div class="hint">Enable or disable the Krater button on RateYourMusic pages.</div>
 
+      <div>
+        <label for="apiKey">API Key:</label>
+        <input type="password" id="apiKey" placeholder="Enter your Krater API Key">
+        <div class="hint">API key for authenticating with the Krater backend service</div>
+        <div class="switch-container">
+          <input type="checkbox" id="isEnabled">
+          <label for="isEnabled">Enable Extension</label>
+        </div>
+        <div class="hint">Enable or disable the Krater button on RateYourMusic pages</div>
+      </div>
 
-      <button id="save">Save Settings</button>
-      <div id="status"></div>
+      <div>
+        <button id="save">Save Settings</button>
+        <div id="status">&nbsp;</div>
+      </div>
+
+      <div class="docs-link-container">
+        <a href="YOUR_GITHUB_DOCUMENTATION_URL_HERE" target="_blank" rel="noopener noreferrer">
+          Need help? View the documentation on GitHub
+        </a>
+      </div>
 
     </div>
     <script src="options.js"></script>
