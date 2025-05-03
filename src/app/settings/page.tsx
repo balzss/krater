@@ -1,7 +1,16 @@
 'use client'
 
 import { MouseEvent, useEffect, useState } from 'react'
-import { House, Check, TriangleAlert, LoaderCircle, Sun, Moon } from 'lucide-react'
+import {
+  House,
+  Check,
+  TriangleAlert,
+  LoaderCircle,
+  Sun,
+  Moon,
+  Download,
+  FileUp,
+} from 'lucide-react'
 import type { HealthIssues } from '@/app/api/health/route'
 import { MenuItem } from '@/components'
 import { useTheme } from 'next-themes'
@@ -47,7 +56,7 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
 
 const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
 
-export default function ConfigPage() {
+export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [missingCovers, setMissingCovers] = useState<HealthIssues['missingCovers']>([])
   const [missingArtistsData, setMissingArtistsData] = useState<HealthIssues['missingArtists']>([])
@@ -67,7 +76,7 @@ export default function ConfigPage() {
   }
 
   useEffect(() => {
-    document.title = 'Config | Krater'
+    document.title = 'Settings | Krater'
     setIsLoading(true)
     fetchHealtData()
   }, [])
@@ -117,6 +126,14 @@ export default function ConfigPage() {
         {theme && (
           <MenuItem startIcon={theme === 'dark' ? Sun : Moon} onClick={handleSwitchTheme}>
             Switch to {theme === 'dark' ? 'light' : 'dark'} theme
+          </MenuItem>
+        )}
+        <MenuItem startIcon={Download} onClick={() => alert('Coming soon...')}>
+          Download library data
+        </MenuItem>
+        {isLocalhost && (
+          <MenuItem startIcon={FileUp} onClick={() => console.log('import')}>
+            Import library
           </MenuItem>
         )}
       </div>

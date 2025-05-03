@@ -30,7 +30,7 @@ export function MainPageContent() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <div className="flex items-center flex-col gap-4 sm:gap-8 max-w-md w-full">
+      <div className="flex items-center flex-col gap-4 sm:gap-6 max-w-md w-full">
         <MenuItem
           startIcon={Github}
           endIcon={ExternalLink}
@@ -40,8 +40,8 @@ export function MainPageContent() {
           Github repo
         </MenuItem>
 
-        <MenuItem startIcon={Settings} href={`/config`}>
-          Config
+        <MenuItem startIcon={Settings} href={`/settings`}>
+          Settings
         </MenuItem>
 
         <MenuItem startIcon={artistsLoading ? Loader : User} href="/artists">

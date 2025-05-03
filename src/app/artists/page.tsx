@@ -45,7 +45,7 @@ export default function ArtistsPage() {
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <ActionButton href="/" size={40} icon={House} />
+        <ActionButton href="/" icon={House} />
       </div>
       {artistResults.map((artist) => (
         <MenuItem key={artist.rymId} href={`/browse?a=${artist.rymId}`} className="max-w-md">

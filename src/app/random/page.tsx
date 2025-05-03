@@ -57,10 +57,10 @@ export default function RandomPage() {
                 onClick={handleUndoButton}
                 icon={Undo2}
                 disabled={chosenReleaseIndex === 0}
-                size={48}
+                size={40}
               />
-              <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
-              <ActionButton href="/" icon={House} size={48} />
+              <ActionButton onClick={handleRollButton} icon={Dices} size={40} />
+              <ActionButton href="/" icon={House} size={40} />
             </div>
           </>
         )}

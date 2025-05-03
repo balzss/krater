@@ -1,8 +1,7 @@
 // Saves options to chrome.storage.sync
 function saveOptions() {
   const apiUrl = document.getElementById('apiUrl').value
-  // Basic check: ensure URL doesn't end with a slash unless it's just "http://host/"
-  const cleanedApiUrl = apiUrl.replace(/\/+$/, '') // Remove trailing slashes
+  const cleanedApiUrl = apiUrl.replace(/\/+$/, '') + '/api' // Remove trailing slashes and add /api subpath
   const isEnabled = document.getElementById('isEnabled').checked
 
   chrome.storage.sync.set({ apiUrl: cleanedApiUrl, isEnabled: isEnabled }, () => {

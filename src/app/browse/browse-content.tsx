@@ -55,7 +55,7 @@ export default function BrowsePageContent() {
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
         />
-        <ActionButton href="/" size={40} icon={House} />
+        <ActionButton href="/" icon={House} />
       </div>
       {artists && artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">
