@@ -1,10 +1,11 @@
 import path from 'path'
 import fs from 'fs/promises'
-import type { Release, Artist } from '@/lib/data'
+import type { Release, Artist, LibraryData } from '@/lib/data'
 
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 const releasesFilePath = path.join(process.cwd(), 'public', 'data', 'releases.json')
 const artistsFilePath = path.join(process.cwd(), 'public', 'data', 'artists.json')
+const dataFilePath = path.join(process.cwd(), 'public', 'data', 'data.json')
 
 export async function deleteCoverFile(filename: string | undefined | null) {
   if (!filename) return // No filename, nothing to delete
@@ -29,6 +30,31 @@ export async function ensureDirectoryExists(dirPath: string) {
     }
     console.error(`Error creating directory ${dirPath}:`, error)
     throw new Error(`Could not create directory: ${dirPath}`)
+  }
+}
+
+export async function readDataJson(): Promise<LibraryData> {
+  try {
+    const dataJson = await fs.readFile(dataFilePath, 'utf8')
+    const libraryData = JSON.parse(dataJson)
+    return libraryData
+  } catch (error: unknown) {
+    console.error('Error reading library data file:', error)
+    throw new Error('Could not read library data file.')
+  }
+}
+
+export async function writeDataJson(data: LibraryData): Promise<void> {
+  try {
+    await ensureDirectoryExists(dataFilePath)
+    const jsonString = JSON.stringify(data, null, 2)
+    await fs.writeFile(dataFilePath, jsonString, 'utf-8')
+    console.log(`Data successfully written to ${dataFilePath} by writeDataJson.`)
+  } catch (error) {
+    console.error(`Error in writeDataJson writing to ${dataFilePath}:`, error)
+    throw new Error(
+      `Failed to write data to JSON file: ${error instanceof Error ? error.message : error}`
+    )
   }
 }
 

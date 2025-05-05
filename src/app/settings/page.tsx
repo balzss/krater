@@ -1,6 +1,6 @@
 'use client'
 
-import { MouseEvent, useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState, useRef } from 'react'
 import {
   House,
   Check,
@@ -10,10 +10,13 @@ import {
   Moon,
   Download,
   FileUp,
+  FilePenLine,
+  RefreshCcw,
 } from 'lucide-react'
 import type { HealthIssues } from '@/app/api/health/route'
-import { MenuItem } from '@/components'
+import { MenuItem, ActionButton } from '@/components'
 import { useTheme } from 'next-themes'
+import { useLibraryData } from '@/hooks'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiRoot = `${basePath}/api`
@@ -57,6 +60,8 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
 const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
 
 export default function SettingsPage() {
+  const importFileInputRef = useRef<HTMLInputElement>(null)
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [missingCovers, setMissingCovers] = useState<HealthIssues['missingCovers']>([])
   const [missingArtistsData, setMissingArtistsData] = useState<HealthIssues['missingArtists']>([])
@@ -64,8 +69,10 @@ export default function SettingsPage() {
   const [unusedCoversData, setUnusedCoversData] = useState<HealthIssues['unusedCovers']>([])
 
   const { theme, setTheme } = useTheme()
+  const { getLibraryData, setLibraryData } = useLibraryData()
 
   const fetchHealtData = async () => {
+    setIsLoading(true)
     const response = await fetch(`${apiRoot}/health`)
     const data = await response.json()
     setMissingCovers(data?.issues?.missingCovers || [])
@@ -77,7 +84,6 @@ export default function SettingsPage() {
 
   useEffect(() => {
     document.title = 'Settings | Krater'
-    setIsLoading(true)
     fetchHealtData()
   }, [])
 
@@ -109,6 +115,44 @@ export default function SettingsPage() {
     setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
+  const handleDownloadLibraryData = async () => {
+    try {
+      const libData = await getLibraryData()
+      const jsonString = JSON.stringify(libData, null, 2)
+      const blob = new Blob([jsonString], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      const dateString = new Date().toISOString().slice(0, 10) // "YYYY-MM-DD"
+      link.download = `krater-library-${dateString}.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      console.log('Data saved successfully as JSON.')
+    } catch (error) {
+      console.error('Failed to save data as JSON:', error)
+    }
+  }
+
+  const handleImportFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+
+    if (!files || files.length === 0) {
+      console.warn('No file selected.')
+      event.target.value = ''
+      return
+    }
+
+    await setLibraryData(files[0])
+
+    event.target.value = ''
+  }
+
+  const handleImportClick = () => {
+    importFileInputRef.current?.click()
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
@@ -128,53 +172,71 @@ export default function SettingsPage() {
             Switch to {theme === 'dark' ? 'light' : 'dark'} theme
           </MenuItem>
         )}
-        <MenuItem startIcon={Download} onClick={() => alert('Coming soon...')}>
-          Download library data
+        <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
+          Download data
         </MenuItem>
         {isLocalhost && (
-          <MenuItem startIcon={FileUp} onClick={() => console.log('import')}>
-            Import library
-          </MenuItem>
+          <>
+            <input
+              type="file"
+              accept=".json,application/json"
+              ref={importFileInputRef}
+              onChange={handleImportFileChange}
+              style={{ display: 'none' }}
+            />
+            <MenuItem startIcon={FileUp} onClick={handleImportClick}>
+              Import JSON
+            </MenuItem>
+            <MenuItem startIcon={FilePenLine} onClick={() => alert('Coming soon...')}>
+              Edit library
+            </MenuItem>
+          </>
         )}
       </div>
 
       {isLocalhost && (
-        <>
-          <h2 className="text-2xl font-bold w-full max-w-lg mt-6">Library health check:</h2>
-          <CheckResult
-            successLabel="No missing covers were detected"
-            warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-            warningItems={missingCovers.map(
-              (cover) => `${cover.releaseArtists} - ${cover.releaseTitle} (${cover.filename})`
-            )}
-            onItemClick={(_e, i) => console.log(missingCovers[i])}
-          />
+        <div className="w-full max-w-lg p-4 border border-(--border) rounded-lg bg-(--card)">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">Library health check:</h2>
+            <ActionButton icon={RefreshCcw} size={20} onClick={fetchHealtData} />
+          </div>
+          <ul className="flex flex-col gap-4">
+            <CheckResult
+              successLabel="No missing covers were detected"
+              warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+              warningItems={missingCovers.map(
+                (cover) => `${cover.releaseArtists} - ${cover.releaseTitle} (${cover.filename})`
+              )}
+              onItemClick={(_e, i) => console.log(missingCovers[i])}
+            />
 
-          <CheckResult
-            successLabel="No unused covers were detected"
-            warningLabel={`${unusedCoversData.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-            warningItems={unusedCoversData}
-            onItemClick={(_e, i) => handleDeleteCover(unusedCoversData[i])}
-          />
+            <CheckResult
+              successLabel="No unused covers were detected"
+              warningLabel={`${unusedCoversData.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+              warningItems={unusedCoversData}
+              onItemClick={(_e, i) => handleDeleteCover(unusedCoversData[i])}
+            />
 
-          <CheckResult
-            successLabel="No missing artists were detected"
-            warningLabel={`${missingArtistsData.length} missing artist${missingArtistsData.length > 1 ? 's were ' : ' was '} detected`}
-            warningItems={missingArtistsData.map(
-              (missingArtist) => missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
-            )}
-            onItemClick={(_e, i) => console.log(missingArtistsData[i])}
-          />
+            <CheckResult
+              successLabel="No missing artists were detected"
+              warningLabel={`${missingArtistsData.length} missing artist${missingArtistsData.length > 1 ? 's were ' : ' was '} detected`}
+              warningItems={missingArtistsData.map(
+                (missingArtist) =>
+                  missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
+              )}
+              onItemClick={(_e, i) => console.log(missingArtistsData[i])}
+            />
 
-          <CheckResult
-            successLabel="No artists were detected without any release"
-            warningLabel={`${unusedArtistsData.length} artist${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
-            warningItems={unusedArtistsData.map((artist) => artist.displayName)}
-            onItemClick={(_e, i) =>
-              handleDeleteArtist(unusedArtistsData[i].rymId, unusedArtistsData[i].displayName)
-            }
-          />
-        </>
+            <CheckResult
+              successLabel="No artists were detected without any release"
+              warningLabel={`${unusedArtistsData.length} artist${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
+              warningItems={unusedArtistsData.map((artist) => artist.displayName)}
+              onItemClick={(_e, i) =>
+                handleDeleteArtist(unusedArtistsData[i].rymId, unusedArtistsData[i].displayName)
+              }
+            />
+          </ul>
+        </div>
       )}
     </div>
   )

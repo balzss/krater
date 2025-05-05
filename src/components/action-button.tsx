@@ -8,6 +8,7 @@ type ActionButtonProps = {
   onClick?: () => void
   disabled?: boolean
   size?: number
+  className?: string
 }
 
 export const ActionButton: FC<ActionButtonProps> = ({
@@ -16,18 +17,18 @@ export const ActionButton: FC<ActionButtonProps> = ({
   onClick,
   disabled,
   size = 32,
+  className = '',
 }) => {
-  const className =
-    'p-2 rounded-lg cursor-pointer duration-100 transform transition hover:bg-(--item) ease-in-out flex gap-2 items-center min-h-12 bg-(--card) disabled:cursor-not-allowed disabled:opacity-25 disabled:bg-transparent'
+  const combinedClasses = `p-2 rounded-lg cursor-pointer duration-100 transform transition hover:bg-(--item) ease-in-out flex gap-2 items-center bg-(--card) disabled:cursor-not-allowed disabled:opacity-25 disabled:bg-transparent ${className}`
   if (href) {
     return (
-      <Link className={className} href={href}>
+      <Link className={combinedClasses} href={href}>
         <Icon size={size} />
       </Link>
     )
   }
   return (
-    <button className={className} onClick={onClick} disabled={disabled}>
+    <button className={combinedClasses} onClick={onClick} disabled={disabled}>
       <Icon size={size} />
     </button>
   )

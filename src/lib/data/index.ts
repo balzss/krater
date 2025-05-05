@@ -14,3 +14,8 @@ export type Artist = {
   rymId: string
   rymUrl?: string
 }
+
+export type LibraryData = {
+  releases: Release[]
+  artists: Artist[]
+}
