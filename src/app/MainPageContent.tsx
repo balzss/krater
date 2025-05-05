@@ -37,7 +37,7 @@ export function MainPageContent() {
           href="https://github.com/balzss/krater"
           target="_blank"
         >
-          Github repo
+          Github repository
         </MenuItem>
 
         <MenuItem startIcon={Settings} href={`/settings`}>

@@ -1,6 +1,4 @@
-[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](https://github.com/balzss/krater/)
-
-# Krater
+[![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg)](ROADMAP.md)
 
 Toolset for creating and updating a static website for your music collection, designed to mimic the experience of browsing a physical vinyl collection
 
