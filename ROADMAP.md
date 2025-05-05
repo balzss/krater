@@ -1,6 +1,6 @@
 # Roadmap (subject to change)
 
-## 0.1 release (MVP)
+## 0.1 beta release
 
 - [ ] allow library data editing on settings page
 - [ ] fix manage page when release has empty artists
