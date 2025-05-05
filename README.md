@@ -22,7 +22,7 @@ This project is **highly opinionated** and built around the way I like to organi
 
 ## Live Demo
 
-You can see an example of a deployed collection here: [https://balzss.github.io/krater/](https://balzss.github.io/krater/)
+You can see an example of a deployed collection here: [https://krater.bsaros.com/](https://krater.bsaros.com/)
 
 ## Project Status
 
@@ -31,6 +31,7 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
 - Expect frequent updates and improvements.
 - Some features are still in development.
 - Breaking changes may happen as it matures.
+- See [ROADMAP](ROADMAP.md) for planned features
 
 ## How It Works
 
@@ -59,8 +60,7 @@ You can see an example of a deployed collection here: [https://balzss.github.io/
     ```
 2.  **Install dependencies:**
     ```bash
-    npm install
-    # or pnpm install / yarn install
+    npm install # or pnpm install / yarn install
     ```
 3.  **Create local env file:**
     ```bash
