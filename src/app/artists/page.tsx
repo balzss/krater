@@ -18,11 +18,7 @@ export default function ArtistsPage() {
   useEffect(() => {
     if (!artists) return
     if (!searchQuery) {
-      setArtistResults(
-        artists.sort((a, b) =>
-          a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
-        )
-      )
+      setArtistResults(artists)
       return
     }
     const lowerSearchQuery = searchQuery.toLowerCase()

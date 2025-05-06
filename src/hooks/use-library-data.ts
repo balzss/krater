@@ -28,25 +28,60 @@ interface UseLibraryDataReturn {
   isLoading: boolean
 }
 
+type SortMethod = 'asc' | 'desc' | 'random'
+
 interface UseLibraryDataProps {
   enabled?: boolean
+  releaseSort?: SortMethod
+  artistSort?: SortMethod
 }
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiUrl = `${basePath}/api/library-data`
 const dataJsonPath = `${basePath}/data/libraryData.json`
 
+function sortArtists(artists: Artist[], sortMethod: SortMethod) {
+  if (sortMethod === 'asc') {
+    return artists.sort((a, b) =>
+      a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
+    )
+  } else if (sortMethod === 'desc') {
+    return artists.sort((a, b) =>
+      b.displayName.localeCompare(a.displayName, undefined, { sensitivity: 'base' })
+    )
+  }
+  for (let i = artists.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[artists[i], artists[j]] = [artists[j], artists[i]]
+  }
+  return artists
+}
+
+function sortReleases(releases: Release[], sortMethod: SortMethod) {
+  if (sortMethod === 'asc') {
+    return releases.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+    )
+  } else if (sortMethod === 'desc') {
+    return releases.sort((a, b) =>
+      b.title.localeCompare(a.title, undefined, { sensitivity: 'base' })
+    )
+  }
+  for (let i = releases.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[releases[i], releases[j]] = [releases[j], releases[i]]
+  }
+  return releases
+}
+
 export function useLibraryData({
   enabled = false,
+  releaseSort = 'random',
+  artistSort = 'asc',
 }: UseLibraryDataProps = {}): UseLibraryDataReturn {
   const [releases, setReleases] = useState<Release[] | null>(null)
   const [artists, setArtists] = useState<Artist[] | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-
-  useEffect(() => {
-    if (enabled) getLibraryData()
-    setIsLoading(false)
-  }, [enabled])
 
   const getLibraryData = async (): Promise<LibraryData | null> => {
     setIsLoading(true)
@@ -57,9 +92,11 @@ export function useLibraryData({
         throw new Error(`API Error: ${response.status}`)
       }
       const libraryData: LibraryData = await response.json()
+      const sortedArtists = sortArtists(libraryData.artists, artistSort)
+      const sortedReleases = sortReleases(libraryData.releases, releaseSort)
 
-      setReleases(libraryData.releases)
-      setArtists(libraryData.artists)
+      setReleases(sortedReleases)
+      setArtists(sortedArtists)
       setIsLoading(false)
 
       return libraryData
@@ -95,6 +132,11 @@ export function useLibraryData({
       throw error
     }
   }
+
+  useEffect(() => {
+    if (enabled) getLibraryData()
+    setIsLoading(false)
+  }, [enabled])
 
   return { getLibraryData, setLibraryData, releases, artists, isLoading }
 }
