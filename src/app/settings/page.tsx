@@ -12,6 +12,8 @@ import {
   FileUp,
   FilePenLine,
   RefreshCcw,
+  LogOut,
+  Key,
 } from 'lucide-react'
 import type { HealthIssues } from '@/app/api/health/route'
 import { MenuItem, ActionButton } from '@/components'
@@ -175,7 +177,7 @@ export default function SettingsPage() {
         <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
           Download data
         </MenuItem>
-        {isLocalhost && (
+        {isLocalhost ? (
           <>
             <input
               type="file"
@@ -190,15 +192,27 @@ export default function SettingsPage() {
             <MenuItem startIcon={FilePenLine} onClick={() => alert('Coming soon...')}>
               Edit library
             </MenuItem>
+            <MenuItem startIcon={LogOut} onClick={() => alert('Coming soon...')}>
+              Log out
+            </MenuItem>
           </>
+        ) : (
+          <MenuItem startIcon={Key} onClick={() => prompt('Please enter your admin key')}>
+            Authenticate
+          </MenuItem>
         )}
       </div>
 
       {isLocalhost && (
         <div className="w-full max-w-lg p-4 border border-(--border) rounded-lg bg-(--card)">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Library health check:</h2>
-            <ActionButton icon={RefreshCcw} size={20} onClick={fetchHealtData} />
+            <h2 className="text-2xl font-bold">Library health check</h2>
+            <ActionButton
+              icon={RefreshCcw}
+              size={20}
+              onClick={fetchHealtData}
+              className="-mt-1 -mr-1"
+            />
           </div>
           <ul className="flex flex-col gap-4">
             <CheckResult
