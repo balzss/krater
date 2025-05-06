@@ -34,7 +34,7 @@ interface UseLibraryDataProps {
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiUrl = `${basePath}/api/library-data`
-const dataJsonPath = `${basePath}/data/data.json`
+const dataJsonPath = `${basePath}/data/libraryData.json`
 
 export function useLibraryData({
   enabled = false,

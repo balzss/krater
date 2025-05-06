@@ -4,7 +4,7 @@ const basePath = ''
 
 const nextConfig: NextConfig = {
   distDir: 'build',
-  output: 'export',
+  output: process.env.NEXT_OUTPUT_MODE === 'export' ? 'export' : undefined,
   basePath,
   images: {
     unoptimized: true,

@@ -3,9 +3,7 @@ import fs from 'fs/promises'
 import type { Release, Artist, LibraryData } from '@/lib/data'
 
 const coversDir = path.join(process.cwd(), 'public', 'covers')
-const releasesFilePath = path.join(process.cwd(), 'public', 'data', 'releases.json')
-const artistsFilePath = path.join(process.cwd(), 'public', 'data', 'artists.json')
-const dataFilePath = path.join(process.cwd(), 'public', 'data', 'data.json')
+const dataJsonPath = path.join(process.cwd(), 'public', 'data', 'libraryData.json')
 
 export { withAuth } from './with-auth'
 
@@ -17,7 +15,6 @@ export async function deleteCoverFile(filename: string | undefined | null) {
     console.log(`Deleted cover file: ${filePath}`)
   } catch (error: unknown) {
     if (error instanceof Error && 'code' in error && error.code !== 'ENOENT') {
-      // Only log errors other than "file not found"
       console.error(`Error deleting cover file ${filename}:`, error)
     }
   }
@@ -35,9 +32,9 @@ export async function ensureDirectoryExists(dirPath: string) {
   }
 }
 
-export async function readDataJson(): Promise<LibraryData> {
+export async function getLibraryData(): Promise<LibraryData> {
   try {
-    const dataJson = await fs.readFile(dataFilePath, 'utf8')
+    const dataJson = await fs.readFile(dataJsonPath, 'utf8')
     const libraryData = JSON.parse(dataJson)
     return libraryData
   } catch (error: unknown) {
@@ -46,46 +43,57 @@ export async function readDataJson(): Promise<LibraryData> {
   }
 }
 
-export async function writeDataJson(data: LibraryData): Promise<void> {
+export async function setLibraryData(data: LibraryData): Promise<void> {
   try {
-    await ensureDirectoryExists(dataFilePath)
+    await ensureDirectoryExists(dataJsonPath)
     const jsonString = JSON.stringify(data, null, 2)
-    await fs.writeFile(dataFilePath, jsonString, 'utf-8')
-    console.log(`Data successfully written to ${dataFilePath} by writeDataJson.`)
+    await fs.writeFile(dataJsonPath, jsonString, 'utf-8')
+    console.log(`Data successfully written to ${dataJsonPath} by writeDataJson.`)
   } catch (error) {
-    console.error(`Error in writeDataJson writing to ${dataFilePath}:`, error)
+    console.error(`Error in writeDataJson writing to ${dataJsonPath}:`, error)
     throw new Error(
       `Failed to write data to JSON file: ${error instanceof Error ? error.message : error}`
     )
   }
 }
 
-export async function readReleasesFile(): Promise<Release[]> {
+export async function getReleases(): Promise<Release[]> {
   try {
-    const releasesJson = await fs.readFile(releasesFilePath, 'utf8')
-    const releasesData = JSON.parse(releasesJson)
+    const libraryData = await getLibraryData()
+    const releasesData = libraryData.releases
     return releasesData
+  } catch (error: unknown) {
+    console.error('Error getting releases:', error)
+    throw new Error('Could not get releases data.')
+  }
+}
+
+export async function updateReleases(releases: Release[]): Promise<void> {
+  try {
+    const libraryData = await getLibraryData()
+    await setLibraryData({ ...libraryData, releases })
   } catch (error: unknown) {
     console.error('Error reading releases file:', error)
     throw new Error('Could not read releases data file.')
   }
 }
 
-export async function writeReleasesToFile(releases: Release[]): Promise<void> {
-  await fs.writeFile(releasesFilePath, JSON.stringify(releases, null, 2), 'utf-8')
-}
-
-export async function readArtistsFile(): Promise<Artist[]> {
+export async function getArtists(): Promise<Artist[]> {
   try {
-    const artistsJson = await fs.readFile(artistsFilePath, 'utf8')
-    const artistsData = JSON.parse(artistsJson)
-    return artistsData
+    const libraryData = await getLibraryData()
+    return libraryData.artists
   } catch (error: unknown) {
-    console.error('Error reading artists file:', error)
-    throw new Error('Could not read artists data file.')
+    console.error('Error getting artists:', error)
+    throw new Error('Could not get artists data.')
   }
 }
 
-export async function writeArtistsToFile(artists: Artist[]): Promise<void> {
-  await fs.writeFile(artistsFilePath, JSON.stringify(artists, null, 2), 'utf-8')
+export async function updateArtists(artists: Artist[]): Promise<void> {
+  try {
+    const libraryData = await getLibraryData()
+    await setLibraryData({ ...libraryData, artists })
+  } catch (error: unknown) {
+    console.error('Error updating artists: ', error)
+    throw new Error('Could not update artists.')
+  }
 }

@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import {
-  writeReleasesToFile,
-  readReleasesFile,
-  deleteCoverFile,
-  ensureDirectoryExists,
-} from '@/lib/server'
+import { updateReleases, getReleases, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
 import type { Release } from '@/lib/data'
 
 const coversDir = path.join(process.cwd(), 'public', 'covers')
@@ -14,7 +9,7 @@ const coversDir = path.join(process.cwd(), 'public', 'covers')
 // GET: Return all releases
 export async function GET(_req: NextRequest) {
   try {
-    const releasesData = await readReleasesFile()
+    const releasesData = await getReleases()
     return NextResponse.json(releasesData)
   } catch (error: unknown) {
     console.error('[API RELEASES GET] Error:', error)
@@ -25,7 +20,7 @@ export async function GET(_req: NextRequest) {
 // POST: Add a new release
 export async function POST(req: NextRequest) {
   try {
-    const releasesData = await readReleasesFile()
+    const releasesData = await getReleases()
     await ensureDirectoryExists(coversDir)
     const formData = await req.formData()
     const newReleaseData: Partial<Release> = {}
@@ -134,7 +129,7 @@ export async function POST(req: NextRequest) {
     }
 
     const updatedReleases = [...releasesData, newRelease]
-    await writeReleasesToFile(updatedReleases)
+    await updateReleases(updatedReleases)
 
     return NextResponse.json(
       { message: 'Release added successfully', release: newRelease },
@@ -178,7 +173,7 @@ export async function POST(req: NextRequest) {
 // PUT: Update an existing release, optionally updating/replacing the cover image
 export async function PUT(req: NextRequest) {
   try {
-    const releasesData = await readReleasesFile()
+    const releasesData = await getReleases()
     await ensureDirectoryExists(coversDir)
     const formData = await req.formData()
     const updateData: Partial<Release> = {}
@@ -305,7 +300,7 @@ export async function PUT(req: NextRequest) {
       ...updateData, // Overwrite with new values where provided
     }
     releasesData[releaseIndex] = updatedReleaseData as Release // Update the array
-    await writeReleasesToFile(releasesData)
+    await updateReleases(releasesData)
 
     return NextResponse.json(
       { message: 'Release updated successfully', release: updatedReleaseData },
@@ -354,7 +349,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
     }
 
-    const releasesData = await readReleasesFile()
+    const releasesData = await getReleases()
     const releaseIndex = releasesData.findIndex((r) => r.rymId === rymIdToDelete)
 
     if (releaseIndex === -1) {
@@ -368,7 +363,7 @@ export async function DELETE(req: NextRequest) {
     const coverFilenameToDelete = releaseToDelete.cover
     const filteredReleases = releasesData.filter((_, index) => index !== releaseIndex)
 
-    await writeReleasesToFile(filteredReleases)
+    await updateReleases(filteredReleases)
     await deleteCoverFile(coverFilenameToDelete)
 
     return NextResponse.json(

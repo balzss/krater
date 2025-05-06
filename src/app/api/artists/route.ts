@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readArtistsFile, writeArtistsToFile } from '@/lib/server'
+import { getArtists, updateArtists } from '@/lib/server'
 import type { Artist } from '@/lib/data'
 
 interface PutResponsePayload {
@@ -13,7 +13,7 @@ export const dynamic = 'force-static'
 
 export async function GET(_req: NextRequest) {
   try {
-    const artists = await readArtistsFile()
+    const artists = await getArtists()
     return NextResponse.json(artists)
   } catch (error: unknown) {
     console.error('[API ARTISTS GET] Error:', error)
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const artists = await readArtistsFile()
+    const artists = await getArtists()
     const currentRymIds = new Set(artists.map((a) => a.rymId))
     const addedArtists: Artist[] = []
     const skippedArtists: { artist: Artist; reason: string }[] = []
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     }
 
     const finalArtists = [...artists, ...addedArtists]
-    await writeArtistsToFile(finalArtists)
+    await updateArtists(finalArtists)
 
     return NextResponse.json(
       {
@@ -119,7 +119,7 @@ export async function PUT(req: NextRequest) {
       )
     }
 
-    const artists = await readArtistsFile()
+    const artists = await getArtists()
     const currentArtists = [...artists]
     let updated = false
     const updatedArtistsResult: Artist[] = []
@@ -143,7 +143,7 @@ export async function PUT(req: NextRequest) {
       )
     }
 
-    await writeArtistsToFile(currentArtists)
+    await updateArtists(currentArtists)
 
     const responsePayload: PutResponsePayload = {
       message: 'Artists updated successfully.',
@@ -186,7 +186,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
     }
 
-    const artists = await readArtistsFile()
+    const artists = await getArtists()
     const filteredArtists = artists.filter((a) => a.rymId !== rymIdToDelete)
 
     if (filteredArtists.length === artists.length) {
@@ -196,7 +196,7 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    await writeArtistsToFile(filteredArtists)
+    await updateArtists(filteredArtists)
 
     return NextResponse.json(
       {

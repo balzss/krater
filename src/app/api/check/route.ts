@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readReleasesFile, readArtistsFile } from '@/lib/server'
+import { getLibraryData } from '@/lib/server'
 
 export const dynamic = 'force-static'
 
@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    const releases = await readReleasesFile()
-    const artists = await readArtistsFile()
+    const libraryData = await getLibraryData()
+    const { releases, artists } = libraryData
 
     const missingArtists = artistIds?.filter((id) => !artists.find((a) => a.rymId === id)) || []
 

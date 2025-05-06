@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
-import { readDataJson, writeDataJson } from '@/lib/server'
+import { getLibraryData, setLibraryData } from '@/lib/server'
 
 export const dynamic = 'force-static'
 
 export async function GET() {
   try {
-    const libraryData = await readDataJson()
+    const libraryData = await getLibraryData()
     return NextResponse.json({
       status: 'ok',
       libraryData,
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       )
     }
 
-    await writeDataJson(receivedData)
+    await setLibraryData(receivedData)
     console.log(`Data successfully processed by writeDataJson.`)
 
     return NextResponse.json({
