@@ -33,7 +33,7 @@ FROM base AS runner
 WORKDIR /app
 
 # Copy built artifacts from the builder stage
-COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/build ./.next
 COPY --from=builder /app/public ./public
 # Copy node_modules from the base stage (contains only production deps)
 COPY --from=base /app/node_modules ./node_modules
