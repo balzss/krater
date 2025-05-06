@@ -1,3 +1,3 @@
-export { useFetchJson } from './useFetchJson'
 export { useLibraryData } from './use-library-data'
-export { useTheme } from './useTheme'
+export { useTheme } from './use-theme'
+export { useAuth } from './use-auth'

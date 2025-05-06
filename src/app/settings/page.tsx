@@ -13,7 +13,7 @@ import {
   FilePenLine,
   RefreshCcw,
   LogOut,
-  Key,
+  KeyRound,
 } from 'lucide-react'
 import type { HealthIssues } from '@/app/api/health/route'
 import { MenuItem, ActionButton } from '@/components'
@@ -197,7 +197,7 @@ export default function SettingsPage() {
             </MenuItem>
           </>
         ) : (
-          <MenuItem startIcon={Key} onClick={() => prompt('Please enter your admin key')}>
+          <MenuItem startIcon={KeyRound} onClick={() => prompt('Please enter your admin key')}>
             Authenticate
           </MenuItem>
         )}

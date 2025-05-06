@@ -3,19 +3,13 @@
 import { useState, useEffect } from 'react'
 import { House } from 'lucide-react'
 import { SearchInput, MenuItem, ActionButton } from '@/components'
-import { type Artist } from '@/lib/data'
-import { useFetchJson } from '@/hooks'
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+import { useLibraryData } from '@/hooks'
+import type { Artist } from '@/lib/data'
 
 export default function ArtistsPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [artistResults, setArtistResults] = useState<Artist[]>([])
-  const {
-    data: artists,
-    loading: _artistsLoading,
-    error: _artistsError,
-  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
+  const { artists } = useLibraryData({ enabled: true })
 
   useEffect(() => {
     document.title = 'Artists | Krater'

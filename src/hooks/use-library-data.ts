@@ -1,4 +1,5 @@
-import { LibraryData } from '@/lib/data'
+import { useState, useEffect } from 'react'
+import { LibraryData, Release, Artist } from '@/lib/data'
 
 interface PostApiResponse {
   status: 'ok' | 'error'
@@ -22,14 +23,33 @@ const readFileAsText = (file: File): Promise<string> => {
 interface UseLibraryDataReturn {
   getLibraryData: () => Promise<LibraryData | null>
   setLibraryData: (jsonFile: File) => Promise<PostApiResponse>
+  releases: Release[] | null
+  artists: Artist[] | null
+  isLoading: boolean
+}
+
+interface UseLibraryDataProps {
+  enabled?: boolean
 }
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiUrl = `${basePath}/api/library-data`
 const dataJsonPath = `${basePath}/data/data.json`
 
-export function useLibraryData(): UseLibraryDataReturn {
+export function useLibraryData({
+  enabled = false,
+}: UseLibraryDataProps = {}): UseLibraryDataReturn {
+  const [releases, setReleases] = useState<Release[] | null>(null)
+  const [artists, setArtists] = useState<Artist[] | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (enabled) getLibraryData()
+    setIsLoading(false)
+  }, [enabled])
+
   const getLibraryData = async (): Promise<LibraryData | null> => {
+    setIsLoading(true)
     try {
       const response = await fetch(dataJsonPath)
       if (!response.ok) {
@@ -37,6 +57,11 @@ export function useLibraryData(): UseLibraryDataReturn {
         throw new Error(`API Error: ${response.status}`)
       }
       const libraryData: LibraryData = await response.json()
+
+      setReleases(libraryData.releases)
+      setArtists(libraryData.artists)
+      setIsLoading(false)
+
       return libraryData
     } catch (error) {
       console.error('Error in getLibraryData:', error)
@@ -71,5 +96,5 @@ export function useLibraryData(): UseLibraryDataReturn {
     }
   }
 
-  return { getLibraryData, setLibraryData }
+  return { getLibraryData, setLibraryData, releases, artists, isLoading }
 }

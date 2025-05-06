@@ -7,6 +7,8 @@ const releasesFilePath = path.join(process.cwd(), 'public', 'data', 'releases.js
 const artistsFilePath = path.join(process.cwd(), 'public', 'data', 'artists.json')
 const dataFilePath = path.join(process.cwd(), 'public', 'data', 'data.json')
 
+export { withAuth } from './with-auth'
+
 export async function deleteCoverFile(filename: string | undefined | null) {
   if (!filename) return // No filename, nothing to delete
   try {

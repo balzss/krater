@@ -4,23 +4,11 @@ import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { House } from 'lucide-react'
 import { MusicTile, SearchInput, ClearableTag, ActionButton } from '@/components'
-import { useFetchJson } from '@/hooks'
-import type { Artist, Release } from '@/lib/data'
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+import { useLibraryData } from '@/hooks'
 
 export default function BrowsePageContent() {
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const {
-    data: releases,
-    loading: _relesesLoading,
-    error: _releasesError,
-  } = useFetchJson<Release[]>(`${basePath}/data/releases.json`)
-  const {
-    data: artists,
-    loading: _artistsLoading,
-    error: _artistsError,
-  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
+  const { releases, artists } = useLibraryData({ enabled: true })
 
   const searchParams = useSearchParams()
   const artistParam = searchParams.get('a')

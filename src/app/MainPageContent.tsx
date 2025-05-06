@@ -1,32 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Library, User, Dices, Github, ExternalLink, Settings, Loader } from 'lucide-react'
-import type { Release, Artist } from '@/lib/data'
+import { Library, User, Dices, Github, ExternalLink, Settings, LoaderCircle } from 'lucide-react'
 import { MenuItem } from '@/components'
-import { useFetchJson } from '@/hooks'
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+import { useLibraryData } from '@/hooks'
 
 export function MainPageContent() {
-  const [mounted, setMounted] = useState(false)
+  const { releases, artists, isLoading } = useLibraryData({ enabled: true })
 
-  const {
-    data: releases,
-    loading: releasesLoading,
-    error: _releasesError,
-  } = useFetchJson<Release[]>(`${basePath}/data/releases.json`)
-  const {
-    data: artists,
-    loading: artistsLoading,
-    error: _artistsError,
-  } = useFetchJson<Artist[]>(`${basePath}/data/artists.json`)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return null
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
+        <LoaderCircle size={20} className="animate-spin" /> Fetching data...
+      </div>
+    )
+  }
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
@@ -44,12 +31,12 @@ export function MainPageContent() {
           Settings
         </MenuItem>
 
-        <MenuItem startIcon={artistsLoading ? Loader : User} href="/artists">
-          {!artistsLoading && `View ${artists?.length} artists`}
+        <MenuItem startIcon={User} href="/artists">
+          View {artists?.length} artists
         </MenuItem>
 
-        <MenuItem startIcon={releasesLoading ? Loader : Library} href="/browse">
-          {!releasesLoading && `Browse all ${releases?.length || 0} releases`}
+        <MenuItem startIcon={Library} href="/browse">
+          Browse all {releases?.length} releases
         </MenuItem>
 
         <MenuItem startIcon={Dices} href="/random">
