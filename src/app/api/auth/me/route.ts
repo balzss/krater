@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 
-export const dynamic = 'force-static'
+export const dynamic = process.env.NEXT_OUTPUT_MODE === 'export' ? 'force-static' : 'force-dynamic'
 
 export async function GET(_request: NextRequest) {
   try {

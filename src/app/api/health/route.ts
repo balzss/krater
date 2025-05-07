@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { getLibraryData } from '@/lib/server'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export type HealthIssues = {
   unusedCovers: string[]

@@ -4,6 +4,8 @@ import path from 'path'
 import { updateReleases, getReleases, deleteCoverFile, ensureDirectoryExists } from '@/lib/server'
 import type { Release } from '@/lib/data'
 
+export const dynamic = 'force-dynamic'
+
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 
 // GET: Return all releases
@@ -391,8 +393,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ message: clientMessage }, { status: statusCode })
   }
 }
-
-// Setting 'force-static' seems incorrect for dynamic API routes that modify data.
-export const dynamic = 'force-static'
-// It should likely be 'auto' (default) or 'force-dynamic' if reads need to be fresh.
-// Given the file writing, it cannot be truly static.

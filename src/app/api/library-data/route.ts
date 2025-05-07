@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getLibraryData, setLibraryData } from '@/lib/server'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {

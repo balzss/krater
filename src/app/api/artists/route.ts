@@ -9,7 +9,7 @@ interface PutResponsePayload {
   notFoundIds?: string[]
 }
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function GET(_req: NextRequest) {
   try {
