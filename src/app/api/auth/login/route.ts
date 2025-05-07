@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server' // Using NextRequest for easier body parsing
 
-export const dynamic = process.env.NEXT_OUTPUT_MODE === 'export' ? 'force-static' : 'force-dynamic'
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {

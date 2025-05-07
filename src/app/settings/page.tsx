@@ -15,7 +15,7 @@ import {
   LogOut,
   KeyRound,
 } from 'lucide-react'
-import type { HealthIssues } from '@/app/api/health/route'
+import type { HealthIssues } from '@/lib/server'
 import { MenuItem, ActionButton } from '@/components'
 import { useTheme } from 'next-themes'
 import { useLibraryData } from '@/hooks'
@@ -74,14 +74,18 @@ export default function SettingsPage() {
   const { getLibraryData, setLibraryData } = useLibraryData()
 
   const fetchHealtData = async () => {
-    setIsLoading(true)
-    const response = await fetch(`${apiRoot}/health`)
-    const data = await response.json()
-    setMissingCovers(data?.issues?.missingCovers || [])
-    setMissingArtistsData(data?.issues?.missingArtists || [])
-    setUnusedArtistsData(data?.issues?.unusedArtists || [])
-    setUnusedCoversData(data?.issues?.unusedCovers || [])
-    setIsLoading(false)
+    try {
+      setIsLoading(true)
+      const response = await fetch(`${apiRoot}/health`)
+      const data = await response.json()
+      setMissingCovers(data?.issues?.missingCovers || [])
+      setMissingArtistsData(data?.issues?.missingArtists || [])
+      setUnusedArtistsData(data?.issues?.unusedArtists || [])
+      setUnusedCoversData(data?.issues?.unusedCovers || [])
+    } catch (e) {
+      console.error(e)
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {

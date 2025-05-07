@@ -1,28 +1,9 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { getLibraryData } from '@/lib/server'
+import { getLibraryData, type HealthIssues } from '@/lib/server'
 
 export const dynamic = 'force-dynamic'
-
-export type HealthIssues = {
-  unusedCovers: string[]
-  unusedArtists: {
-    rymId: string
-    displayName: string
-  }[]
-  missingCovers: {
-    releaseTitle: string
-    releaseArtists: string
-    filename: string
-    rymId: string
-    rymUrl?: string
-  }[]
-  missingArtists: {
-    rymId: string
-    referencedIn: string[]
-  }[]
-}
 
 export async function GET() {
   try {

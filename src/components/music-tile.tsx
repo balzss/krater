@@ -12,6 +12,8 @@ interface MusicTileProps {
   className?: string
 }
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 const MusicTile: React.FC<MusicTileProps> = ({
   cover,
   artists,
@@ -20,8 +22,6 @@ const MusicTile: React.FC<MusicTileProps> = ({
   priority = false,
   className = '',
 }) => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-
   return (
     <div
       className={`bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300 ${className}`}

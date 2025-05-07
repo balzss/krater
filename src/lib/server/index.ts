@@ -7,6 +7,25 @@ const dataJsonPath = path.join(process.cwd(), 'public', 'data', 'libraryData.jso
 
 export { withAuth } from './with-auth'
 
+export type HealthIssues = {
+  unusedCovers: string[]
+  unusedArtists: {
+    rymId: string
+    displayName: string
+  }[]
+  missingCovers: {
+    releaseTitle: string
+    releaseArtists: string
+    filename: string
+    rymId: string
+    rymUrl?: string
+  }[]
+  missingArtists: {
+    rymId: string
+    referencedIn: string[]
+  }[]
+}
+
 export async function deleteCoverFile(filename: string | undefined | null) {
   if (!filename) return // No filename, nothing to delete
   try {

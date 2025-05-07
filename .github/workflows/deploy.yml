@@ -51,6 +51,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Remove `api` subfolder
+        run: rm -rf src/app/api
+
       - name: Export static site with Next.js
         run: npm run export
 
