@@ -5,8 +5,6 @@ import type { Release, Artist, LibraryData } from '@/lib/data'
 const coversDir = path.join(process.cwd(), 'public', 'covers')
 const dataJsonPath = path.join(process.cwd(), 'public', 'data', 'libraryData.json')
 
-export { withAuth } from './with-auth'
-
 export type HealthIssues = {
   unusedCovers: string[]
   unusedArtists: {
