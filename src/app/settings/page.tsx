@@ -1,6 +1,6 @@
 'use client'
 
-import { MouseEvent, useEffect, useState, useRef } from 'react'
+import { MouseEvent, useEffect, useRef } from 'react'
 import {
   House,
   Check,
@@ -15,10 +15,9 @@ import {
   LogOut,
   KeyRound,
 } from 'lucide-react'
-import type { HealthIssues } from '@/lib/server'
 import { MenuItem, ActionButton } from '@/components'
 import { useTheme } from 'next-themes'
-import { useLibraryData } from '@/hooks'
+import { useLibraryData, useAuth, useHealthCheck } from '@/hooks'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiRoot = `${basePath}/api`
@@ -59,62 +58,39 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
   )
 }
 
-const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true'
-
 export default function SettingsPage() {
   const importFileInputRef = useRef<HTMLInputElement>(null)
-
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [missingCovers, setMissingCovers] = useState<HealthIssues['missingCovers']>([])
-  const [missingArtistsData, setMissingArtistsData] = useState<HealthIssues['missingArtists']>([])
-  const [unusedArtistsData, setUnusedArtistsData] = useState<HealthIssues['unusedArtists']>([])
-  const [unusedCoversData, setUnusedCoversData] = useState<HealthIssues['unusedCovers']>([])
-
   const { theme, setTheme } = useTheme()
   const { getLibraryData, setLibraryData } = useLibraryData()
+  const { isAdmin, login, logout, isLoading } = useAuth()
+  const { healthData, refetchHealthData } = useHealthCheck()
 
-  const fetchHealtData = async () => {
-    try {
-      setIsLoading(true)
-      const response = await fetch(`${apiRoot}/health`)
-      const data = await response.json()
-      setMissingCovers(data?.issues?.missingCovers || [])
-      setMissingArtistsData(data?.issues?.missingArtists || [])
-      setUnusedArtistsData(data?.issues?.unusedArtists || [])
-      setUnusedCoversData(data?.issues?.unusedCovers || [])
-    } catch (e) {
-      console.error(e)
-      setIsLoading(false)
-    }
-  }
+  const { missingCovers, missingArtists, unusedCovers, unusedArtists } = healthData
 
   useEffect(() => {
     document.title = 'Settings | Krater'
-    fetchHealtData()
   }, [])
 
   const handleDeleteCover = async (filename: string) => {
     if (!window.confirm(`Do you want to remove the cover file "${filename}"`)) return
-    setIsLoading(true)
     await fetch(`${apiRoot}/covers?filename=${filename}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
       },
     })
-    await fetchHealtData()
+    await refetchHealthData()
   }
 
   const handleDeleteArtist = async (artistRymId: string, artistDisplayName: string) => {
     if (!window.confirm(`Do you want to remove artist "${artistDisplayName}"`)) return
-    setIsLoading(true)
     await fetch(`${apiRoot}/artists?rymId=${artistRymId}`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
       },
     })
-    await fetchHealtData()
+    await refetchHealthData()
   }
 
   const handleSwitchTheme = () => {
@@ -181,7 +157,7 @@ export default function SettingsPage() {
         <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
           Download data
         </MenuItem>
-        {isLocalhost ? (
+        {isAdmin ? (
           <>
             <input
               type="file"
@@ -196,25 +172,31 @@ export default function SettingsPage() {
             <MenuItem startIcon={FilePenLine} onClick={() => alert('Coming soon...')}>
               Edit library
             </MenuItem>
-            <MenuItem startIcon={LogOut} onClick={() => alert('Coming soon...')}>
+            <MenuItem startIcon={LogOut} onClick={() => logout()}>
               Log out
             </MenuItem>
           </>
         ) : (
-          <MenuItem startIcon={KeyRound} onClick={() => prompt('Please enter your admin key')}>
+          <MenuItem
+            startIcon={KeyRound}
+            onClick={() => {
+              const adminSecret = prompt('Please enter your admin key') || ''
+              login(adminSecret)
+            }}
+          >
             Authenticate
           </MenuItem>
         )}
       </div>
 
-      {isLocalhost && (
+      {isAdmin && (
         <div className="w-full max-w-lg p-4 border border-(--border) rounded-lg bg-(--card)">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Library health check</h2>
             <ActionButton
               icon={RefreshCcw}
               size={20}
-              onClick={fetchHealtData}
+              onClick={refetchHealthData}
               className="-mt-1 -mr-1"
             />
           </div>
@@ -230,27 +212,27 @@ export default function SettingsPage() {
 
             <CheckResult
               successLabel="No unused covers were detected"
-              warningLabel={`${unusedCoversData.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-              warningItems={unusedCoversData}
-              onItemClick={(_e, i) => handleDeleteCover(unusedCoversData[i])}
+              warningLabel={`${unusedCovers.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+              warningItems={unusedCovers}
+              onItemClick={(_e, i) => handleDeleteCover(unusedCovers[i])}
             />
 
             <CheckResult
               successLabel="No missing artists were detected"
-              warningLabel={`${missingArtistsData.length} missing artist${missingArtistsData.length > 1 ? 's were ' : ' was '} detected`}
-              warningItems={missingArtistsData.map(
+              warningLabel={`${missingArtists.length} missing artist${missingArtists.length > 1 ? 's were ' : ' was '} detected`}
+              warningItems={missingArtists.map(
                 (missingArtist) =>
                   missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
               )}
-              onItemClick={(_e, i) => console.log(missingArtistsData[i])}
+              onItemClick={(_e, i) => console.log(missingArtists[i])}
             />
 
             <CheckResult
               successLabel="No artists were detected without any release"
-              warningLabel={`${unusedArtistsData.length} artist${unusedArtistsData.length > 1 ? 's were ' : ' was '} detected without any release`}
-              warningItems={unusedArtistsData.map((artist) => artist.displayName)}
+              warningLabel={`${unusedArtists.length} artist${unusedArtists.length > 1 ? 's were ' : ' was '} detected without any release`}
+              warningItems={unusedArtists.map((artist) => artist.displayName)}
               onItemClick={(_e, i) =>
-                handleDeleteArtist(unusedArtistsData[i].rymId, unusedArtistsData[i].displayName)
+                handleDeleteArtist(unusedArtists[i].rymId, unusedArtists[i].displayName)
               }
             />
           </ul>

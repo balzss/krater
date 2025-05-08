@@ -8,7 +8,8 @@ type RouteHandler = (
 
 export function withAuth(handler: RouteHandler): RouteHandler {
   return async (req: NextRequest, params?: { [key: string]: string | string[] }) => {
-    const isDevelopment = process.env.NODE_ENV === 'development'
+    // const isDevelopment = process.env.NODE_ENV === 'development'
+    const isDevelopment = false
 
     if (!isDevelopment) {
       // Only apply auth if NOT in development

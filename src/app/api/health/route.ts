@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
-import { getLibraryData, type HealthIssues } from '@/lib/server'
+import { withAuth, getLibraryData, type HealthIssues } from '@/lib/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export const GET = withAuth(async () => {
   try {
     const libraryData = await getLibraryData()
     const { releases, artists } = libraryData
@@ -80,4 +80,4 @@ export async function GET() {
       { status: 500 }
     )
   }
-}
+})

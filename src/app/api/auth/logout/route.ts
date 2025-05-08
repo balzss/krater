@@ -1,24 +1,20 @@
 import { cookies } from 'next/headers'
-import type { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(_request: NextRequest) {
+export async function POST() {
   try {
     const cookieStore = await cookies()
-    const adminSessionCookie = cookieStore.get('admin-session')
 
-    if (adminSessionCookie && adminSessionCookie.value === 'true') {
-      return Response.json({ isAdmin: true }, { status: 200 })
-    }
+    cookieStore.delete('admin-session')
 
-    return Response.json({ isAdmin: false }, { status: 200 })
+    return Response.json({ message: 'Logout successful' }, { status: 200 })
   } catch (error) {
-    let errorMessage = 'Internal Server Error'
+    let errorMessage = 'An unexpected error occurred during logout.'
     if (error instanceof Error) {
       errorMessage = error.message
     }
-    console.error('Error in /api/me route handler:', error)
-    return Response.json({ message: errorMessage, isAdmin: false }, { status: 500 })
+    console.error('Error in /api/logout route handler:', error)
+    return Response.json({ message: errorMessage }, { status: 500 })
   }
 }

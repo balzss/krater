@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+const apiUrl = `${basePath}/api/auth`
+
 export function useAuth() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -8,7 +11,7 @@ export function useAuth() {
   const checkAuthStatus = useCallback(async () => {
     setIsLoading(true)
     try {
-      const res = await fetch('/api/me')
+      const res = await fetch(`${apiUrl}/me`)
       if (res.ok) {
         const data = await res.json()
         setIsAdmin(data.isAdmin || false)
@@ -31,7 +34,7 @@ export function useAuth() {
     setLoginError('')
     setIsLoading(true)
     try {
-      const res = await fetch('/api/login', {
+      const res = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ secret }),
@@ -58,7 +61,7 @@ export function useAuth() {
   const logout = useCallback(async () => {
     setIsLoading(true)
     try {
-      await fetch('/api/logout', { method: 'POST' })
+      await fetch(`${apiUrl}/logout`, { method: 'POST' })
       setIsAdmin(false)
       setLoginError('')
     } catch (error) {
