@@ -2013,6 +2013,30 @@
         "spotify": "https://open.spotify.com/album/0HXPCaB36TH58IjdXmpq4m"
       },
       "rymUrl": "https://rateyourmusic.com/release/album/colin-stetson/when-we-were-that-what-wept-for-the-sea/"
+    },
+    {
+      "title": "M-Series",
+      "rymId": "[Album16091879]",
+      "artistRymIds": [
+        "[Artist22015]"
+      ],
+      "cover": "maurizio-m-series-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/3dQcknWb1G439u0whEtJCQ"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/maurizio/m-series-1/"
+    },
+    {
+      "title": "BCD",
+      "rymId": "[Album101985]",
+      "artistRymIds": [
+        "[Artist25139]"
+      ],
+      "cover": "basic-channel-bcd-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/3QiuQrKMLpt7MDgjUDvv8d"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/basic-channel/bcd/"
     }
   ],
   "artists": [
@@ -2740,6 +2764,16 @@
       "displayName": "Flatbush Zombies",
       "rymId": "[Artist798434]",
       "rymUrl": "https://rateyourmusic.com/artist/flatbush-zombies"
+    },
+    {
+      "displayName": "Maurizio",
+      "rymId": "[Artist22015]",
+      "rymUrl": "https://rateyourmusic.com/artist/maurizio"
+    },
+    {
+      "displayName": "Basic Channel",
+      "rymId": "[Artist25139]",
+      "rymUrl": "https://rateyourmusic.com/artist/basic-channel"
     }
   ]
 }
