@@ -23,8 +23,7 @@ const SearchInput: React.FC<SearchInputProps & InputHTMLAttributes<HTMLInputElem
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
       <input
         {...rest}
-        type="text"
-        placeholder="Search..."
+        type="search"
         className="w-full pl-10 pr-10 border border-(--border) rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent bg-(--card) h-12 hover:border-(--foreground) transition duration-150"
         value={query}
         onKeyDown={handleKeyDown}

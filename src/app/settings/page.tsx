@@ -146,9 +146,10 @@ export default function SettingsPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-6">
       <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
-        <MenuItem startIcon={House} href="/">
-          Return to home
-        </MenuItem>
+        <div className="flex w-full gap-2 sm:gap-4">
+          <h1 className="text-4xl font-bold mr-auto">Settings</h1>
+          <ActionButton href="/" icon={House} />
+        </div>
         {theme && (
           <MenuItem startIcon={theme === 'dark' ? Sun : Moon} onClick={handleSwitchTheme}>
             Switch to {theme === 'dark' ? 'light' : 'dark'} theme

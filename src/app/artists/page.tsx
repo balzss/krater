@@ -34,6 +34,7 @@ export default function ArtistsPage() {
         <SearchInput
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+          placeholder="Search artists"
         />
         <ActionButton href="/" icon={House} />
       </div>

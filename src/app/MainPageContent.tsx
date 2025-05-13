@@ -1,7 +1,8 @@
 'use client'
 
-import { Library, User, Dices, Github, ExternalLink, Settings, LoaderCircle } from 'lucide-react'
-import { MenuItem } from '@/components'
+import { Library, User, Dices, Settings, LoaderCircle } from 'lucide-react'
+import { SiGithub } from '@icons-pack/react-simple-icons'
+import { ActionButton, MenuItem } from '@/components'
 import { useLibraryData } from '@/hooks'
 
 export function MainPageContent() {
@@ -16,20 +17,13 @@ export function MainPageContent() {
   }
 
   return (
-    <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
+    <div className="flex items-center flex-col p-4 sm:py-12 sm:px-16">
       <div className="flex items-center flex-col gap-4 sm:gap-6 max-w-md w-full">
-        <MenuItem
-          startIcon={Github}
-          endIcon={ExternalLink}
-          href="https://github.com/balzss/krater"
-          target="_blank"
-        >
-          Github repository
-        </MenuItem>
-
-        <MenuItem startIcon={Settings} href={`/settings`}>
-          Settings
-        </MenuItem>
+        <div className="flex w-full gap-2 sm:gap-4">
+          <h1 className="text-4xl font-bold mr-auto">Krater</h1>
+          <ActionButton href="/settings" icon={Settings} />
+          <ActionButton href="https://github.com/balzss/krater" target="_blank" icon={SiGithub} />
+        </div>
 
         <MenuItem startIcon={User} href="/artists">
           View {artists?.length} artists

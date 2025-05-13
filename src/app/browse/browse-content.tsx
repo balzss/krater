@@ -42,6 +42,7 @@ export default function BrowsePageContent() {
         <SearchInput
           query={searchQuery}
           onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+          placeholder="Search releases"
         />
         <ActionButton href="/" icon={House} />
       </div>
