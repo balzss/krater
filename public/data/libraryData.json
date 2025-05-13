@@ -1989,6 +1989,30 @@
         "spotify": "https://open.spotify.com/album/622gmiTAUET3WtAZq8aXtS"
       },
       "rymUrl": "https://rateyourmusic.com/release/album/flatbush-zombies/vacation-in-hell/"
+    },
+    {
+      "title": "Balloonerism",
+      "rymId": "[Album16158511]",
+      "artistRymIds": [
+        "[Artist452135]"
+      ],
+      "cover": "mac-miller-balloonerism-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/2ANFIaCb53iam0MBkFFoxY"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/mac-miller/balloonerism/"
+    },
+    {
+      "title": "When We Were That What Wept for the Sea",
+      "rymId": "[Album15219139]",
+      "artistRymIds": [
+        "[Artist120435]"
+      ],
+      "cover": "colin-stetson-when-we-were-that-what-wept-for-the-sea-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/0HXPCaB36TH58IjdXmpq4m"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/colin-stetson/when-we-were-that-what-wept-for-the-sea/"
     }
   ],
   "artists": [
