@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { House, Dices, Undo2, LoaderCircle, CircleAlert } from 'lucide-react'
+import { House, Dices, Undo2, CircleAlert } from 'lucide-react'
 import { MusicTile, ActionButton } from '@/components'
 import { useLibraryData } from '@/hooks'
 
@@ -23,20 +23,16 @@ export default function RandomPage() {
     setChosenReleaseIndex((prevIndex) => (prevIndex + 1) % releases?.length)
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
-        <LoaderCircle size={20} className="animate-spin" /> Fetching data...
-      </div>
-    )
-  }
-
-  if (!artists?.length || !releases?.length) {
+  if ((!artists?.length || !releases?.length) && !isLoading) {
     return (
       <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
         <CircleAlert size={20} /> Your library is empty
       </div>
     )
+  }
+
+  if (isLoading || !artists?.length || !releases?.length) {
+    return
   }
 
   return (

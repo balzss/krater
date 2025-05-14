@@ -5,19 +5,19 @@ import {
   House,
   Check,
   TriangleAlert,
-  LoaderCircle,
   Sun,
   Moon,
   Download,
   FileUp,
   FilePenLine,
   RefreshCcw,
-  LogOut,
-  KeyRound,
+  Server,
+  CloudOff,
 } from 'lucide-react'
 import { MenuItem, ActionButton } from '@/components'
 import { useTheme } from 'next-themes'
 import { useLibraryData, useAuth, useHealthCheck } from '@/hooks'
+import { SiLastdotfm } from '@icons-pack/react-simple-icons'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 const apiRoot = `${basePath}/api`
@@ -136,11 +136,7 @@ export default function SettingsPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center m-4 sm:my-12 gap-2">
-        <LoaderCircle size={20} className="animate-spin" /> Fetching data...
-      </div>
-    )
+    return
   }
 
   return (
@@ -156,7 +152,7 @@ export default function SettingsPage() {
           </MenuItem>
         )}
         <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
-          Download data
+          Download library data
         </MenuItem>
         {isAdmin ? (
           <>
@@ -168,77 +164,85 @@ export default function SettingsPage() {
               style={{ display: 'none' }}
             />
             <MenuItem startIcon={FileUp} onClick={handleImportClick}>
-              Import JSON
+              Import from JSON
             </MenuItem>
             <MenuItem startIcon={FilePenLine} onClick={() => alert('Coming soon...')}>
               Edit library
             </MenuItem>
-            <MenuItem startIcon={LogOut} onClick={() => logout()}>
-              Log out
+            <MenuItem startIcon={CloudOff} onClick={() => logout()}>
+              Disconnect from server
             </MenuItem>
           </>
         ) : (
           <MenuItem
-            startIcon={KeyRound}
+            startIcon={Server}
             onClick={() => {
               const adminSecret = prompt('Please enter your admin key') || ''
               login(adminSecret)
             }}
           >
-            Authenticate
+            Connect server
           </MenuItem>
         )}
-      </div>
+        {isAdmin && (
+          <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">Library health check</h2>
+              <ActionButton
+                icon={RefreshCcw}
+                size={20}
+                onClick={refetchHealthData}
+                className="-mt-1 -mr-1"
+              />
+            </div>
+            <ul className="flex flex-col gap-4">
+              <CheckResult
+                successLabel="No missing covers were detected"
+                warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+                warningItems={missingCovers.map(
+                  (cover) => `${cover.releaseArtists} - ${cover.releaseTitle} (${cover.filename})`
+                )}
+                onItemClick={(_e, i) => console.log(missingCovers[i])}
+              />
 
-      {isAdmin && (
-        <div className="w-full max-w-lg p-4 border border-(--border) rounded-lg bg-(--card)">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Library health check</h2>
-            <ActionButton
-              icon={RefreshCcw}
-              size={20}
-              onClick={refetchHealthData}
-              className="-mt-1 -mr-1"
-            />
+              <CheckResult
+                successLabel="No unused covers were detected"
+                warningLabel={`${unusedCovers.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
+                warningItems={unusedCovers}
+                onItemClick={(_e, i) => handleDeleteCover(unusedCovers[i])}
+              />
+
+              <CheckResult
+                successLabel="No missing artists were detected"
+                warningLabel={`${missingArtists.length} missing artist${missingArtists.length > 1 ? 's were ' : ' was '} detected`}
+                warningItems={missingArtists.map(
+                  (missingArtist) =>
+                    missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
+                )}
+                onItemClick={(_e, i) => console.log(missingArtists[i])}
+              />
+
+              <CheckResult
+                successLabel="No artists were detected without any release"
+                warningLabel={`${unusedArtists.length} artist${unusedArtists.length > 1 ? 's were ' : ' was '} detected without any release`}
+                warningItems={unusedArtists.map((artist) => artist.displayName)}
+                onItemClick={(_e, i) =>
+                  handleDeleteArtist(unusedArtists[i].rymId, unusedArtists[i].displayName)
+                }
+              />
+            </ul>
           </div>
-          <ul className="flex flex-col gap-4">
-            <CheckResult
-              successLabel="No missing covers were detected"
-              warningLabel={`${missingCovers.length} missing cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-              warningItems={missingCovers.map(
-                (cover) => `${cover.releaseArtists} - ${cover.releaseTitle} (${cover.filename})`
-              )}
-              onItemClick={(_e, i) => console.log(missingCovers[i])}
-            />
+        )}
 
-            <CheckResult
-              successLabel="No unused covers were detected"
-              warningLabel={`${unusedCovers.length} unused cover${missingCovers.length > 1 ? 's were' : ' was'} detected`}
-              warningItems={unusedCovers}
-              onItemClick={(_e, i) => handleDeleteCover(unusedCovers[i])}
-            />
-
-            <CheckResult
-              successLabel="No missing artists were detected"
-              warningLabel={`${missingArtists.length} missing artist${missingArtists.length > 1 ? 's were ' : ' was '} detected`}
-              warningItems={missingArtists.map(
-                (missingArtist) =>
-                  missingArtist.rymId + ' in release: ' + missingArtist.referencedIn
-              )}
-              onItemClick={(_e, i) => console.log(missingArtists[i])}
-            />
-
-            <CheckResult
-              successLabel="No artists were detected without any release"
-              warningLabel={`${unusedArtists.length} artist${unusedArtists.length > 1 ? 's were ' : ' was '} detected without any release`}
-              warningItems={unusedArtists.map((artist) => artist.displayName)}
-              onItemClick={(_e, i) =>
-                handleDeleteArtist(unusedArtists[i].rymId, unusedArtists[i].displayName)
-              }
-            />
-          </ul>
-        </div>
-      )}
+        <MenuItem
+          startIcon={SiLastdotfm}
+          onClick={() => {
+            alert('Coming soon...')
+          }}
+        >
+          Connect Last.fm
+        </MenuItem>
+      </div>
     </div>
   )
 }
