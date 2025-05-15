@@ -11,7 +11,7 @@ export default function BrowsePageContent() {
   const { releases, artists } = useLibraryData({ enabled: true })
 
   const searchParams = useSearchParams()
-  const artistParam = searchParams.get('a')
+  const artistParam = searchParams.get('artist')
 
   const filteredReleases = useMemo(() => {
     if (!releases || !artists) return []

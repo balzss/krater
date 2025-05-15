@@ -36,7 +36,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
           fill
           src={`${basePath}/covers/${cover}`}
           alt={title}
-          className=" transform transition hover:scale-103 ease-in-out duration-300 "
+          className="transform transition hover:scale-102 ease-in-out duration-300"
           priority={priority}
         />
       </Link>
@@ -52,7 +52,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
           {artists.map((artist, index) => (
             <Fragment key={artist?.rymId || index}>
               {artist ? (
-                <Link className="hover:text-gray-500" href={`/browse?a=${artist?.rymId}`}>
+                <Link className="hover:text-gray-500" href={`/browse?artist=${artist?.rymId}`}>
                   {artist?.displayName}
                 </Link>
               ) : (

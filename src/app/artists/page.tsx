@@ -39,7 +39,7 @@ export default function ArtistsPage() {
         <ActionButton href="/" icon={House} />
       </div>
       {artistResults.map((artist) => (
-        <MenuItem key={artist.rymId} href={`/browse?a=${artist.rymId}`} className="max-w-md">
+        <MenuItem key={artist.rymId} href={`/browse?artist=${artist.rymId}`} className="max-w-md">
           {artist.displayName}
         </MenuItem>
       ))}
