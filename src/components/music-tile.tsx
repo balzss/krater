@@ -24,7 +24,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg max-w-sm w-full transition duration-300 ${className}`}
+      className={`bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md max-w-sm w-full transition duration-300 ${className}`}
     >
       <Link
         className="flex relative w-full aspect-square cursor-pointer"
@@ -36,7 +36,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
           fill
           src={`${basePath}/covers/${cover}`}
           alt={title}
-          className="transform transition hover:scale-102 ease-in-out duration-300"
+          className="transform transition hover:scale-101 ease-in-out duration-300"
           priority={priority}
         />
       </Link>

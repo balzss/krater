@@ -144,13 +144,11 @@ export default function SettingsPage() {
       <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
         <div className="flex w-full gap-2 sm:gap-4">
           <h1 className="text-4xl font-bold mr-auto">Settings</h1>
+          {theme && (
+            <ActionButton onClick={handleSwitchTheme} icon={theme === 'dark' ? Sun : Moon} />
+          )}
           <ActionButton href="/" icon={House} />
         </div>
-        {theme && (
-          <MenuItem startIcon={theme === 'dark' ? Sun : Moon} onClick={handleSwitchTheme}>
-            Switch to {theme === 'dark' ? 'light' : 'dark'} theme
-          </MenuItem>
-        )}
         <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
           Download library data
         </MenuItem>

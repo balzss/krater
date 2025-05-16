@@ -14,7 +14,7 @@ export function MainPageContent() {
 
   return (
     <div className="flex items-center flex-col p-4 sm:py-12 sm:px-16 min-h-screen">
-      <div className="flex items-center flex-col gap-4 sm:gap-6 max-w-md w-full">
+      <div className="flex items-center flex-col gap-4 sm:gap-6 max-w-lg w-full">
         <div className="flex w-full gap-2 sm:gap-4">
           <h1 className="text-4xl font-bold mr-auto">Krater</h1>
           <ActionButton href="/settings" icon={Settings} />
