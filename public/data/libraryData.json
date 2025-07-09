@@ -2037,6 +2037,18 @@
         "spotify": "https://open.spotify.com/album/3QiuQrKMLpt7MDgjUDvv8d"
       },
       "rymUrl": "https://rateyourmusic.com/release/album/basic-channel/bcd/"
+    },
+    {
+      "title": "FromBeyondTheGrave",
+      "rymId": "[Album12229514]",
+      "artistRymIds": [
+        "[Artist952957]"
+      ],
+      "cover": "bones-frombeyondthegrave-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/646x2vO2P4qeUTXANXTPLU"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/frombeyondthegrave/"
     }
   ],
   "artists": [

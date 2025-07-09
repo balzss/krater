@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import { version } from './package.json'
 
 const basePath = ''
 
@@ -11,6 +12,7 @@ const nextConfig: NextConfig = {
   },
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
+    APP_VERSION: version,
   },
   async headers() {
     return [
