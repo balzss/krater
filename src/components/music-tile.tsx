@@ -28,7 +28,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
   return (
     <div
-      className={`bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md max-w-sm w-full transition duration-300 flex flex-col ${className}`}
+      className={`bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md w-full transition duration-300 flex flex-col ${className}`}
       onMouseEnter={() => setShowInfoBtn(true)}
       onMouseLeave={() => setShowInfoBtn(false)}
     >

@@ -142,7 +142,7 @@ export default function SettingsPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-6">
       <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
-        <div className="flex w-full gap-2 sm:gap-4">
+        <div className="flex w-full gap-2 sm:gap-4 items-center">
           <h1 className="text-4xl font-bold mr-auto">Settings</h1>
           {theme && (
             <ActionButton onClick={handleSwitchTheme} icon={theme === 'dark' ? Sun : Moon} />

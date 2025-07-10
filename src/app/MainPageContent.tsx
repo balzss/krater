@@ -16,7 +16,7 @@ export function MainPageContent() {
   return (
     <div className="flex items-center flex-col p-4 sm:py-12 sm:px-16 min-h-screen">
       <div className="flex items-center flex-col gap-4 sm:gap-6 max-w-lg w-full">
-        <div className="flex w-full gap-2 sm:gap-4">
+        <div className="flex w-full gap-2 sm:gap-4 items-center">
           <h1 className="text-4xl font-bold mr-auto">Krater</h1>
           <ActionButton href="https://github.com/balzss/krater" target="_blank" icon={SiGithub} />
           <ActionButton href="/settings" icon={Settings} />

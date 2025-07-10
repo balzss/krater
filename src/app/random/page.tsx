@@ -11,7 +11,7 @@ export default function RandomPage() {
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
 
   useEffect(() => {
-    document.title = 'Random Release | Krater'
+    document.title = 'Random release | Krater'
   }, [])
 
   const handleUndoButton = () => {
@@ -37,7 +37,12 @@ export default function RandomPage() {
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <div className="w-full max-w-sm flex flex-col">
+      <div className="w-full max-w-md flex flex-col gap-4">
+        <div className="flex w-full gap-2 sm:gap-4 items-center">
+          <h1 className="text-3xl font-bold mr-auto">Random release</h1>
+          <ActionButton href="/" icon={House} />
+        </div>
+
         <MusicTile
           key={releases[chosenReleaseIndex].rymId}
           cover={releases[chosenReleaseIndex].cover}
@@ -48,15 +53,14 @@ export default function RandomPage() {
           media={releases[chosenReleaseIndex].media.spotify}
           priority
         />
-        <div className="flex justify-between m-6">
+        <div className="flex justify-around">
           <ActionButton
             onClick={handleUndoButton}
             icon={Undo2}
             disabled={chosenReleaseIndex === 0}
-            size={40}
+            size={48}
           />
-          <ActionButton onClick={handleRollButton} icon={Dices} size={40} />
-          <ActionButton href="/" icon={House} size={40} />
+          <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
         </div>
       </div>
     </div>
