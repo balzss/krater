@@ -2049,6 +2049,18 @@
         "spotify": "https://open.spotify.com/album/646x2vO2P4qeUTXANXTPLU"
       },
       "rymUrl": "https://rateyourmusic.com/release/mixtape/bones/frombeyondthegrave/"
+    },
+    {
+      "title": "The Slow Rush",
+      "rymId": "[Album10767807]",
+      "artistRymIds": [
+        "[Artist369450]"
+      ],
+      "cover": "tame-impala-the-slow-rush-Cover-Art.webp",
+      "media": {
+        "spotify": "https://open.spotify.com/album/31qVWUdRrlb8thMvts0yYL"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/tame-impala/the-slow-rush/"
     }
   ],
   "artists": [

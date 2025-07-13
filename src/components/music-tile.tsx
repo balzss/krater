@@ -72,7 +72,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
           <ActionButton
             onClick={() => alert('Coming soon...')}
             icon={BadgeInfo}
-            className={`text-gray-600 -mr-2 -mb-2 self-end ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-200`}
+            className={`text-gray-600 -mr-2 -mb-2 self-end ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-100`}
             size={20}
           />
         </div>
