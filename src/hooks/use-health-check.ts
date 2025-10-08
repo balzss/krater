@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { HealthIssues } from '@/lib/server'
+import { API_BASE_URL } from '@/lib/constants'
 
 const initialHealthData: HealthIssues = {
   unusedCovers: [],
@@ -8,8 +9,7 @@ const initialHealthData: HealthIssues = {
   missingArtists: [],
 }
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const apiUrl = `${basePath}/api/health`
+const apiUrl = `${API_BASE_URL}/health`
 
 export const useHealthCheck = () => {
   const [healthData, setHealthData] = useState<HealthIssues>(initialHealthData)

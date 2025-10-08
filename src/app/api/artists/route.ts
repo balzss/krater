@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtists, updateArtists } from '@/lib/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 import type { Artist } from '@/lib/data'
 
 interface PutResponsePayload {
@@ -14,10 +15,11 @@ export const dynamic = 'force-dynamic'
 export async function GET(_req: NextRequest) {
   try {
     const artists = await getArtists()
+    // Return raw array for backward compatibility
     return NextResponse.json(artists)
   } catch (error: unknown) {
     console.error('[API ARTISTS GET] Error:', error)
-    return NextResponse.json({ message: 'Failed to fetch artists' }, { status: 500 })
+    return errorResponse('Failed to fetch artists')
   }
 }
 
@@ -27,18 +29,16 @@ export async function POST(req: NextRequest) {
     const artistsToAdd = Array.isArray(newArtistsData) ? newArtistsData : [newArtistsData]
 
     if (!artistsToAdd.length) {
-      return NextResponse.json({ message: 'Request body cannot be empty.' }, { status: 400 })
+      return errorResponse('Request body cannot be empty.', 400)
     }
     const invalidArtists = artistsToAdd.filter(
       (a) => !a || typeof a.displayName !== 'string' || typeof a.rymId !== 'string'
     )
     if (invalidArtists.length > 0) {
-      return NextResponse.json(
-        {
-          message: 'Invalid artist data. Required fields: displayName (string), rymId (string).',
-          invalidData: invalidArtists,
-        },
-        { status: 400 }
+      return errorResponse(
+        'Invalid artist data. Required fields: displayName (string), rymId (string).',
+        400,
+        { invalidData: invalidArtists }
       )
     }
 
@@ -57,27 +57,24 @@ export async function POST(req: NextRequest) {
     }
 
     if (addedArtists.length === 0) {
-      return NextResponse.json(
-        {
-          message: 'No new artists were added (duplicates or invalid data skipped).',
-          skipped: skippedArtists,
-          artists: artists,
-        },
-        { status: 200 }
-      )
+      return successResponse({
+        message: 'No new artists were added (duplicates or invalid data skipped).',
+        skipped: skippedArtists,
+        artists: artists,
+      })
     }
 
     const finalArtists = [...artists, ...addedArtists]
     await updateArtists(finalArtists)
 
-    return NextResponse.json(
+    return successResponse(
       {
         message: `Successfully added ${addedArtists.length} artist(s).`,
         added: addedArtists,
         skipped: skippedArtists,
         artists: finalArtists,
       },
-      { status: 201 }
+      201
     )
   } catch (error: unknown) {
     let errorMessage = 'Failed to add artists.'
@@ -96,7 +93,7 @@ export async function POST(req: NextRequest) {
       console.error('[API ARTISTS POST] Non-Error thrown:', error)
       errorMessage = 'An unexpected server error occurred.'
     }
-    return NextResponse.json({ message: errorMessage }, { status: statusCode })
+    return errorResponse(errorMessage, statusCode)
   }
 }
 
@@ -106,16 +103,14 @@ export async function PUT(req: NextRequest) {
     const artistsToUpdate = Array.isArray(updateData) ? updateData : [updateData]
 
     if (!artistsToUpdate.length) {
-      return NextResponse.json({ message: 'Request body cannot be empty.' }, { status: 400 })
+      return errorResponse('Request body cannot be empty.', 400)
     }
     const invalidUpdates = artistsToUpdate.filter((a) => !a || typeof a.rymId !== 'string')
     if (invalidUpdates.length > 0) {
-      return NextResponse.json(
-        {
-          message: 'Invalid update data. Each object must include rymId (string).',
-          invalidData: invalidUpdates,
-        },
-        { status: 400 }
+      return errorResponse(
+        'Invalid update data. Each object must include rymId (string).',
+        400,
+        { invalidData: invalidUpdates }
       )
     }
 
@@ -137,10 +132,7 @@ export async function PUT(req: NextRequest) {
     })
 
     if (!updated) {
-      return NextResponse.json(
-        { message: 'No matching artists found to update.', notFoundIds },
-        { status: 404 }
-      )
+      return errorResponse('No matching artists found to update.', 404, { notFoundIds })
     }
 
     await updateArtists(currentArtists)
@@ -155,7 +147,7 @@ export async function PUT(req: NextRequest) {
       responsePayload.message = `Update partially successful. ${updatedArtistsResult.length} updated, ${notFoundIds.length} not found.`
     }
 
-    return NextResponse.json(responsePayload, { status: 200 })
+    return successResponse(responsePayload)
   } catch (error: unknown) {
     let errorMessage = 'Failed to update artists.'
     let statusCode = 500
@@ -173,7 +165,7 @@ export async function PUT(req: NextRequest) {
       console.error('[API ARTISTS PUT] Non-Error thrown:', error)
       errorMessage = 'An unexpected server error occurred.'
     }
-    return NextResponse.json({ message: errorMessage }, { status: statusCode })
+    return errorResponse(errorMessage, statusCode)
   }
 }
 
@@ -183,28 +175,22 @@ export async function DELETE(req: NextRequest) {
     const rymIdToDelete = searchParams.get('rymId')
 
     if (!rymIdToDelete) {
-      return NextResponse.json({ message: 'Missing `rymId` query parameter.' }, { status: 400 })
+      return errorResponse('Missing `rymId` query parameter.', 400)
     }
 
     const artists = await getArtists()
     const filteredArtists = artists.filter((a) => a.rymId !== rymIdToDelete)
 
     if (filteredArtists.length === artists.length) {
-      return NextResponse.json(
-        { message: `Artist with rymId '${rymIdToDelete}' not found.` },
-        { status: 404 }
-      )
+      return errorResponse(`Artist with rymId '${rymIdToDelete}' not found.`, 404)
     }
 
     await updateArtists(filteredArtists)
 
-    return NextResponse.json(
-      {
-        message: `Artist with rymId '${rymIdToDelete}' deleted successfully.`,
-        artists: filteredArtists,
-      },
-      { status: 200 }
-    )
+    return successResponse({
+      message: `Artist with rymId '${rymIdToDelete}' deleted successfully.`,
+      artists: filteredArtists,
+    })
   } catch (error: unknown) {
     let errorMessage = 'Failed to delete artist.'
     const statusCode = 500
@@ -219,6 +205,6 @@ export async function DELETE(req: NextRequest) {
       console.error('[API ARTISTS DELETE] Non-Error thrown:', error)
       errorMessage = 'An unexpected server error occurred.'
     }
-    return NextResponse.json({ message: errorMessage }, { status: statusCode })
+    return errorResponse(errorMessage, statusCode)
   }
 }

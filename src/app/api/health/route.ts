@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { getLibraryData, type HealthIssues } from '@/lib/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,10 +14,9 @@ export async function GET() {
     try {
       coverFiles = fs.readdirSync(coversDir)
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Handle case where the directory might not exist
-      if (error.code === 'ENOENT') {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
         console.warn(`Health Check: Covers directory not found at ${coversDir}`)
       } else {
         console.error('Health Check: Error reading covers directory:', error)
@@ -68,16 +67,12 @@ export async function GET() {
       missingCovers,
       missingArtists,
     }
-    return NextResponse.json({
-      status: 'ok',
+    return successResponse({
       issues,
       checkedAt: new Date().toISOString(),
     })
   } catch (error) {
     console.error('Health Check API Error:', error)
-    return NextResponse.json(
-      { status: 'error', message: 'Internal Server Error during health check.' },
-      { status: 500 }
-    )
+    return errorResponse('Internal Server Error during health check.')
   }
 }

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { LibraryData, Release, Artist } from '@/lib/data'
+import { API_BASE_URL, DATA_PATH } from '@/lib/constants'
 
 interface PostApiResponse {
   status: 'ok' | 'error'
@@ -36,42 +37,35 @@ interface UseLibraryDataProps {
   artistSort?: SortMethod
 }
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const apiUrl = `${basePath}/api/library-data`
-const dataJsonPath = `${basePath}/data/libraryData.json`
+const apiUrl = `${API_BASE_URL}/library-data`
+const dataJsonPath = `${DATA_PATH}/libraryData.json`
 
-function sortArtists(artists: Artist[], sortMethod: SortMethod) {
-  if (sortMethod === 'asc') {
-    return artists.sort((a, b) =>
-      a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
-    )
-  } else if (sortMethod === 'desc') {
-    return artists.sort((a, b) =>
-      b.displayName.localeCompare(a.displayName, undefined, { sensitivity: 'base' })
-    )
-  }
-  for (let i = artists.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[artists[i], artists[j]] = [artists[j], artists[i]]
-  }
-  return artists
-}
+/**
+ * Generic sorting function for arrays with Fisher-Yates shuffle for random sorting
+ * @param items - Array of items to sort
+ * @param method - Sort method: 'asc', 'desc', or 'random'
+ * @param compareFn - Comparison function for 'asc' sorting (result will be inverted for 'desc')
+ * @returns Sorted array (new array, original is not mutated)
+ */
+function sortItems<T>(
+  items: T[],
+  method: SortMethod,
+  compareFn: (a: T, b: T) => number
+): T[] {
+  const sorted = [...items] // avoid param mutation by creating a shallow copy
 
-function sortReleases(releases: Release[], sortMethod: SortMethod) {
-  if (sortMethod === 'asc') {
-    return releases.sort((a, b) =>
-      a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
-    )
-  } else if (sortMethod === 'desc') {
-    return releases.sort((a, b) =>
-      b.title.localeCompare(a.title, undefined, { sensitivity: 'base' })
-    )
+  if (method === 'asc') {
+    return sorted.sort(compareFn)
+  } else if (method === 'desc') {
+    return sorted.sort((a, b) => compareFn(b, a))
   }
-  for (let i = releases.length - 1; i > 0; i--) {
+
+  // Fisher-Yates shuffle for unbiased random sorting
+  for (let i = sorted.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[releases[i], releases[j]] = [releases[j], releases[i]]
+    ;[sorted[i], sorted[j]] = [sorted[j], sorted[i]]
   }
-  return releases
+  return sorted
 }
 
 export function useLibraryData({
@@ -81,9 +75,9 @@ export function useLibraryData({
 }: UseLibraryDataProps = {}): UseLibraryDataReturn {
   const [releases, setReleases] = useState<Release[] | null>(null)
   const [artists, setArtists] = useState<Artist[] | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(enabled)
 
-  const getLibraryData = async (): Promise<LibraryData | null> => {
+  const getLibraryData = useCallback(async (): Promise<LibraryData | null> => {
     setIsLoading(true)
     try {
       const response = await fetch(dataJsonPath)
@@ -92,8 +86,16 @@ export function useLibraryData({
         throw new Error(`API Error: ${response.status}`)
       }
       const libraryData: LibraryData = await response.json()
-      const sortedArtists = sortArtists(libraryData.artists, artistSort)
-      const sortedReleases = sortReleases(libraryData.releases, releaseSort)
+      const sortedArtists = sortItems(
+        libraryData.artists,
+        artistSort,
+        (a, b) => a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
+      )
+      const sortedReleases = sortItems(
+        libraryData.releases,
+        releaseSort,
+        (a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+      )
 
       setReleases(sortedReleases)
       setArtists(sortedArtists)
@@ -102,11 +104,16 @@ export function useLibraryData({
       return libraryData
     } catch (error) {
       console.error('Error in getLibraryData:', error)
+      setReleases(null)
+      setArtists(null)
       return null
+    } finally {
+      setIsLoading(false)
     }
-  }
+  }, [artistSort, releaseSort])
 
-  const setLibraryData = async (jsonFile: File): Promise<PostApiResponse> => {
+  const setLibraryData = useCallback(async (jsonFile: File): Promise<PostApiResponse> => {
+    setIsLoading(true)
     try {
       const fileContent = await readFileAsText(jsonFile)
 
@@ -130,13 +137,14 @@ export function useLibraryData({
     } catch (error) {
       console.error('Error in setLibraryData:', error)
       throw error
+    } finally {
+      setIsLoading(false)
     }
-  }
+  }, [])
 
   useEffect(() => {
     if (enabled) getLibraryData()
-    setIsLoading(false)
-  }, [enabled])
+  }, [enabled, getLibraryData])
 
   return { getLibraryData, setLibraryData, releases, artists, isLoading }
 }

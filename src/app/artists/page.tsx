@@ -1,45 +1,46 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { House } from 'lucide-react'
-import { SearchInput, MenuItem, ActionButton } from '@/components'
-import { useLibraryData } from '@/hooks'
-import type { Artist } from '@/lib/data'
+import { useEffect, useCallback } from 'react'
+import { SearchInput, MenuItem, PageHeader } from '@/components'
+import { useLibraryData, useSearch } from '@/hooks'
 
 export default function ArtistsPage() {
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  const [artistResults, setArtistResults] = useState<Artist[]>([])
   const { artists } = useLibraryData({ enabled: true })
+
+  // Generic search hook with artist filtering logic
+  const filterArtists = useCallback(
+    (artist: { displayName: string }, lowerQuery: string) =>
+      artist.displayName.toLowerCase().includes(lowerQuery),
+    []
+  )
+  const { query: searchQuery, setQuery: setSearchQuery, results: artistResults } = useSearch(
+    artists,
+    filterArtists
+  )
 
   useEffect(() => {
     document.title = 'Artists | Krater'
   }, [])
 
-  useEffect(() => {
-    if (!artists) return
-    if (!searchQuery) {
-      setArtistResults(artists)
-      return
-    }
-    const lowerSearchQuery = searchQuery.toLowerCase()
-    const filteredResults = artists.filter((artist) =>
-      artist.displayName.toLowerCase().includes(lowerSearchQuery)
-    )
-    setArtistResults(filteredResults)
-  }, [searchQuery, artists])
-
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
-      <div className="flex items-center w-full max-w-lg gap-2 sm:gap-4 sm:mb-4">
-        <SearchInput
-          query={searchQuery}
-          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
-          placeholder="Search artists"
-        />
-        <ActionButton href="/" icon={House} />
-      </div>
+      <PageHeader
+        actions={
+          <SearchInput
+            query={searchQuery}
+            onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+            placeholder="Search artists"
+            className="max-w-lg mb-4"
+          />
+        }
+      />
       {artistResults.map((artist) => (
-        <MenuItem key={artist.rymId} href={`/browse?artist=${artist.rymId}`} className="max-w-lg">
+        <MenuItem
+          key={artist.rymId}
+          href={`/browse?artist=${artist.rymId}`}
+          className="max-w-lg"
+          data-testid="artist-item"
+        >
           {artist.displayName}
         </MenuItem>
       ))}

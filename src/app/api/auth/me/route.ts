@@ -1,24 +1,26 @@
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
+import { CONFIG } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(_request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const adminSessionCookie = cookieStore.get('admin-session')
+    const adminSessionCookie = cookieStore.get(CONFIG.auth.cookieName)
 
     if (adminSessionCookie && adminSessionCookie.value === 'true') {
-      return Response.json({ isAdmin: true }, { status: 200 })
+      return successResponse({ isAdmin: true })
     }
 
-    return Response.json({ isAdmin: false }, { status: 200 })
+    return successResponse({ isAdmin: false })
   } catch (error) {
     let errorMessage = 'Internal Server Error'
     if (error instanceof Error) {
       errorMessage = error.message
     }
     console.error('Error in /api/me route handler:', error)
-    return Response.json({ message: errorMessage, isAdmin: false }, { status: 500 })
+    return errorResponse(errorMessage, 500, { isAdmin: false })
   }
 }

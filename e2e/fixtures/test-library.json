@@ -1,0 +1,154 @@
+{
+  "releases": [
+    {
+      "artistRymIds": ["[Artist1]"],
+      "title": "OK Computer",
+      "rymId": "[Album1]",
+      "cover": "ok-computer.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/6dVIqQ8qmQ5GBnJ9shOYGE"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/radiohead/ok-computer/"
+    },
+    {
+      "artistRymIds": ["[Artist2]"],
+      "title": "Selected Ambient Works 85-92",
+      "rymId": "[Album2]",
+      "cover": "saw-85-92.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/7aNclGRxTysfh6z0d8671k"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/aphex-twin/selected-ambient-works-85-92/"
+    },
+    {
+      "artistRymIds": ["[Artist3]"],
+      "title": "The Downward Spiral",
+      "rymId": "[Album3]",
+      "cover": "downward-spiral.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/5kHFMFPDS4G5rvxe0qShsZ"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/nine-inch-nails/the-downward-spiral/"
+    },
+    {
+      "artistRymIds": ["[Artist1]", "[Artist2]"],
+      "title": "Collaboration Album",
+      "rymId": "[Album4]",
+      "cover": "collaboration.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test1"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/various/collaboration/"
+    },
+    {
+      "artistRymIds": ["[Artist4]"],
+      "title": "Ágætis byrjun",
+      "rymId": "[Album5]",
+      "cover": "agaetis-byrjun.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test2"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/sigur-ros/agaetis-byrjun/"
+    },
+    {
+      "artistRymIds": ["[Artist5]"],
+      "title": "No Spotify Link",
+      "rymId": "[Album6]",
+      "cover": "no-spotify.jpg",
+      "media": {},
+      "rymUrl": "https://rateyourmusic.com/release/album/test/no-spotify/"
+    },
+    {
+      "artistRymIds": ["[Artist6]"],
+      "title": "Ambient 1: Music for Airports",
+      "rymId": "[Album7]",
+      "cover": "ambient-1.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test3"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/brian-eno/ambient-1-music-for-airports/"
+    },
+    {
+      "artistRymIds": ["[Artist7]"],
+      "title": "Mezzanine",
+      "rymId": "[Album8]",
+      "cover": "mezzanine.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test4"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/massive-attack/mezzanine/"
+    },
+    {
+      "artistRymIds": ["[Artist8]"],
+      "title": "In Rainbows",
+      "rymId": "[Album9]",
+      "cover": "in-rainbows.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test5"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/radiohead/in-rainbows/"
+    },
+    {
+      "artistRymIds": ["[Artist9]"],
+      "title": "Discovery",
+      "rymId": "[Album10]",
+      "cover": "discovery.jpg",
+      "media": {
+        "spotify": "https://open.spotify.com/album/test6"
+      },
+      "rymUrl": "https://rateyourmusic.com/release/album/daft-punk/discovery/"
+    }
+  ],
+  "artists": [
+    {
+      "displayName": "Radiohead",
+      "rymId": "[Artist1]",
+      "rymUrl": "https://rateyourmusic.com/artist/radiohead"
+    },
+    {
+      "displayName": "Aphex Twin",
+      "rymId": "[Artist2]",
+      "rymUrl": "https://rateyourmusic.com/artist/aphex_twin"
+    },
+    {
+      "displayName": "Nine Inch Nails",
+      "rymId": "[Artist3]",
+      "rymUrl": "https://rateyourmusic.com/artist/nine_inch_nails"
+    },
+    {
+      "displayName": "Sigur Rós",
+      "rymId": "[Artist4]",
+      "rymUrl": "https://rateyourmusic.com/artist/sigur_ros"
+    },
+    {
+      "displayName": "Test Artist",
+      "rymId": "[Artist5]",
+      "rymUrl": "https://rateyourmusic.com/artist/test"
+    },
+    {
+      "displayName": "Brian Eno",
+      "rymId": "[Artist6]",
+      "rymUrl": "https://rateyourmusic.com/artist/brian_eno"
+    },
+    {
+      "displayName": "Massive Attack",
+      "rymId": "[Artist7]",
+      "rymUrl": "https://rateyourmusic.com/artist/massive_attack"
+    },
+    {
+      "displayName": "Arcade Fire",
+      "rymId": "[Artist8]",
+      "rymUrl": "https://rateyourmusic.com/artist/arcade_fire"
+    },
+    {
+      "displayName": "Daft Punk",
+      "rymId": "[Artist9]",
+      "rymUrl": "https://rateyourmusic.com/artist/daft_punk"
+    },
+    {
+      "displayName": "Unused Artist",
+      "rymId": "[Artist10]",
+      "rymUrl": "https://rateyourmusic.com/artist/unused"
+    }
+  ]
+}

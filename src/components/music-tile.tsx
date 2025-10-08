@@ -1,9 +1,10 @@
-import { useState, Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Artist } from '@/lib/data'
 import { BadgeInfo } from 'lucide-react'
 import { ActionButton } from '@/components'
+import { COVERS_PATH } from '@/lib/constants'
 
 interface MusicTileProps {
   cover: string
@@ -14,8 +15,6 @@ interface MusicTileProps {
   className?: string
 }
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-
 const MusicTile: React.FC<MusicTileProps> = ({
   cover,
   artists,
@@ -25,9 +24,14 @@ const MusicTile: React.FC<MusicTileProps> = ({
   className = '',
 }) => {
   const [showInfoBtn, setShowInfoBtn] = useState<boolean>(false)
-  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches)
+  }, [])
   return (
     <div
+      data-testid="music-tile"
       className={`bg-white shadow-sm rounded-lg overflow-hidden hover:shadow-md w-full transition duration-300 flex flex-col ${className}`}
       onMouseEnter={() => setShowInfoBtn(true)}
       onMouseLeave={() => setShowInfoBtn(false)}
@@ -40,7 +44,7 @@ const MusicTile: React.FC<MusicTileProps> = ({
       >
         <Image
           fill
-          src={`${basePath}/covers/${cover}`}
+          src={`${COVERS_PATH}/${cover}`}
           alt={title}
           className="transform transition hover:scale-101 ease-in-out duration-300"
           priority={priority}

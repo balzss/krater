@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { House } from 'lucide-react'
-import { MusicTile, SearchInput, ClearableTag, ActionButton } from '@/components'
+import { MusicTile, SearchInput, ClearableTag, PageHeader } from '@/components'
 import { useLibraryData } from '@/hooks'
+import { CONFIG } from '@/lib/constants'
 
 export default function BrowsePageContent() {
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -12,6 +12,12 @@ export default function BrowsePageContent() {
 
   const searchParams = useSearchParams()
   const artistParam = searchParams.get('artist')
+
+  // Create artist lookup map for O(1) lookups
+  const artistMap = useMemo(
+    () => new Map(artists?.map((a) => [a.rymId, a]) || []),
+    [artists]
+  )
 
   const filteredReleases = useMemo(() => {
     if (!releases || !artists) return []
@@ -27,31 +33,33 @@ export default function BrowsePageContent() {
     const lowerSearchQuery = searchQuery.toLowerCase()
     return result.filter((r) => {
       const releaseArtists = r.artistRymIds
-        .map((id) => artists.find((artist) => artist.rymId === id)?.displayName.toLowerCase())
+        .map((id) => artistMap.get(id)?.displayName.toLowerCase())
         .join(' ')
       return (
         releaseArtists.includes(lowerSearchQuery) ||
         r.title.toLowerCase().includes(lowerSearchQuery)
       )
     })
-  }, [releases, artistParam, searchQuery, artists])
+  }, [releases, artistParam, searchQuery, artistMap])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
-      <div className="flex items-center w-full max-w-lg gap-2 sm:gap-4">
-        <SearchInput
-          query={searchQuery}
-          onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
-          placeholder="Search releases"
-        />
-        <ActionButton href="/" icon={House} />
-      </div>
+      <PageHeader
+        actions={
+          <SearchInput
+            query={searchQuery}
+            onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+            placeholder="Search releases"
+            className="max-w-lg"
+          />
+        }
+      />
       {artists && artistParam && (
         <div className="flex justify-start w-full mt-4 sm:mt-8">
           <ClearableTag
             href="/browse"
             tagLabel="Artist"
-            tagValue={artists.find((a) => a.rymId === artistParam)?.displayName as string}
+            tagValue={artistMap.get(artistParam)?.displayName as string}
           />
         </div>
       )}
@@ -61,10 +69,10 @@ export default function BrowsePageContent() {
             <MusicTile
               key={rymId}
               cover={cover}
-              artists={artistRymIds.map((id) => artists.find((artist) => artist.rymId === id))}
+              artists={artistRymIds.map((id) => artistMap.get(id))}
               title={title}
               media={media.spotify}
-              priority={index < 8}
+              priority={index < CONFIG.images.priorityLoadCount}
             />
           ))}
       </div>

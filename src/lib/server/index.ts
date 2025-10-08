@@ -62,7 +62,8 @@ export async function getLibraryData(): Promise<LibraryData> {
 
 export async function setLibraryData(data: LibraryData): Promise<void> {
   try {
-    await ensureDirectoryExists(dataJsonPath)
+    const dataDir = path.dirname(dataJsonPath)
+    await ensureDirectoryExists(dataDir)
     const jsonString = JSON.stringify(data, null, 2)
     await fs.writeFile(dataJsonPath, jsonString, 'utf-8')
     console.log(`Data successfully written to ${dataJsonPath} by writeDataJson.`)

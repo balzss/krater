@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { API_BASE_URL } from '@/lib/constants'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const apiUrl = `${basePath}/api/auth`
+const apiUrl = `${API_BASE_URL}/auth`
 
 export function useAuth() {
   const [isAdmin, setIsAdmin] = useState(false)

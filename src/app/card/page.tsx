@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Dices, Undo2, CircleAlert, LoaderCircle } from 'lucide-react'
 import { MusicTile, ActionButton, SpotifyPlayButton } from '@/components'
 import { useLibraryData } from '@/hooks'
@@ -9,6 +9,12 @@ export default function CardPage() {
   const { releases, artists, isLoading } = useLibraryData({ enabled: true })
 
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
+
+  // Create artist lookup map for O(1) lookups
+  const artistMap = useMemo(
+    () => new Map(artists?.map((a) => [a.rymId, a]) || []),
+    [artists]
+  )
 
   useEffect(() => {
     document.title = 'Krater Card'
@@ -45,9 +51,7 @@ export default function CardPage() {
         <MusicTile
           key={releases[chosenReleaseIndex].rymId}
           cover={releases[chosenReleaseIndex].cover}
-          artists={releases[chosenReleaseIndex].artistRymIds.map((id) =>
-            artists.find((artist) => artist.rymId === id)
-          )}
+          artists={releases[chosenReleaseIndex].artistRymIds.map((id) => artistMap.get(id))}
           title={releases[chosenReleaseIndex].title}
           media={releases[chosenReleaseIndex].media.spotify}
           priority

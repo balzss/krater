@@ -1,5 +1,6 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { getLibraryData } from '@/lib/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,10 +12,7 @@ export async function GET(req: NextRequest) {
     const releaseId = searchParams.get('releaseId')
 
     if (!artistIds?.length && !releaseId) {
-      return NextResponse.json(
-        { message: 'Please provide either an artistIds or releaseId in the query string.' },
-        { status: 400 }
-      )
+      return errorResponse('Please provide either an artistIds or releaseId in the query string.', 400)
     }
 
     const libraryData = await getLibraryData()
@@ -25,15 +23,13 @@ export async function GET(req: NextRequest) {
     const missingRelease =
       releaseId && releases.find((release) => release.rymId === releaseId) ? '' : releaseId
 
-    return NextResponse.json({ missingArtists, missingRelease }, { status: 200 })
+    return successResponse({ missingArtists, missingRelease })
   } catch (error) {
     console.error('Error checking for artist or release:', error)
-    return NextResponse.json(
-      {
-        message: 'Internal Server Error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
+    return errorResponse(
+      'Internal Server Error',
+      500,
+      { error: error instanceof Error ? error.message : 'Unknown error' }
     )
   }
 }

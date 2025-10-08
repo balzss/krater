@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+import { BASE_PATH } from '@/lib/constants'
 
 export const metadata: Metadata = {
   icons: {
-    icon: `${basePath}/library-64.png`,
+    icon: `${BASE_PATH}/library-64.png`,
   },
 }
 

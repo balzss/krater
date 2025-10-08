@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { CONFIG } from '@/lib/constants'
 
 async function verifyAdminSession(req: NextRequest): Promise<boolean> {
-  const adminSessionCookie = req.cookies.get('admin-session')
+  const adminSessionCookie = req.cookies.get(CONFIG.auth.cookieName)
   return adminSessionCookie?.value === 'true'
 }
 
 export async function middleware(req: NextRequest) {
-  const isDevelopment = false
+  const isDevelopment = process.env.NODE_ENV === 'development'
 
   if (!isDevelopment) {
     try {

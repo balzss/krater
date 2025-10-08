@@ -1,22 +1,18 @@
-import { NextResponse } from 'next/server'
 import { getLibraryData, setLibraryData } from '@/lib/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
     const libraryData = await getLibraryData()
-    return NextResponse.json({
-      status: 'ok',
+    return successResponse({
       libraryData,
       checkedAt: new Date().toISOString(),
     })
   } catch (error) {
     console.error('Library data API Error:', error)
-    return NextResponse.json(
-      { status: 'error', message: 'Internal Server Error during getting library data.' },
-      { status: 500 }
-    )
+    return errorResponse('Internal Server Error during getting library data.')
   }
 }
 
@@ -25,17 +21,13 @@ export async function POST(request: Request) {
     const receivedData = await request.json()
 
     if (!receivedData) {
-      return NextResponse.json(
-        { status: 'error', message: 'No data received in request body.' },
-        { status: 400 }
-      )
+      return errorResponse('No data received in request body.', 400)
     }
 
     await setLibraryData(receivedData)
     console.log(`Data successfully processed by writeDataJson.`)
 
-    return NextResponse.json({
-      status: 'ok',
+    return successResponse({
       message: 'Data saved successfully.',
       savedAt: new Date().toISOString(),
     })
@@ -43,15 +35,9 @@ export async function POST(request: Request) {
     console.error('Library data POST API Error:', error)
 
     if (error instanceof SyntaxError) {
-      return NextResponse.json(
-        { status: 'error', message: 'Invalid JSON format in request body.' },
-        { status: 400 }
-      )
+      return errorResponse('Invalid JSON format in request body.', 400)
     }
 
-    return NextResponse.json(
-      { status: 'error', message: 'Internal Server Error during saving data.' },
-      { status: 500 }
-    )
+    return errorResponse('Internal Server Error during saving data.')
   }
 }

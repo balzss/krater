@@ -2,7 +2,6 @@
 
 import { MouseEvent, useEffect, useRef } from 'react'
 import {
-  House,
   Check,
   TriangleAlert,
   Sun,
@@ -14,13 +13,13 @@ import {
   Server,
   CloudOff,
 } from 'lucide-react'
-import { MenuItem, ActionButton } from '@/components'
+import { MenuItem, PageHeader, ActionButton } from '@/components'
 import { useTheme } from 'next-themes'
 import { useLibraryData, useAuth, useHealthCheck } from '@/hooks'
 import { SiLastdotfm } from '@icons-pack/react-simple-icons'
+import { API_BASE_URL } from '@/lib/constants'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
-const apiRoot = `${basePath}/api`
+const apiRoot = API_BASE_URL
 
 type CheckResultProps = {
   warningLabel: string
@@ -142,13 +141,18 @@ export default function SettingsPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4 sm:gap-6">
       <div className="flex flex-col items-center w-full max-w-lg gap-4 sm:gap-6">
-        <div className="flex w-full gap-2 sm:gap-4 items-center">
-          <h1 className="text-4xl font-bold mr-auto">Settings</h1>
-          {theme && (
-            <ActionButton onClick={handleSwitchTheme} icon={theme === 'dark' ? Sun : Moon} />
-          )}
-          <ActionButton href="/" icon={House} />
-        </div>
+        <PageHeader
+          title="Settings"
+          actions={
+            theme && (
+              <ActionButton
+                onClick={handleSwitchTheme}
+                icon={theme === 'dark' ? Sun : Moon}
+                aria-label="Toggle theme"
+              />
+            )
+          }
+        />
         <MenuItem startIcon={Download} onClick={handleDownloadLibraryData}>
           Download library data
         </MenuItem>

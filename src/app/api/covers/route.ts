@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { deleteCoverFile } from '@/lib/server'
+import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 
 export async function DELETE(req: NextRequest) {
   try {
@@ -7,18 +8,15 @@ export async function DELETE(req: NextRequest) {
     const coverToDelete = searchParams.get('filename')
     await deleteCoverFile(coverToDelete)
 
-    return NextResponse.json(
-      {
-        message: `Cover with filename '${coverToDelete}' deleted successfully.`,
-      },
-      { status: 200 }
-    )
+    return successResponse({
+      message: `Cover with filename '${coverToDelete}' deleted successfully.`,
+    })
   } catch (error: unknown) {
     let errorMessage = 'Failed to delete cover.'
     if (error instanceof Error) {
       errorMessage = error.message
     }
     console.error(errorMessage)
-    return NextResponse.json({ message: errorMessage }, { status: 500 })
+    return errorResponse(errorMessage)
   }
 }

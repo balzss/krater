@@ -1,14 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { House, Dices, Undo2, CircleAlert } from 'lucide-react'
-import { MusicTile, ActionButton } from '@/components'
+import { useEffect, useState, useMemo } from 'react'
+import { Dices, Undo2, CircleAlert } from 'lucide-react'
+import { MusicTile, ActionButton, PageHeader } from '@/components'
 import { useLibraryData } from '@/hooks'
 
 export default function RandomPage() {
   const { releases, artists, isLoading } = useLibraryData({ enabled: true })
 
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
+
+  // Create artist lookup map for O(1) lookups
+  const artistMap = useMemo(
+    () => new Map(artists?.map((a) => [a.rymId, a]) || []),
+    [artists]
+  )
 
   useEffect(() => {
     document.title = 'Random release | Krater'
@@ -38,17 +44,12 @@ export default function RandomPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
       <div className="w-full max-w-md flex flex-col gap-4">
-        <div className="flex w-full gap-2 sm:gap-4 items-center">
-          <h1 className="text-3xl font-bold mr-auto">Random release</h1>
-          <ActionButton href="/" icon={House} />
-        </div>
+        <PageHeader title="Random release" />
 
         <MusicTile
           key={releases[chosenReleaseIndex].rymId}
           cover={releases[chosenReleaseIndex].cover}
-          artists={releases[chosenReleaseIndex].artistRymIds.map((id) =>
-            artists.find((artist) => artist.rymId === id)
-          )}
+          artists={releases[chosenReleaseIndex].artistRymIds.map((id) => artistMap.get(id))}
           title={releases[chosenReleaseIndex].title}
           media={releases[chosenReleaseIndex].media.spotify}
           priority

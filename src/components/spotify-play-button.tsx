@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { ActionButton } from '@/components' // Assuming ActionButton is correctly imported
 import { Play, Plug, Ellipsis } from 'lucide-react'
+import { CONFIG } from '@/lib/constants'
 
 // --- Configuration Constants ---
-const CLIENT_ID = '47802db6dc5249cbaa5dba475f04cc4d' // Your Spotify application's Client ID
+const CLIENT_ID = CONFIG.spotify.clientId
 const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true' // Check if running locally
 // The URL Spotify redirects the WebView back to after authorization.
 const REDIRECT_URI = isLocalhost ? 'http://localhost:3000/card' : 'https://krater.bsaros.com/card'
@@ -97,7 +98,7 @@ export const SpotifyPlayButton: React.FC<SpotifyPlayButtonProps> = ({ albumUrl }
 
     try {
       // 1. Generate PKCE codes
-      const codeVerifier = generateCodeVerifier(128)
+      const codeVerifier = generateCodeVerifier(CONFIG.spotify.codeVerifierLength)
       const codeChallenge = await generateCodeChallenge(codeVerifier)
 
       // 2. Store the verifier in localStorage. The page loaded at REDIRECT_URI
