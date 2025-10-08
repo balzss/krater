@@ -4,7 +4,6 @@ import { GET, POST, PUT, DELETE } from '@/app/api/releases/route'
 import * as serverLib from '@/lib/server'
 import fs from 'fs/promises'
 import { mockLibraryData, createMockRelease } from '../../mocks/data'
-import type { Release } from '@/lib/data'
 
 vi.mock('@/lib/server')
 vi.mock('fs/promises')
@@ -443,9 +442,7 @@ describe('Releases API Integration Tests', () => {
       const data = await response.json()
       expect(data.message).toContain('deleted successfully')
       expect(serverLib.updateReleases).toHaveBeenCalledWith(
-        expect.not.arrayContaining([
-          expect.objectContaining({ rymId: releaseToDelete.rymId }),
-        ])
+        expect.not.arrayContaining([expect.objectContaining({ rymId: releaseToDelete.rymId })])
       )
     })
 
@@ -467,12 +464,9 @@ describe('Releases API Integration Tests', () => {
     })
 
     it('should return 404 for non-existent release', async () => {
-      const request = new NextRequest(
-        'http://localhost:3000/api/releases?rymId=non-existent-id',
-        {
-          method: 'DELETE',
-        }
-      )
+      const request = new NextRequest('http://localhost:3000/api/releases?rymId=non-existent-id', {
+        method: 'DELETE',
+      })
 
       const response = await DELETE(request)
 

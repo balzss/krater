@@ -18,7 +18,7 @@ export const handlers = [
 
   // POST /api/library-data
   http.post('/api/library-data', async ({ request }) => {
-    const data = await request.json()
+    const _data = await request.json()
     return HttpResponse.json({
       status: 'ok',
       message: 'Data saved successfully.',

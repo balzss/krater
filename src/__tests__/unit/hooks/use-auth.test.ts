@@ -143,7 +143,7 @@ describe('useAuth', () => {
         return HttpResponse.json({ isAdmin: false })
       }),
       http.post('/api/auth/login', async ({ request }) => {
-        const body = await request.json()
+        const _body = await request.json()
         loginAttempts++
 
         if (loginAttempts === 1) {

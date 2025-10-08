@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import fs from 'fs/promises'
-import path from 'path'
 import {
   deleteCoverFile,
   ensureDirectoryExists,
@@ -30,9 +29,7 @@ describe('server utilities', () => {
 
       await deleteCoverFile('test-cover.jpg')
 
-      expect(fs.unlink).toHaveBeenCalledWith(
-        expect.stringContaining('test-cover.jpg')
-      )
+      expect(fs.unlink).toHaveBeenCalledWith(expect.stringContaining('test-cover.jpg'))
     })
 
     it('should handle ENOENT error gracefully', async () => {
@@ -89,18 +86,13 @@ describe('server utilities', () => {
       const result = await getLibraryData()
 
       expect(result).toEqual(mockLibraryData)
-      expect(fs.readFile).toHaveBeenCalledWith(
-        expect.stringContaining('libraryData.json'),
-        'utf8'
-      )
+      expect(fs.readFile).toHaveBeenCalledWith(expect.stringContaining('libraryData.json'), 'utf8')
     })
 
     it('should throw error when file cannot be read', async () => {
       vi.mocked(fs.readFile).mockRejectedValue(new Error('File not found'))
 
-      await expect(getLibraryData()).rejects.toThrow(
-        'Could not read library data file'
-      )
+      await expect(getLibraryData()).rejects.toThrow('Could not read library data file')
     })
 
     it('should throw error when JSON is invalid', async () => {
@@ -159,9 +151,7 @@ describe('server utilities', () => {
       const newReleases = [...mockLibraryData.releases]
       await updateReleases(newReleases)
 
-      const writtenData = JSON.parse(
-        vi.mocked(fs.writeFile).mock.calls[0][1] as string
-      )
+      const writtenData = JSON.parse(vi.mocked(fs.writeFile).mock.calls[0][1] as string)
       expect(writtenData.releases).toEqual(newReleases)
       expect(writtenData.artists).toEqual(mockLibraryData.artists)
     })
@@ -200,9 +190,7 @@ describe('server utilities', () => {
       const newArtists = [...mockLibraryData.artists]
       await updateArtists(newArtists)
 
-      const writtenData = JSON.parse(
-        vi.mocked(fs.writeFile).mock.calls[0][1] as string
-      )
+      const writtenData = JSON.parse(vi.mocked(fs.writeFile).mock.calls[0][1] as string)
       expect(writtenData.artists).toEqual(newArtists)
       expect(writtenData.releases).toEqual(mockLibraryData.releases)
     })

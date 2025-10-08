@@ -28,7 +28,7 @@ describe('GET /api/health', () => {
       'saw-85-92.jpg',
       'downward-spiral.jpg',
       'unused-cover.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -56,7 +56,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       'downward-spiral.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -76,7 +76,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       // downward-spiral.jpg is missing
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -105,7 +105,7 @@ describe('GET /api/health', () => {
       artists: [],
     }
     vi.mocked(getLibraryData).mockResolvedValue(dataWithMissingArtist)
-    vi.mocked(fs.readdirSync).mockReturnValue(['test.jpg'] as any)
+    vi.mocked(fs.readdirSync).mockReturnValue(['test.jpg'] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -125,7 +125,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       'downward-spiral.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -141,7 +141,7 @@ describe('GET /api/health', () => {
     const { getLibraryData } = await import('@/lib/server')
     vi.mocked(getLibraryData).mockResolvedValue(mockLibraryData)
 
-    const error: any = new Error('Directory not found')
+    const error = new Error('Directory not found') as NodeJS.ErrnoException
     error.code = 'ENOENT'
     vi.mocked(fs.readdirSync).mockImplementation(() => {
       throw error
@@ -159,7 +159,7 @@ describe('GET /api/health', () => {
   it('should map artist names to missing covers', async () => {
     const { getLibraryData } = await import('@/lib/server')
     vi.mocked(getLibraryData).mockResolvedValue(mockLibraryData)
-    vi.mocked(fs.readdirSync).mockReturnValue(['ok-computer.jpg'] as any)
+    vi.mocked(fs.readdirSync).mockReturnValue(['ok-computer.jpg'] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -168,7 +168,9 @@ describe('GET /api/health', () => {
     const missingCovers = data.issues.missingCovers
     expect(missingCovers.length).toBeGreaterThan(0)
 
-    const sawMissing = missingCovers.find((c: any) => c.filename === 'saw-85-92.jpg')
+    const sawMissing = missingCovers.find(
+      (c: { filename: string }) => c.filename === 'saw-85-92.jpg'
+    )
     expect(sawMissing).toBeDefined()
     expect(sawMissing.releaseArtists).toBe('Aphex Twin')
   })
@@ -195,7 +197,10 @@ describe('GET /api/health', () => {
       artists: [],
     }
     vi.mocked(getLibraryData).mockResolvedValue(dataWithMissingArtists)
-    vi.mocked(fs.readdirSync).mockReturnValue(['album1.jpg', 'album2.jpg'] as any)
+    vi.mocked(fs.readdirSync).mockReturnValue([
+      'album1.jpg',
+      'album2.jpg',
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -208,7 +213,7 @@ describe('GET /api/health', () => {
     expect(data.issues.missingArtists.length).toBeGreaterThan(0)
     // Check that at least one entry has both releases listed
     const artistEntry = data.issues.missingArtists.find(
-      (a: any) => a.rymId === 'missing-artist'
+      (a: { rymId: string }) => a.rymId === 'missing-artist'
     )
     expect(artistEntry).toBeDefined()
     expect(artistEntry.referencedIn).toEqual(['Album 1', 'Album 2'])
@@ -221,7 +226,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       'downward-spiral.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
 
@@ -236,7 +241,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       'downward-spiral.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()
@@ -249,7 +254,7 @@ describe('GET /api/health', () => {
     const { getLibraryData } = await import('@/lib/server')
     vi.mocked(getLibraryData).mockResolvedValue(mockLibraryData)
 
-    const error: any = new Error('Permission denied')
+    const error = new Error('Permission denied') as NodeJS.ErrnoException
     error.code = 'EACCES'
     vi.mocked(fs.readdirSync).mockImplementation(() => {
       throw error
@@ -270,7 +275,7 @@ describe('GET /api/health', () => {
       'ok-computer.jpg',
       'saw-85-92.jpg',
       'downward-spiral.jpg',
-    ] as any)
+    ] as unknown as fs.Dirent[])
 
     const response = await GET()
     const data = await response.json()

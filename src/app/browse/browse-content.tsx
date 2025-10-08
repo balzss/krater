@@ -14,10 +14,7 @@ export default function BrowsePageContent() {
   const artistParam = searchParams.get('artist')
 
   // Create artist lookup map for O(1) lookups
-  const artistMap = useMemo(
-    () => new Map(artists?.map((a) => [a.rymId, a]) || []),
-    [artists]
-  )
+  const artistMap = useMemo(() => new Map(artists?.map((a) => [a.rymId, a]) || []), [artists])
 
   const filteredReleases = useMemo(() => {
     if (!releases || !artists) return []
@@ -40,7 +37,7 @@ export default function BrowsePageContent() {
         r.title.toLowerCase().includes(lowerSearchQuery)
       )
     })
-  }, [releases, artistParam, searchQuery, artistMap])
+  }, [releases, artists, artistParam, searchQuery, artistMap])
 
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16">
