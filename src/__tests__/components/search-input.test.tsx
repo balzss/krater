@@ -11,13 +11,7 @@ describe('SearchInput', () => {
   })
 
   it('should render with placeholder', () => {
-    render(
-      <SearchInput
-        query=""
-        onQueryChange={mockOnQueryChange}
-        placeholder="Search..."
-      />
-    )
+    render(<SearchInput query="" onQueryChange={mockOnQueryChange} placeholder="Search..." />)
 
     expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument()
   })
@@ -72,9 +66,7 @@ describe('SearchInput', () => {
   })
 
   it('should render search icon', () => {
-    const { container } = render(
-      <SearchInput query="" onQueryChange={mockOnQueryChange} />
-    )
+    const { container } = render(<SearchInput query="" onQueryChange={mockOnQueryChange} />)
 
     // Lucide icons render as SVG
     const searchIcon = container.querySelector('svg')
@@ -82,13 +74,7 @@ describe('SearchInput', () => {
   })
 
   it('should apply custom className', () => {
-    render(
-      <SearchInput
-        query=""
-        onQueryChange={mockOnQueryChange}
-        className="custom-class"
-      />
-    )
+    render(<SearchInput query="" onQueryChange={mockOnQueryChange} className="custom-class" />)
 
     const input = screen.getByRole('searchbox')
     const wrapper = input.parentElement!
@@ -96,13 +82,7 @@ describe('SearchInput', () => {
   })
 
   it('should pass through additional HTML attributes', () => {
-    render(
-      <SearchInput
-        query=""
-        onQueryChange={mockOnQueryChange}
-        aria-label="Custom search"
-      />
-    )
+    render(<SearchInput query="" onQueryChange={mockOnQueryChange} aria-label="Custom search" />)
 
     expect(screen.getByLabelText('Custom search')).toBeInTheDocument()
   })

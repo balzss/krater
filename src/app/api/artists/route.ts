@@ -107,11 +107,9 @@ export async function PUT(req: NextRequest) {
     }
     const invalidUpdates = artistsToUpdate.filter((a) => !a || typeof a.rymId !== 'string')
     if (invalidUpdates.length > 0) {
-      return errorResponse(
-        'Invalid update data. Each object must include rymId (string).',
-        400,
-        { invalidData: invalidUpdates }
-      )
+      return errorResponse('Invalid update data. Each object must include rymId (string).', 400, {
+        invalidData: invalidUpdates,
+      })
     }
 
     const artists = await getArtists()

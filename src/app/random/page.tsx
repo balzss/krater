@@ -11,10 +11,7 @@ export default function RandomPage() {
   const [chosenReleaseIndex, setChosenReleaseIndex] = useState<number>(0)
 
   // Create artist lookup map for O(1) lookups
-  const artistMap = useMemo(
-    () => new Map(artists?.map((a) => [a.rymId, a]) || []),
-    [artists]
-  )
+  const artistMap = useMemo(() => new Map(artists?.map((a) => [a.rymId, a]) || []), [artists])
 
   useEffect(() => {
     document.title = 'Random release | Krater'

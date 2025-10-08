@@ -25,9 +25,7 @@ describe('MenuItem', () => {
   })
 
   it('should render start icon', () => {
-    const { container } = render(
-      <MenuItem startIcon={Home}>With Start Icon</MenuItem>
-    )
+    const { container } = render(<MenuItem startIcon={Home}>With Start Icon</MenuItem>)
 
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
@@ -35,9 +33,7 @@ describe('MenuItem', () => {
   })
 
   it('should render end icon', () => {
-    const { container } = render(
-      <MenuItem endIcon={ArrowRight}>With End Icon</MenuItem>
-    )
+    const { container } = render(<MenuItem endIcon={ArrowRight}>With End Icon</MenuItem>)
 
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()

@@ -85,7 +85,9 @@ export async function parseReleaseFormData(formData: FormData): Promise<ParsedRe
  * @returns Parsed release data including cover file and optional new normalized filename
  * @throws Error if rymId is missing or invalid
  */
-export async function parseUpdateFormData(formData: FormData): Promise<ParsedReleaseData & { rymId: string }> {
+export async function parseUpdateFormData(
+  formData: FormData
+): Promise<ParsedReleaseData & { rymId: string }> {
   // Validate rymId presence first
   if (!formData.has('rymId')) {
     throw new Error("Missing 'rymId' field in form data to identify the release to update.")
@@ -141,7 +143,11 @@ export async function parseUpdateFormData(formData: FormData): Promise<ParsedRel
  * @param targetDir - Directory to save file in
  * @throws Error if file is empty or write fails
  */
-export async function saveCoverFile(file: File, filename: string, targetDir: string): Promise<void> {
+export async function saveCoverFile(
+  file: File,
+  filename: string,
+  targetDir: string
+): Promise<void> {
   if (file.size === 0) {
     throw new Error('Cover image file cannot be empty.')
   }
@@ -163,12 +169,7 @@ export async function saveCoverFile(file: File, filename: string, targetDir: str
  * @throws Error if required fields are missing or invalid
  */
 export function validateNewRelease(releaseData: Partial<Release>): void {
-  if (
-    !releaseData.title ||
-    !releaseData.rymId ||
-    !releaseData.artistRymIds ||
-    !releaseData.media
-  ) {
+  if (!releaseData.title || !releaseData.rymId || !releaseData.artistRymIds || !releaseData.media) {
     throw new Error('Missing required fields: title, rymId, artistRymIds, media')
   }
 

@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
     const releaseId = searchParams.get('releaseId')
 
     if (!artistIds?.length && !releaseId) {
-      return errorResponse('Please provide either an artistIds or releaseId in the query string.', 400)
+      return errorResponse(
+        'Please provide either an artistIds or releaseId in the query string.',
+        400
+      )
     }
 
     const libraryData = await getLibraryData()
@@ -26,10 +29,8 @@ export async function GET(req: NextRequest) {
     return successResponse({ missingArtists, missingRelease })
   } catch (error) {
     console.error('Error checking for artist or release:', error)
-    return errorResponse(
-      'Internal Server Error',
-      500,
-      { error: error instanceof Error ? error.message : 'Unknown error' }
-    )
+    return errorResponse('Internal Server Error', 500, {
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
   }
 }

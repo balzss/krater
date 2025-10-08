@@ -54,12 +54,9 @@ describe('DELETE /api/covers', () => {
     // deleteCoverFile handles ENOENT gracefully and doesn't throw
     vi.mocked(deleteCoverFile).mockResolvedValue(undefined)
 
-    const request = new Request(
-      'http://localhost:3000/api/covers?filename=non-existent.jpg',
-      {
-        method: 'DELETE',
-      }
-    )
+    const request = new Request('http://localhost:3000/api/covers?filename=non-existent.jpg', {
+      method: 'DELETE',
+    })
 
     const response = await DELETE(request)
     const data = await response.json()

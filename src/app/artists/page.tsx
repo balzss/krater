@@ -13,10 +13,11 @@ export default function ArtistsPage() {
       artist.displayName.toLowerCase().includes(lowerQuery),
     []
   )
-  const { query: searchQuery, setQuery: setSearchQuery, results: artistResults } = useSearch(
-    artists,
-    filterArtists
-  )
+  const {
+    query: searchQuery,
+    setQuery: setSearchQuery,
+    results: artistResults,
+  } = useSearch(artists, filterArtists)
 
   useEffect(() => {
     document.title = 'Artists | Krater'

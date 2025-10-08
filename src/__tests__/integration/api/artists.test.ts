@@ -257,9 +257,7 @@ describe('DELETE /api/artists', () => {
     vi.mocked(server.getArtists).mockResolvedValue(mockLibraryData.artists)
     vi.mocked(server.updateArtists).mockResolvedValue()
 
-    const req = new NextRequest(
-      `http://localhost:3000/api/artists?rymId=${artistToDelete.rymId}`
-    )
+    const req = new NextRequest(`http://localhost:3000/api/artists?rymId=${artistToDelete.rymId}`)
     const response = await DELETE(req)
 
     expect(response.status).toBe(200)

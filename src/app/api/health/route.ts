@@ -13,7 +13,6 @@ export async function GET() {
     let coverFiles: string[] = []
     try {
       coverFiles = fs.readdirSync(coversDir)
-
     } catch (error: unknown) {
       // Handle case where the directory might not exist
       if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {

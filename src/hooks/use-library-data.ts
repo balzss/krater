@@ -47,11 +47,7 @@ const dataJsonPath = `${DATA_PATH}/libraryData.json`
  * @param compareFn - Comparison function for 'asc' sorting (result will be inverted for 'desc')
  * @returns Sorted array (new array, original is not mutated)
  */
-function sortItems<T>(
-  items: T[],
-  method: SortMethod,
-  compareFn: (a: T, b: T) => number
-): T[] {
+function sortItems<T>(items: T[], method: SortMethod, compareFn: (a: T, b: T) => number): T[] {
   const sorted = [...items] // avoid param mutation by creating a shallow copy
 
   if (method === 'asc') {
@@ -86,15 +82,11 @@ export function useLibraryData({
         throw new Error(`API Error: ${response.status}`)
       }
       const libraryData: LibraryData = await response.json()
-      const sortedArtists = sortItems(
-        libraryData.artists,
-        artistSort,
-        (a, b) => a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
+      const sortedArtists = sortItems(libraryData.artists, artistSort, (a, b) =>
+        a.displayName.localeCompare(b.displayName, undefined, { sensitivity: 'base' })
       )
-      const sortedReleases = sortItems(
-        libraryData.releases,
-        releaseSort,
-        (a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
+      const sortedReleases = sortItems(libraryData.releases, releaseSort, (a, b) =>
+        a.title.localeCompare(b.title, undefined, { sensitivity: 'base' })
       )
 
       setReleases(sortedReleases)

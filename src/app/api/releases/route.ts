@@ -63,10 +63,7 @@ export async function POST(req: NextRequest) {
     const updatedReleases = [...releasesData, newRelease]
     await updateReleases(updatedReleases)
 
-    return successResponse(
-      { message: 'Release added successfully', release: newRelease },
-      201
-    )
+    return successResponse({ message: 'Release added successfully', release: newRelease }, 201)
   } catch (error: unknown) {
     let errorMessage = 'Failed to add release.'
     let statusCode = 500
@@ -109,7 +106,12 @@ export async function PUT(req: NextRequest) {
     await ensureDirectoryExists(coversDir)
 
     const formData = await req.formData()
-    const { releaseData: updateData, coverFile, coverFilename, rymId } = await parseUpdateFormData(formData)
+    const {
+      releaseData: updateData,
+      coverFile,
+      coverFilename,
+      rymId,
+    } = await parseUpdateFormData(formData)
 
     // Find existing release
     const releaseIndex = releasesData.findIndex((r) => r.rymId === rymId)
@@ -151,9 +153,7 @@ export async function PUT(req: NextRequest) {
     releasesData[releaseIndex] = updatedReleaseData as Release
     await updateReleases(releasesData)
 
-    return successResponse(
-      { message: 'Release updated successfully', release: updatedReleaseData }
-    )
+    return successResponse({ message: 'Release updated successfully', release: updatedReleaseData })
   } catch (error: unknown) {
     let errorMessage = 'Failed to update release.'
     let statusCode = 500

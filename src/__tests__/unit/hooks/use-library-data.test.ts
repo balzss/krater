@@ -66,14 +66,14 @@ describe('useLibraryData', () => {
     it('should sort releases ascending by title', async () => {
       // Uses default MSW handler for /data/libraryData.json
 
-      const { result } = renderHook(() =>
-        useLibraryData({ enabled: true, releaseSort: 'asc' })
-      )
+      const { result } = renderHook(() => useLibraryData({ enabled: true, releaseSort: 'asc' }))
 
       await waitFor(() => {
         const releases = result.current.releases
         if (releases && releases.length > 1) {
-          expect(releases[0].title.localeCompare(releases[1].title, undefined, { sensitivity: 'base' })).toBeLessThanOrEqual(0)
+          expect(
+            releases[0].title.localeCompare(releases[1].title, undefined, { sensitivity: 'base' })
+          ).toBeLessThanOrEqual(0)
         }
       })
     })
@@ -81,14 +81,14 @@ describe('useLibraryData', () => {
     it('should sort releases descending by title', async () => {
       // Uses default MSW handler for /data/libraryData.json
 
-      const { result } = renderHook(() =>
-        useLibraryData({ enabled: true, releaseSort: 'desc' })
-      )
+      const { result } = renderHook(() => useLibraryData({ enabled: true, releaseSort: 'desc' }))
 
       await waitFor(() => {
         const releases = result.current.releases
         if (releases && releases.length > 1) {
-          expect(releases[0].title.localeCompare(releases[1].title, undefined, { sensitivity: 'base' })).toBeGreaterThanOrEqual(0)
+          expect(
+            releases[0].title.localeCompare(releases[1].title, undefined, { sensitivity: 'base' })
+          ).toBeGreaterThanOrEqual(0)
         }
       })
     })
@@ -101,7 +101,11 @@ describe('useLibraryData', () => {
       await waitFor(() => {
         const artists = result.current.artists
         if (artists && artists.length > 1) {
-          expect(artists[0].displayName.localeCompare(artists[1].displayName, undefined, { sensitivity: 'base' })).toBeLessThanOrEqual(0)
+          expect(
+            artists[0].displayName.localeCompare(artists[1].displayName, undefined, {
+              sensitivity: 'base',
+            })
+          ).toBeLessThanOrEqual(0)
         }
       })
     })
@@ -109,9 +113,7 @@ describe('useLibraryData', () => {
     it('should randomize releases when sort is random', async () => {
       // Uses default MSW handler for /data/libraryData.json
 
-      const { result } = renderHook(() =>
-        useLibraryData({ enabled: true, releaseSort: 'random' })
-      )
+      const { result } = renderHook(() => useLibraryData({ enabled: true, releaseSort: 'random' }))
 
       await waitFor(() => {
         expect(result.current.releases).toEqual(expect.any(Array))
@@ -137,9 +139,7 @@ describe('useLibraryData', () => {
       const { result } = renderHook(() => useLibraryData())
       const file = new File(['test'], 'file.txt', { type: 'text/plain' })
 
-      await expect(result.current.setLibraryData(file)).rejects.toThrow(
-        'Invalid file type'
-      )
+      await expect(result.current.setLibraryData(file)).rejects.toThrow('Invalid file type')
     })
 
     it('should set loading state correctly', async () => {
@@ -163,10 +163,7 @@ describe('useLibraryData', () => {
     it('should handle API errors in setLibraryData', async () => {
       server.use(
         http.post('/api/library-data', () => {
-          return HttpResponse.json(
-            { status: 'error', message: 'Server error' },
-            { status: 500 }
-          )
+          return HttpResponse.json({ status: 'error', message: 'Server error' }, { status: 500 })
         })
       )
 
