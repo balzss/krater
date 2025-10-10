@@ -9,7 +9,8 @@ describe('MusicTile', () => {
     cover: 'test-cover.jpg',
     artists: [mockArtists[0]],
     title: 'Test Album',
-    media: 'https://open.spotify.com/album/test',
+    rymId: 'test-album',
+    media: { spotify: 'https://open.spotify.com/album/test' },
   }
 
   beforeEach(() => {
@@ -58,7 +59,7 @@ describe('MusicTile', () => {
     render(<MusicTile {...defaultProps} />)
 
     const links = screen.getAllByRole('link', { name: /Test Album/i })
-    expect(links[0]).toHaveAttribute('href', defaultProps.media)
+    expect(links[0]).toHaveAttribute('href', defaultProps.media.spotify)
     expect(links[0]).toHaveAttribute('target', '_blank')
   })
 
@@ -111,16 +112,15 @@ describe('MusicTile', () => {
     expect(tile.className).toContain('custom-class')
   })
 
-  it('should show coming soon alert when info button clicked', async () => {
+  it('should open modal when info button clicked', async () => {
     const user = userEvent.setup()
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
 
     render(<MusicTile {...defaultProps} />)
     const infoButton = screen.getByRole('button')
 
     await user.click(infoButton)
 
-    expect(alertSpy).toHaveBeenCalledWith('Coming soon...')
-    alertSpy.mockRestore()
+    // Check that modal dialog is now visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
   })
 })

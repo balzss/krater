@@ -1,6 +1,6 @@
 'use client'
 
-import { Library, User, Dices, Settings } from 'lucide-react'
+import { LayoutGrid, User, Dices, Settings } from 'lucide-react'
 import { SiGithub } from '@icons-pack/react-simple-icons'
 import { ActionButton, MenuItem } from '@/components'
 import { useLibraryData } from '@/hooks'
@@ -22,7 +22,7 @@ export function MainPageContent() {
           <ActionButton href="/settings" icon={Settings} />
         </div>
 
-        <MenuItem startIcon={Library} href="/browse">
+        <MenuItem startIcon={LayoutGrid} href="/browse">
           Browse {releases?.length} releases
         </MenuItem>
 

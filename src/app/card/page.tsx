@@ -50,7 +50,9 @@ export default function CardPage() {
           cover={releases[chosenReleaseIndex].cover}
           artists={releases[chosenReleaseIndex].artistRymIds.map((id) => artistMap.get(id))}
           title={releases[chosenReleaseIndex].title}
-          media={releases[chosenReleaseIndex].media.spotify}
+          rymId={releases[chosenReleaseIndex].rymId}
+          rymUrl={releases[chosenReleaseIndex].rymUrl}
+          media={releases[chosenReleaseIndex].media}
           priority
           className="max-w-xs"
         />

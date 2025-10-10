@@ -1,12 +1,20 @@
+export type Media = {
+  spotify?: string
+  appleMusic?: string
+  bandcamp?: string
+  youtube?: string
+  soundcloud?: string
+  tidal?: string
+  deezer?: string
+}
+
 export type Release = {
   artistRymIds: string[]
   title: string
   rymId: string
   rymUrl?: string
   cover: string
-  media: {
-    spotify?: string
-  }
+  media: Media
 }
 
 export type Artist = {

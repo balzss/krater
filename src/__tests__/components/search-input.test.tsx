@@ -18,7 +18,7 @@ describe('SearchInput', () => {
 
   it('should call onQueryChange when typing', async () => {
     const user = userEvent.setup()
-    render(<SearchInput query="" onQueryChange={mockOnQueryChange} />)
+    render(<SearchInput query="" onQueryChange={mockOnQueryChange} debounceMs={0} />)
 
     const input = screen.getByRole('searchbox')
     await user.type(input, 't')

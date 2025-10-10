@@ -26,12 +26,13 @@ export default function ArtistsPage() {
   return (
     <div className="flex items-center flex-col m-4 sm:my-12 sm:mx-16 gap-4">
       <PageHeader
+        centered
         actions={
           <SearchInput
             query={searchQuery}
-            onQueryChange={(newSearchQuery) => setSearchQuery(newSearchQuery)}
+            onQueryChange={setSearchQuery}
             placeholder="Search artists"
-            className="max-w-lg mb-4"
+            className="max-w-lg"
           />
         }
       />

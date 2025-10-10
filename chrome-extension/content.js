@@ -49,7 +49,32 @@ async function addRelease(apiUrl, artistIds, update = false) {
   const rymUrl = window.location.origin + window.location.pathname
   const coverElement = document.querySelector('.page_release_art_frame img')
   const coverSrc = coverElement?.src
-  const spotifyLink = document.querySelector('a.ui_media_link_btn_spotify')?.href
+
+  // Extract all media links
+  function extractMediaLinks() {
+    const media = {}
+    
+    // RYM uses links with class ui_media_link_btn_[service]
+    const spotifyLink = document.querySelector('a.ui_media_link_btn_spotify')?.href
+    const appleMusicLink = document.querySelector('a.ui_media_link_btn_applemusic')?.href
+    const youtubeLink = document.querySelector('a.ui_media_link_btn_youtube')?.href
+    const bandcampLink = document.querySelector('a.ui_media_link_btn_bandcamp')?.href
+    const soundcloudLink = document.querySelector('a.ui_media_link_btn_soundcloud')?.href
+    const tidalLink = document.querySelector('a.ui_media_link_btn_tidal')?.href
+    const deezerLink = document.querySelector('a.ui_media_link_btn_deezer')?.href
+    
+    if (spotifyLink) media.spotify = spotifyLink
+    if (appleMusicLink) media.appleMusic = appleMusicLink
+    if (youtubeLink) media.youtube = youtubeLink
+    if (bandcampLink) media.bandcamp = bandcampLink
+    if (soundcloudLink) media.soundcloud = soundcloudLink
+    if (tidalLink) media.tidal = tidalLink
+    if (deezerLink) media.deezer = deezerLink
+    
+    return media
+  }
+
+  const media = extractMediaLinks()
 
   // Basic validation
   if (!title || !rymId || !coverSrc || !artistIds || artistIds.length === 0) {
@@ -80,11 +105,7 @@ async function addRelease(apiUrl, artistIds, update = false) {
     formData.append('rymUrl', rymUrl)
     formData.append('cover', coverFileName) // Sending filename again? Check if API needs this
     formData.append('artistRymIds', JSON.stringify(artistIds))
-    if (spotifyLink) {
-      formData.append('media', JSON.stringify({ spotify: spotifyLink }))
-    } else {
-      formData.append('media', JSON.stringify({})) // Send empty media object if no spotify link
-    }
+    formData.append('media', JSON.stringify(media))
 
     // Make API call
     const releaseResponse = await fetch(`${apiUrl}/releases`, {
