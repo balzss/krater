@@ -36,7 +36,6 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
   const [isRemoving, setIsRemoving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const artistNames = artists.map((a) => a?.displayName || 'Unknown').join(', ')
   const availablePlayers = getAvailableMediaPlayers(release.media)
 
   const handleRemove = async () => {
@@ -70,10 +69,6 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
                 <span className="sr-only">Close</span>
               </Dialog.Close>
             </div>
-
-            <Dialog.Description className="text-base text-(--foreground) opacity-70">
-              {artistNames}
-            </Dialog.Description>
 
             {/* Cover Image */}
             <div className="relative w-full aspect-square max-w-[400px] mx-auto rounded-lg overflow-hidden shadow-md">

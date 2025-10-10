@@ -188,6 +188,56 @@ See `MASTER_PLAN.md` for detailed status and `ROADMAP.md` for planned features.
 - Library data editing in settings page
 - Address remaining E2E test issues
 
+## Version Management
+
+The project uses automated version bumping via git hooks. When you commit:
+
+1. **Lint check runs** to ensure code quality (can be skipped with `--no-lint`)
+2. **Changes are analyzed** based on commit message and modified files
+3. **Version bump is suggested** following semantic versioning (major/minor/patch)
+4. **User confirms** the bump type (or it auto-applies in non-interactive mode)
+5. **package.json is updated** and staged automatically
+
+**Semantic Versioning:**
+- **MAJOR (x.0.0):** Breaking changes, incompatible API changes
+- **MINOR (0.x.0):** New features, backwards-compatible functionality
+- **PATCH (0.0.x):** Bug fixes, backwards-compatible fixes
+
+**Conventional Commit Format:**
+```bash
+feat: add new feature         # → minor bump
+fix: resolve bug              # → patch bump
+feat!: breaking change        # → major bump
+docs: update documentation    # → patch bump or skip
+```
+
+**Manual version bumping:**
+```bash
+npm run version:bump          # Interactive mode with lint check
+npm run version:bump:no-lint  # Skip lint check
+npm run version:major         # Force major bump (1.0.0 → 2.0.0)
+npm run version:minor         # Force minor bump (1.0.0 → 1.1.0)
+npm run version:patch         # Force patch bump (1.0.0 → 1.0.1)
+```
+
+**Skipping version bump:**
+- Select "skip" when prompted during commit
+- Use `git commit --no-verify` to bypass all hooks
+- Changes to docs/tests only are auto-detected and suggest "skip"
+
+**Configuration:**
+The version bump behavior is configured in `package.json`:
+```json
+{
+  "versionBump": {
+    "enabled": true,
+    "interactive": true,
+    "lintBeforeBump": true,
+    "skipPaths": ["README.md", "docs/", "**/*.test.ts", "__tests__/"]
+  }
+}
+```
+
 ## Testing
 
 The project has comprehensive test coverage across multiple levels:

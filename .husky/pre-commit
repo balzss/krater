@@ -1,5 +1,14 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Run version bump script before commit
+node scripts/bump-version.js
+
+# If script failed, abort commit
+if [ $? -ne 0 ]; then
+  echo "❌ Version bump failed or was cancelled"
+  exit 1
+fi
+
 # Run tests before commit
 npm test -- --run --reporter=default

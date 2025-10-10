@@ -71,7 +71,7 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
           priority={priority}
         />
       </Link>
-      <div className={compact ? 'p-2' : 'p-4'}>
+      <div className={`${compact ? 'p-2' : 'p-4'} relative`}>
         <Link
           className={`font-bold text-gray-900 cursor-pointer hover:underline ${compact ? 'text-sm' : 'text-lg'}`}
           href={mediaUrl || '#'}
@@ -79,30 +79,26 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
         >
           {title}
         </Link>
-        <div className="flex h-full">
-          <p className={`text-gray-600 mr-auto ${compact ? 'text-xs' : 'text-sm'}`}>
-            {artists.map((artist, index) => (
-              <Fragment key={artist?.rymId || index}>
-                {artist ? (
-                  <Link className="hover:text-gray-500" href={`/browse?artist=${artist?.rymId}`}>
-                    {artist?.displayName}
-                  </Link>
-                ) : (
-                  <span>Unknown</span>
-                )}
-                {index < artists.length - 1 ? ', ' : ''}
-              </Fragment>
-            ))}
-          </p>
-          {!compact && (
-            <ActionButton
-              onClick={() => setIsModalOpen(true)}
-              icon={BadgeInfo}
-              className={`text-gray-600 -mr-2 -mb-2 self-end ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-100`}
-              size={20}
-            />
-          )}
-        </div>
+        <p className={`text-gray-600 ${compact ? 'text-xs pr-6' : 'text-sm pr-8'}`}>
+          {artists.map((artist, index) => (
+            <Fragment key={artist?.rymId || index}>
+              {artist ? (
+                <Link className="hover:text-gray-500" href={`/browse?artist=${artist?.rymId}`}>
+                  {artist?.displayName}
+                </Link>
+              ) : (
+                <span>Unknown</span>
+              )}
+              {index < artists.length - 1 ? ', ' : ''}
+            </Fragment>
+          ))}
+        </p>
+        <ActionButton
+          onClick={() => setIsModalOpen(true)}
+          icon={BadgeInfo}
+          className={`absolute ${compact ? 'bottom-1 right-1' : 'bottom-2 right-2'} text-gray-600 ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-100`}
+          size={compact ? 16 : 20}
+        />
       </div>
 
       <ReleaseModal
