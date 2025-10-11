@@ -137,8 +137,14 @@ test.describe('Settings Page', () => {
       // These may include: import, edit, disconnect buttons
 
       // Look for common admin features
-      const hasImport = await page.locator('text=/Import.*JSON/i').isVisible().catch(() => false)
-      const hasEdit = await page.locator('text=/Edit.*library/i').isVisible().catch(() => false)
+      const hasImport = await page
+        .locator('text=/Import.*JSON/i')
+        .isVisible()
+        .catch(() => false)
+      const hasEdit = await page
+        .locator('text=/Edit.*library/i')
+        .isVisible()
+        .catch(() => false)
       const hasDisconnect = await page
         .locator('text=/Disconnect.*server/i')
         .isVisible()

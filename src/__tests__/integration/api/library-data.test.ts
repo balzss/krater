@@ -8,6 +8,14 @@ vi.mock('@/lib/server', () => ({
   setLibraryData: vi.fn(),
 }))
 
+// Mock auth helpers
+vi.mock('@/lib/auth-helpers', () => ({
+  requireAuth: vi.fn().mockResolvedValue({
+    session: { user: { id: 'test-user' } },
+    response: null,
+  }),
+}))
+
 describe('GET /api/library-data', () => {
   beforeEach(() => {
     vi.clearAllMocks()

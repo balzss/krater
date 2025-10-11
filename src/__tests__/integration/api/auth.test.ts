@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST as loginPOST } from '@/app/api/auth/login/route'
 import { POST as logoutPOST } from '@/app/api/auth/logout/route'
-import { GET as meGET } from '@/app/api/auth/me/route'
 
 // Mock Next.js cookies
 const mockCookieStore = {
@@ -212,73 +211,5 @@ describe('POST /api/auth/logout', () => {
 
     expect(response1.status).toBe(200)
     expect(response2.status).toBe(200)
-  })
-})
-
-describe('GET /api/auth/me', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  it('should return isAdmin true when authenticated (200)', async () => {
-    mockCookieStore.get.mockReturnValue({
-      name: 'admin-session',
-      value: 'true',
-    })
-
-    const request = new Request('http://localhost:3000/api/auth/me')
-    const response = await meGET(request)
-    const data = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(data.isAdmin).toBe(true)
-  })
-
-  it('should return isAdmin false when not authenticated (200)', async () => {
-    mockCookieStore.get.mockReturnValue(undefined)
-
-    const request = new Request('http://localhost:3000/api/auth/me')
-    const response = await meGET(request)
-    const data = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(data.isAdmin).toBe(false)
-  })
-
-  it('should check admin-session cookie', async () => {
-    mockCookieStore.get.mockReturnValue({
-      name: 'admin-session',
-      value: 'true',
-    })
-
-    const request = new Request('http://localhost:3000/api/auth/me')
-    await meGET(request)
-
-    expect(mockCookieStore.get).toHaveBeenCalledWith('admin-session')
-  })
-
-  it('should handle missing cookie', async () => {
-    mockCookieStore.get.mockReturnValue(null)
-
-    const request = new Request('http://localhost:3000/api/auth/me')
-    const response = await meGET(request)
-    const data = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(data.isAdmin).toBe(false)
-  })
-
-  it('should return false for invalid cookie value', async () => {
-    mockCookieStore.get.mockReturnValue({
-      name: 'admin-session',
-      value: 'false',
-    })
-
-    const request = new Request('http://localhost:3000/api/auth/me')
-    const response = await meGET(request)
-    const data = await response.json()
-
-    expect(response.status).toBe(200)
-    expect(data.isAdmin).toBe(false)
   })
 })

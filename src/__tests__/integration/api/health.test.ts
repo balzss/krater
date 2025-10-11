@@ -15,6 +15,14 @@ vi.mock('fs', () => ({
   },
 }))
 
+// Mock auth helpers
+vi.mock('@/lib/auth-helpers', () => ({
+  requireAuth: vi.fn().mockResolvedValue({
+    session: { user: { id: 'test-user' } },
+    response: null,
+  }),
+}))
+
 describe('GET /api/health', () => {
   beforeEach(() => {
     vi.clearAllMocks()

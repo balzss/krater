@@ -60,6 +60,78 @@ export const handlers = [
     )
   }),
 
+  // GET /api/auth/get-session (Better Auth)
+  http.get('/api/auth/get-session', ({ cookies }) => {
+    // Mock better-auth session endpoint
+    const hasSession = cookies['better-auth.session_token'] === 'test-session'
+    if (hasSession) {
+      return HttpResponse.json({
+        user: {
+          id: 'test-user-id',
+          email: 'admin@krater.local',
+          name: 'Admin User',
+          emailVerified: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        session: {
+          id: 'test-session-id',
+          userId: 'test-user-id',
+          token: 'test-session',
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      })
+    }
+    return HttpResponse.json({ user: null, session: null })
+  }),
+
+  // POST /api/auth/sign-in/email (Better Auth)
+  http.post('/api/auth/sign-in/email', async ({ request }) => {
+    const body = await request.json()
+    if (body.email === 'admin@krater.local' && body.password === 'admin123') {
+      return HttpResponse.json(
+        {
+          user: {
+            id: 'test-user-id',
+            email: 'admin@krater.local',
+            name: 'Admin User',
+            emailVerified: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          session: {
+            id: 'test-session-id',
+            userId: 'test-user-id',
+            token: 'test-session',
+            expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        },
+        {
+          headers: {
+            'Set-Cookie': 'better-auth.session_token=test-session; Path=/; HttpOnly',
+          },
+        }
+      )
+    }
+    return HttpResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+  }),
+
+  // POST /api/auth/sign-out (Better Auth)
+  http.post('/api/auth/sign-out', () => {
+    return HttpResponse.json(
+      { success: true },
+      {
+        headers: {
+          'Set-Cookie': 'better-auth.session_token=; Path=/; Max-Age=0',
+        },
+      }
+    )
+  }),
+
   // GET /api/health
   http.get('/api/health', () => {
     return HttpResponse.json({

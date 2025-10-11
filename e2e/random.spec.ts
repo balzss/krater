@@ -22,7 +22,10 @@ test.describe('Random Page', () => {
     const initialTitle = await initialTile.textContent()
 
     // Click roll button
-    const rollButton = page.locator('button').filter({ hasText: /roll|dice/i }).first()
+    const rollButton = page
+      .locator('button')
+      .filter({ hasText: /roll|dice/i })
+      .first()
     await rollButton.click()
 
     // Wait for new release
@@ -48,7 +51,10 @@ test.describe('Random Page', () => {
     await expect(undoButton).toBeDisabled()
 
     // Click roll button
-    const rollButton = page.locator('button').filter({ hasText: /roll|dice/i }).first()
+    const rollButton = page
+      .locator('button')
+      .filter({ hasText: /roll|dice/i })
+      .first()
     await rollButton.click()
 
     // Wait for roll to complete
@@ -66,7 +72,10 @@ test.describe('Random Page', () => {
     const initialTitle = await page.locator('[data-testid="music-tile"]').textContent()
 
     // Click roll button
-    const rollButton = page.locator('button').filter({ hasText: /roll|dice/i }).first()
+    const rollButton = page
+      .locator('button')
+      .filter({ hasText: /roll|dice/i })
+      .first()
     await rollButton.click()
     await page.waitForTimeout(200)
 
@@ -92,7 +101,10 @@ test.describe('Random Page', () => {
     const librarySize = data.releases.length
 
     // Roll through all releases plus one to test wrap-around
-    const rollButton = page.locator('button').filter({ hasText: /roll|dice/i }).first()
+    const rollButton = page
+      .locator('button')
+      .filter({ hasText: /roll|dice/i })
+      .first()
 
     for (let i = 0; i < librarySize + 1; i++) {
       await rollButton.click()

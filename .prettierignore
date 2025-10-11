@@ -1,1 +1,83 @@
-src/components/ui
+# Dependencies
+node_modules
+
+# Build output
+build
+.next
+out
+dist
+
+# Environment files
+.env
+.env*.local
+
+# Config files
+.prettierrc.js
+tsconfig.json
+next.config.ts
+tailwind.config.ts
+vitest.config.ts
+.prettierignore
+.gitignore
+
+# Git and CI/CD
+.git
+.github
+.husky
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Chrome extension
+chrome-extension
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+
+# Lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Markdown and documentation
+*.md
+
+# Data files
+public/data
+public/covers
+public/*.png
+public/*.jpg
+public/*.jpeg
+public/*.gif
+public/*.svg
+public/*.ico
+public/*.webp
+
+# E2E test fixtures
+e2e/fixtures
+
+# Shell scripts
+*.sh
+
+# CSS (handled by Tailwind)
+*.css
+
+# JSON and YAML (keep as-is)
+*.json
+*.yaml
+*.yml
+
+# HTML
+*.html
+
+# Other
+*.log
+coverage
+.turbo
+LICENSE

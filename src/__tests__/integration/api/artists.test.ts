@@ -7,6 +7,14 @@ import type { Artist } from '@/lib/data'
 
 vi.mock('@/lib/server')
 
+// Mock auth helpers
+vi.mock('@/lib/auth-helpers', () => ({
+  requireAuth: vi.fn().mockResolvedValue({
+    session: { user: { id: 'test-user' } },
+    response: null,
+  }),
+}))
+
 describe('GET /api/artists', () => {
   beforeEach(() => {
     vi.clearAllMocks()

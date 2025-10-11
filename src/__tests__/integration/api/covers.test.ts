@@ -6,6 +6,14 @@ vi.mock('@/lib/server', () => ({
   deleteCoverFile: vi.fn(),
 }))
 
+// Mock auth helpers
+vi.mock('@/lib/auth-helpers', () => ({
+  requireAuth: vi.fn().mockResolvedValue({
+    session: { user: { id: 'test-user' } },
+    response: null,
+  }),
+}))
+
 describe('DELETE /api/covers', () => {
   beforeEach(() => {
     vi.clearAllMocks()

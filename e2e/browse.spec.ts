@@ -45,7 +45,11 @@ test.describe('Browse Page', () => {
     await expect(searchInput).toHaveValue('test')
 
     // Click clear button (X icon button)
-    await page.locator('button').filter({ has: page.locator('svg') }).first().click()
+    await page
+      .locator('button')
+      .filter({ has: page.locator('svg') })
+      .first()
+      .click()
 
     // Verify search is cleared
     await expect(searchInput).toHaveValue('')

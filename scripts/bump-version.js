@@ -13,8 +13,10 @@ import readline from 'readline'
 const args = process.argv.slice(2)
 const skipLint = args.includes('--no-lint')
 const skipPrompt = args.includes('--no-prompt')
-const forcedBumpType = args.find(arg => ['major', 'minor', 'patch', 'skip'].includes(arg))
-const commitMsg = args.find(arg => !arg.startsWith('--') && !['major', 'minor', 'patch', 'skip'].includes(arg))
+const forcedBumpType = args.find((arg) => ['major', 'minor', 'patch', 'skip'].includes(arg))
+const commitMsg = args.find(
+  (arg) => !arg.startsWith('--') && !['major', 'minor', 'patch', 'skip'].includes(arg)
+)
 
 // Load configuration from package.json
 let config = { lintBeforeBump: true, interactive: true, autoSkipInCI: true }
@@ -59,7 +61,7 @@ function runLint() {
     // Run eslint on staged files only
     execSync(`npx eslint --max-warnings=0 ${stagedFiles.split('\n').join(' ')}`, {
       stdio: 'inherit',
-      shell: true
+      shell: true,
     })
     return true
   } catch (error) {
@@ -103,7 +105,7 @@ function parseVersion(version) {
  */
 function bumpVersion(version, bumpType) {
   const { major, minor, patch } = parseVersion(version)
-  
+
   switch (bumpType) {
     case 'major':
       return `${major + 1}.0.0`
@@ -123,7 +125,10 @@ function bumpVersion(version, bumpType) {
 function getStagedFiles() {
   try {
     const output = execSync('git diff --cached --name-only', { encoding: 'utf8' })
-    return output.trim().split('\n').filter(f => f)
+    return output
+      .trim()
+      .split('\n')
+      .filter((f) => f)
   } catch (err) {
     console.error('❌ Failed to get staged files. Are you in a git repository?')
     console.error('   Error:', err.message)
@@ -141,7 +146,7 @@ function isNewFile(file) {
     const output = execSync('git diff --cached --name-status', { encoding: 'utf8' })
     const lines = output.split('\n')
     // Check if any line starts with 'A' (Added) followed by tab and the file path
-    return lines.some(line => {
+    return lines.some((line) => {
       const [status, path] = line.split('\t')
       return status === 'A' && path === file
     })
@@ -171,18 +176,10 @@ function suggestBumpType(commitMsg, files) {
   }
 
   // Skip version bump for certain file types
-  const skipPaths = config.skipPaths || [
-    'README.md',
-    'docs/',
-    '.test.',
-    '.spec.',
-    '__tests__/'
-  ]
+  const skipPaths = config.skipPaths || ['README.md', 'docs/', '.test.', '.spec.', '__tests__/']
 
   // Separate meaningful files from documentation/test files
-  const meaningfulFiles = files.filter(f =>
-    !skipPaths.some(skip => f.includes(skip))
-  )
+  const meaningfulFiles = files.filter((f) => !skipPaths.some((skip) => f.includes(skip)))
 
   // If only docs/tests changed, suggest skip
   if (meaningfulFiles.length === 0 && files.length > 0) {
@@ -190,10 +187,10 @@ function suggestBumpType(commitMsg, files) {
   }
 
   // Analyze only meaningful files
-  const hasApiChanges = meaningfulFiles.some(f => f.includes('api/') || f.includes('routes/'))
-  const hasNewComponents = meaningfulFiles.some(f => f.includes('components/') && isNewFile(f))
-  const hasNewFeatures = meaningfulFiles.some(f =>
-    (f.includes('app/') || f.includes('pages/')) && isNewFile(f)
+  const hasApiChanges = meaningfulFiles.some((f) => f.includes('api/') || f.includes('routes/'))
+  const hasNewComponents = meaningfulFiles.some((f) => f.includes('components/') && isNewFile(f))
+  const hasNewFeatures = meaningfulFiles.some(
+    (f) => (f.includes('app/') || f.includes('pages/')) && isNewFile(f)
   )
 
   if (hasNewComponents || hasNewFeatures) return 'minor'
@@ -210,17 +207,16 @@ function suggestBumpType(commitMsg, files) {
 function promptUser(suggestion) {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
   })
 
   return new Promise((resolve) => {
-    const suggestionText = suggestion === 'skip' 
-      ? 'skip (documentation/test changes only)'
-      : suggestion
-    
+    const suggestionText =
+      suggestion === 'skip' ? 'skip (documentation/test changes only)' : suggestion
+
     rl.question(
       `\n📦 Suggested version bump: ${suggestionText}\n` +
-      `   Select bump type (major/minor/patch/skip) [${suggestion}]: `,
+        `   Select bump type (major/minor/patch/skip) [${suggestion}]: `,
       (answer) => {
         rl.close()
         const choice = answer.trim().toLowerCase() || suggestion
@@ -375,7 +371,7 @@ async function main() {
 }
 
 // Run main function
-main().catch(err => {
+main().catch((err) => {
   console.error('❌ Unexpected error:', err.message)
   process.exit(1)
 })

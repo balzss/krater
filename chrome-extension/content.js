@@ -53,7 +53,7 @@ async function addRelease(apiUrl, artistIds, update = false) {
   // Extract all media links
   function extractMediaLinks() {
     const media = {}
-    
+
     // RYM uses links with class ui_media_link_btn_[service]
     const spotifyLink = document.querySelector('a.ui_media_link_btn_spotify')?.href
     const appleMusicLink = document.querySelector('a.ui_media_link_btn_applemusic')?.href
@@ -62,7 +62,7 @@ async function addRelease(apiUrl, artistIds, update = false) {
     const soundcloudLink = document.querySelector('a.ui_media_link_btn_soundcloud')?.href
     const tidalLink = document.querySelector('a.ui_media_link_btn_tidal')?.href
     const deezerLink = document.querySelector('a.ui_media_link_btn_deezer')?.href
-    
+
     if (spotifyLink) media.spotify = spotifyLink
     if (appleMusicLink) media.appleMusic = appleMusicLink
     if (youtubeLink) media.youtube = youtubeLink
@@ -70,7 +70,7 @@ async function addRelease(apiUrl, artistIds, update = false) {
     if (soundcloudLink) media.soundcloud = soundcloudLink
     if (tidalLink) media.tidal = tidalLink
     if (deezerLink) media.deezer = deezerLink
-    
+
     return media
   }
 
