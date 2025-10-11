@@ -45,7 +45,7 @@ export type MediaPlayer = keyof typeof MEDIA_PLAYERS
 
 export const CONFIG = {
   images: {
-    priorityLoadCount: 8,
+    priorityLoadCount: 16, // Increased from 8 to cover ~1.5 viewports
   },
   auth: {
     cookieMaxAge: 7 * 24 * 60 * 60, // 7 days in seconds
