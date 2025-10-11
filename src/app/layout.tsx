@@ -4,6 +4,7 @@ import './globals.css'
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
 import '@/styles/json-editor-custom.css'
 import { BASE_PATH } from '@/lib/constants'
+import { LayoutProvider } from '@/contexts/layout-context'
 
 export const metadata: Metadata = {
   icons: {
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased min-h-screen flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          {children}
+          <LayoutProvider>{children}</LayoutProvider>
         </ThemeProvider>
       </body>
     </html>
