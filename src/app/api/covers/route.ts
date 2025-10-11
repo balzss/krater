@@ -3,6 +3,9 @@ import { deleteCoverFile } from '@/lib/server'
 import { errorResponse, successResponse } from '@/lib/server/response-helpers'
 import { requireAuth } from '@/lib/auth-helpers'
 
+// Tell Next.js this route can't be statically analyzed
+export const dynamic = 'force-dynamic'
+
 export async function DELETE(req: NextRequest) {
   // Check authentication
   const { response: authResponse } = await requireAuth(req)
