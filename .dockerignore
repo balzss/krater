@@ -7,5 +7,17 @@ node_modules
 npm-debug.log
 README.md
 .next
+build
 .git
+.github
+.husky
+.vscode
+.idea
 *.log
+coverage
+.turbo
+e2e
+chrome-extension
+*.md
+!package.json
+!package-lock.json
