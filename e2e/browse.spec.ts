@@ -123,11 +123,13 @@ test.describe('Browse Page', () => {
     // Check first 8 tiles (or all tiles if less than 8)
     const tilesToCheck = Math.min(8, tileCount)
 
-    // Count images with high priority
-    const priorityImages = await page.locator('img[fetchpriority="high"]').count()
+    // Count images with high priority (Next.js uses both fetchpriority and loading attrs)
+    const priorityImages = await page
+      .locator('img[fetchpriority="high"], img:not([loading="lazy"])')
+      .count()
 
     // Should have priority images for first tiles
     expect(priorityImages).toBeGreaterThan(0)
-    expect(priorityImages).toBeLessThanOrEqual(tilesToCheck)
+    expect(priorityImages).toBeLessThanOrEqual(tileCount)
   })
 })

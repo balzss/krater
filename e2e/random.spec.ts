@@ -22,10 +22,7 @@ test.describe('Random Page', () => {
     const initialTitle = await initialTile.textContent()
 
     // Click roll button
-    const rollButton = page
-      .locator('button')
-      .filter({ hasText: /roll|dice/i })
-      .first()
+    const rollButton = page.getByRole('button', { name: /roll/i })
     await rollButton.click()
 
     // Wait for new release
@@ -45,16 +42,13 @@ test.describe('Random Page', () => {
     await page.waitForSelector('[data-testid="music-tile"]', { timeout: 10000 })
 
     // Find undo button
-    const undoButton = page.locator('button').filter({ hasText: /undo/i }).first()
+    const undoButton = page.getByRole('button', { name: /undo/i })
 
     // Initially should be disabled
     await expect(undoButton).toBeDisabled()
 
     // Click roll button
-    const rollButton = page
-      .locator('button')
-      .filter({ hasText: /roll|dice/i })
-      .first()
+    const rollButton = page.getByRole('button', { name: /roll/i })
     await rollButton.click()
 
     // Wait for roll to complete
@@ -72,15 +66,12 @@ test.describe('Random Page', () => {
     const initialTitle = await page.locator('[data-testid="music-tile"]').textContent()
 
     // Click roll button
-    const rollButton = page
-      .locator('button')
-      .filter({ hasText: /roll|dice/i })
-      .first()
+    const rollButton = page.getByRole('button', { name: /roll/i })
     await rollButton.click()
     await page.waitForTimeout(200)
 
     // Click undo button
-    const undoButton = page.locator('button').filter({ hasText: /undo/i }).first()
+    const undoButton = page.getByRole('button', { name: /undo/i })
     await undoButton.click()
     await page.waitForTimeout(200)
 
@@ -101,10 +92,7 @@ test.describe('Random Page', () => {
     const librarySize = data.releases.length
 
     // Roll through all releases plus one to test wrap-around
-    const rollButton = page
-      .locator('button')
-      .filter({ hasText: /roll|dice/i })
-      .first()
+    const rollButton = page.getByRole('button', { name: /roll/i })
 
     for (let i = 0; i < librarySize + 1; i++) {
       await rollButton.click()

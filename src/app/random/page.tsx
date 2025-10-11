@@ -59,8 +59,9 @@ export default function RandomPage() {
             icon={Undo2}
             disabled={chosenReleaseIndex === 0}
             size={48}
+            aria-label="Undo"
           />
-          <ActionButton onClick={handleRollButton} icon={Dices} size={48} />
+          <ActionButton onClick={handleRollButton} icon={Dices} size={48} aria-label="Roll dice" />
         </div>
       </div>
     </div>
