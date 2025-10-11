@@ -5,7 +5,8 @@ COPY package*.json ./
 # Set NODE_ENV to production for the final image
 ENV NODE_ENV=production
 # Install ONLY production dependencies for the final, lean image
-RUN npm ci --omit=dev && npm cache clean --force
+# Skip scripts (including husky prepare) during Docker build
+RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 
 
 # ---- Builder Stage (for building the app) ----
@@ -15,8 +16,9 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 # Install ALL dependencies (including devDependencies) needed for the build
+# Skip scripts (including husky prepare) during Docker build
 # Using npm ci ensures we install based on the lock file
-RUN npm ci && npm cache clean --force
+RUN npm ci --ignore-scripts && npm cache clean --force
 # Copy the rest of the application code
 COPY . .
 # Set build-time environment variables if needed (uncomment and pass via --build-arg if required)
