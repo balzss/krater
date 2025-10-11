@@ -6,7 +6,7 @@ import { ActionButton, MenuItem } from '@/components'
 import { useLibraryData } from '@/hooks'
 
 export function MainPageContent() {
-  const appVersion = process.env.APP_VERSION
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION
   const { releases, artists, isLoading } = useLibraryData({ enabled: true })
 
   if (isLoading) {

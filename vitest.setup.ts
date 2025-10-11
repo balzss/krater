@@ -27,4 +27,4 @@ vi.mock('next/navigation', () => ({
 
 // Mock environment variables
 process.env.NEXT_PUBLIC_BASE_PATH = ''
-process.env.APP_VERSION = '0.1.0-test'
+process.env.NEXT_PUBLIC_APP_VERSION = '0.1.0-test'
