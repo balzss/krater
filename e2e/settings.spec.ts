@@ -45,68 +45,46 @@ test.describe('Settings Page', () => {
     expect(newClass).not.toBe(initialClass)
   })
 
-  test('should show login prompt when clicking connect server', async ({ page }) => {
-    // Set up dialog handler
-    let dialogShown = false
-    page.on('dialog', async (dialog) => {
-      dialogShown = true
-      expect(dialog.type()).toBe('prompt')
-      expect(dialog.message().toLowerCase()).toContain('admin')
-      await dialog.dismiss()
-    })
+  test('should show login form when clicking admin login', async ({ page }) => {
+    // Click Admin Login button to expand form
+    await page.locator('text=/Admin Login/i').click()
 
-    // Click connect server button
-    await page.locator('text=/Connect.*server/i').click()
+    // Wait for form to appear
+    await page.waitForTimeout(300)
 
-    // Wait for dialog to appear
-    await page.waitForTimeout(500)
-
-    // Verify dialog was shown
-    expect(dialogShown).toBe(true)
+    // Verify form fields are visible
+    await expect(page.locator('input[type="email"]')).toBeVisible()
+    await expect(page.locator('input[type="password"]')).toBeVisible()
+    await expect(page.locator('button[type="submit"]')).toBeVisible()
   })
 
-  test('should show health check after admin login', async ({ page }) => {
-    // Set up dialog handler to accept with secret
-    page.on('dialog', async (dialog) => {
-      await dialog.accept('test-secret')
-    })
+  test('should toggle admin login form', async ({ page }) => {
+    // Click Admin Login to show form
+    await page.locator('text=/Admin Login/i').click()
+    await page.waitForTimeout(200)
 
-    // Click connect server
-    await page.locator('text=/Connect.*server/i').click()
+    // Verify form is visible
+    await expect(page.locator('input[type="email"]')).toBeVisible()
 
-    // Wait for potential health check to appear
-    await page.waitForTimeout(1000)
+    // Click "Hide Admin Login" to hide form
+    await page.locator('text=/Hide Admin Login/i').click()
+    await page.waitForTimeout(200)
 
-    // Check if health check section appears (depends on successful login)
-    // This test may need adjustment based on actual auth implementation
-    const healthCheck = page.locator('text=/health.*check/i')
-    const isVisible = await healthCheck.isVisible().catch(() => false)
-
-    // Note: This test may fail if authentication isn't set up in test environment
-    // That's expected behavior
+    // Verify form is hidden
+    await expect(page.locator('input[type="email"]')).not.toBeVisible()
   })
 
-  test('should display coming soon alert for Last.fm', async ({ page }) => {
-    // Set up dialog handler
-    let dialogShown = false
-    page.on('dialog', async (dialog) => {
-      dialogShown = true
-      expect(dialog.type()).toBe('alert')
-      expect(dialog.message().toLowerCase()).toContain('coming soon')
-      await dialog.accept()
-    })
+  test('should show Last.fm integration section', async ({ page }) => {
+    // Look for Last.fm integration section
+    const lastfmSection = page.locator('text=/Last\\.fm Integration/i')
+    await expect(lastfmSection).toBeVisible()
 
-    // Click Last.fm button
-    const lastfmButton = page.locator('text=/Last\\.fm/i')
-    if (await lastfmButton.isVisible()) {
-      await lastfmButton.click()
+    // Should have a connect button when not connected
+    const connectButton = page.locator('text=/Connect Last\\.fm/i')
+    const isVisible = await connectButton.isVisible().catch(() => false)
 
-      // Wait for dialog
-      await page.waitForTimeout(500)
-
-      // Verify dialog was shown
-      expect(dialogShown).toBe(true)
-    }
+    // Button should be visible (assuming user not connected in tests)
+    expect(isVisible).toBe(true)
   })
 
   test('should navigate home when home button clicked', async ({ page }) => {
@@ -134,7 +112,7 @@ test.describe('Settings Page', () => {
 
     test('should show admin-only features', async ({ page }) => {
       // Check for admin-specific elements
-      // These may include: import, edit, disconnect buttons
+      // These may include: import, edit, logout buttons
 
       // Look for common admin features
       const hasImport = await page
@@ -145,13 +123,13 @@ test.describe('Settings Page', () => {
         .locator('text=/Edit.*library/i')
         .isVisible()
         .catch(() => false)
-      const hasDisconnect = await page
-        .locator('text=/Disconnect.*server/i')
+      const hasLogout = await page
+        .locator('text=/Logout/i')
         .isVisible()
         .catch(() => false)
 
       // At least one admin feature should be visible
-      expect(hasImport || hasEdit || hasDisconnect).toBe(true)
+      expect(hasImport || hasEdit || hasLogout).toBe(true)
     })
 
     test('should show health check section', async ({ page }) => {
