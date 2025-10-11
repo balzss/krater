@@ -19,6 +19,8 @@ COPY package*.json ./
 # Skip scripts (including husky prepare) during Docker build
 # Using npm ci ensures we install based on the lock file
 RUN npm ci --ignore-scripts && npm cache clean --force
+# Rebuild better-sqlite3 to compile native bindings (needed for better-auth)
+RUN npm rebuild better-sqlite3
 # Copy the rest of the application code
 COPY . .
 # Set build-time environment variables if needed (uncomment and pass via --build-arg if required)
