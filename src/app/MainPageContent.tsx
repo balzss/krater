@@ -1,7 +1,7 @@
 'use client'
 
 import { LayoutGrid, User, Dices, Settings } from 'lucide-react'
-import { SiGithub } from '@icons-pack/react-simple-icons'
+import { SiGithub, SiLastdotfm } from '@icons-pack/react-simple-icons'
 import { ActionButton, MenuItem } from '@/components'
 import { useLibraryData } from '@/hooks'
 
@@ -28,6 +28,10 @@ export function MainPageContent() {
 
         <MenuItem startIcon={User} href="/artists">
           View {artists?.length} artists
+        </MenuItem>
+
+        <MenuItem startIcon={SiLastdotfm} href="/stats">
+          Listening stats
         </MenuItem>
 
         <MenuItem startIcon={Dices} href="/random">
