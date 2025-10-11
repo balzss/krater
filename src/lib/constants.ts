@@ -2,6 +2,7 @@ export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''
 export const API_BASE_URL = `${BASE_PATH}/api`
 export const COVERS_PATH = `${BASE_PATH}/covers`
 export const DATA_PATH = `${BASE_PATH}/data`
+export const IS_STATIC_EXPORT = process.env.NEXT_OUTPUT_MODE === 'export'
 
 export const MEDIA_PLAYERS = {
   spotify: {

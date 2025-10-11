@@ -20,7 +20,7 @@ import { MenuItem, PageHeader, ActionButton, JsonEditorModal } from '@/component
 import { useTheme } from 'next-themes'
 import { useLibraryData, useAuth, useHealthCheck, useLayout, useMediaPreference } from '@/hooks'
 import { useLastFmConnection } from '@/hooks/use-lastfm'
-import { MEDIA_PLAYERS, MediaPlayer } from '@/lib/constants'
+import { MEDIA_PLAYERS, MediaPlayer, IS_STATIC_EXPORT } from '@/lib/constants'
 import { SiLastdotfm } from '@icons-pack/react-simple-icons'
 import { API_BASE_URL } from '@/lib/constants'
 import { signIn } from '@/lib/auth-client'
@@ -73,6 +73,7 @@ export default function SettingsPage() {
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [showAdminForm, setShowAdminForm] = useState(false)
   const { theme, setTheme } = useTheme()
   const { getLibraryData, setLibraryData } = useLibraryData()
   const { isAdmin, logout, isLoading } = useAuth()
@@ -254,75 +255,86 @@ export default function SettingsPage() {
               Logout
             </MenuItem>
           </>
-        ) : (
+        ) : IS_STATIC_EXPORT ? (
           <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
-            <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
-              <LogIn size={20} />
-              Admin Login
-            </h2>
-            <p className="text-sm text-(--foreground) opacity-70 mb-4">
-              Sign in to access library management features.
+            <p className="text-sm text-(--foreground) opacity-70">
+              Admin login is not available in static export mode. Please use the development or
+              standard build to access admin features.
             </p>
-
-            <form onSubmit={handleLogin} className="flex flex-col gap-3">
-              {loginError && (
-                <div className="p-3 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 rounded border border-rose-200 dark:border-rose-800 text-sm">
-                  {loginError}
-                </div>
-              )}
-
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium mb-1 text-(--foreground)"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                  disabled={isLoggingIn}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium mb-1 text-(--foreground)"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                  disabled={isLoggingIn}
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoggingIn}
-                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-              >
-                {isLoggingIn ? 'Signing in...' : 'Sign In'}
-              </button>
-
-              <p className="text-xs text-(--foreground) opacity-60">
-                Default credentials: admin@krater.local /{' '}
-                {process.env.NODE_ENV === 'development' ? 'admin123' : '[set via env]'}
-              </p>
-            </form>
           </div>
+        ) : (
+          <>
+            <MenuItem startIcon={LogIn} onClick={() => setShowAdminForm(!showAdminForm)}>
+              {showAdminForm ? 'Hide Admin Login' : 'Admin Login'}
+            </MenuItem>
+
+            {showAdminForm && (
+              <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
+                <p className="text-sm text-(--foreground) opacity-70 mb-4">
+                  Sign in to access library management features.
+                </p>
+
+                <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                  {loginError && (
+                    <div className="p-3 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 rounded border border-rose-200 dark:border-rose-800 text-sm">
+                      {loginError}
+                    </div>
+                  )}
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium mb-1 text-(--foreground)"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      disabled={isLoggingIn}
+                      autoComplete="email"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium mb-1 text-(--foreground)"
+                    >
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      disabled={isLoggingIn}
+                      autoComplete="current-password"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoggingIn}
+                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                  >
+                    {isLoggingIn ? 'Signing in...' : 'Sign In'}
+                  </button>
+
+                  <p className="text-xs text-(--foreground) opacity-60">
+                    Default credentials: admin@krater.local /{' '}
+                    {process.env.NODE_ENV === 'development' ? 'admin123' : '[set via env]'}
+                  </p>
+                </form>
+              </div>
+            )}
+          </>
         )}
         <MenuItem startIcon={layout === 'compact' ? LayoutGrid : Grid3x3} onClick={toggleLayout}>
           {layout === 'compact' ? 'Switch to standard view' : 'Switch to compact view'}
@@ -413,48 +425,50 @@ export default function SettingsPage() {
           </div>
         )}
 
-        <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
-          <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
-            <SiLastdotfm size={20} />
-            Last.fm Integration
-          </h2>
-          <p className="text-sm text-(--foreground) opacity-70 mb-4">
-            Connect your Last.fm account to view listening statistics and get album suggestions.
-          </p>
+        {!IS_STATIC_EXPORT && (
+          <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
+            <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
+              <SiLastdotfm size={20} />
+              Last.fm Integration
+            </h2>
+            <p className="text-sm text-(--foreground) opacity-70 mb-4">
+              Connect your Last.fm account to view listening statistics and get album suggestions.
+            </p>
 
-          {isLastFmConnected && lastFmUser ? (
-            <div className="space-y-3">
-              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
-                <p className="text-sm font-medium text-green-900 dark:text-green-100">
-                  Connected as: <span className="font-bold">{lastFmUser.name}</span>
-                </p>
-                {lastFmUser.realname && (
-                  <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-                    {lastFmUser.realname}
+            {isLastFmConnected && lastFmUser ? (
+              <div className="space-y-3">
+                <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
+                  <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                    Connected as: <span className="font-bold">{lastFmUser.name}</span>
                   </p>
-                )}
-                <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-                  Total scrobbles: {parseInt(lastFmUser.playcount).toLocaleString()}
-                </p>
-              </div>
+                  {lastFmUser.realname && (
+                    <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                      {lastFmUser.realname}
+                    </p>
+                  )}
+                  <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                    Total scrobbles: {parseInt(lastFmUser.playcount).toLocaleString()}
+                  </p>
+                </div>
 
+                <button
+                  onClick={disconnectLastFm}
+                  className="w-full px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 transition-colors font-medium"
+                >
+                  Disconnect Last.fm
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={disconnectLastFm}
-                className="w-full px-4 py-2 bg-rose-500 text-white rounded-md hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 transition-colors font-medium"
+                onClick={connectLastFm}
+                className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium flex items-center justify-center gap-2"
               >
-                Disconnect Last.fm
+                <SiLastdotfm size={16} />
+                Connect Last.fm Account
               </button>
-            </div>
-          ) : (
-            <button
-              onClick={connectLastFm}
-              className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-medium flex items-center justify-center gap-2"
-            >
-              <SiLastdotfm size={16} />
-              Connect Last.fm Account
-            </button>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* JSON Editor Modal */}

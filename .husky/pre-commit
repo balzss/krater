@@ -1,14 +1,11 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Run lint check on staged files
-echo "🔍 Running lint check..."
-npx eslint --max-warnings=0 $(git diff --cached --name-only --diff-filter=ACM | grep -E "\.(js|jsx|ts|tsx)$" | tr '\n' ' ')
+# Auto-format staged files with Prettier
+echo "🎨 Running Prettier auto-format..."
+npm run lint:fix
 if [ $? -ne 0 ]; then
-  echo "❌ Lint check failed. Please fix errors before committing."
+  echo "❌ Prettier formatting failed."
   exit 1
 fi
-echo "✅ Lint check passed!"
+echo "✅ Prettier formatting complete!"
 
 # Run version bump script before commit
 node scripts/bump-version.js

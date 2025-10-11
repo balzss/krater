@@ -10,9 +10,6 @@
     <a href="https://github.com/balzss/krater/actions/workflows/test.yml">
         <img src="https://github.com/balzss/krater/actions/workflows/test.yml/badge.svg" alt="Tests">
     </a>
-    <a href="https://codecov.io/gh/balzss/krater">
-        <img src="https://codecov.io/gh/balzss/krater/branch/main/graph/badge.svg" alt="Coverage">
-    </a>
 </p>
 
 Toolset for creating and updating a static website for your music collection, designed to mimic the experience of browsing a physical vinyl collection

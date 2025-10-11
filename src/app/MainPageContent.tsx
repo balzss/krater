@@ -4,10 +4,13 @@ import { LayoutGrid, User, Dices, Settings } from 'lucide-react'
 import { SiGithub, SiLastdotfm } from '@icons-pack/react-simple-icons'
 import { ActionButton, MenuItem } from '@/components'
 import { useLibraryData } from '@/hooks'
+import { useLastFmConnection } from '@/hooks/use-lastfm'
+import { IS_STATIC_EXPORT } from '@/lib/constants'
 
 export function MainPageContent() {
   const appVersion = process.env.NEXT_PUBLIC_APP_VERSION
   const { releases, artists, isLoading } = useLibraryData({ enabled: true })
+  const { isConnected } = useLastFmConnection()
 
   if (isLoading) {
     return
@@ -22,16 +25,18 @@ export function MainPageContent() {
           <ActionButton href="/settings" icon={Settings} />
         </div>
 
-        <MenuItem startIcon={LayoutGrid} href="/browse">
-          Browse {releases?.length} releases
-        </MenuItem>
+        {!IS_STATIC_EXPORT && isConnected && (
+          <MenuItem startIcon={SiLastdotfm} href="/stats">
+            Listening stats
+          </MenuItem>
+        )}
 
         <MenuItem startIcon={User} href="/artists">
           View {artists?.length} artists
         </MenuItem>
 
-        <MenuItem startIcon={SiLastdotfm} href="/stats">
-          Listening stats
+        <MenuItem startIcon={LayoutGrid} href="/browse">
+          Browse {releases?.length} releases
         </MenuItem>
 
         <MenuItem startIcon={Dices} href="/random">
