@@ -1,33 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { CONFIG } from '@/lib/constants'
 
-async function verifyAdminSession(req: NextRequest): Promise<boolean> {
-  const adminSessionCookie = req.cookies.get(CONFIG.auth.cookieName)
-  return adminSessionCookie?.value === 'true'
-}
-
-export async function middleware(req: NextRequest) {
-  const isDevelopment = process.env.NODE_ENV === 'development'
-
-  if (!isDevelopment) {
-    try {
-      const isAdmin = await verifyAdminSession(req)
-
-      if (!isAdmin) {
-        return NextResponse.json(
-          { message: 'Unauthorized: Admin access required.' },
-          { status: 401 }
-        )
-      }
-    } catch (error) {
-      console.error('Error during authentication check in middleware:', error)
-      return NextResponse.json({ message: 'Authentication error.' }, { status: 500 })
-    }
-  }
-
+/**
+ * Middleware for CORS and basic request handling
+ *
+ * Note: Authentication is handled in individual API routes, not middleware.
+ * This is because Better Auth with SQLite requires Node.js runtime,
+ * but Next.js middleware must run in Edge runtime.
+ */
+export async function middleware(_req: NextRequest) {
+  // Allow all requests to pass through
+  // Authentication will be checked in each protected API route
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/api/health'],
+  matcher: ['/api/:path*'],
 }

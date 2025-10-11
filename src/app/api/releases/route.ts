@@ -9,6 +9,7 @@ import {
   checkDuplicateRelease,
 } from '@/lib/server/form-helpers'
 import { errorResponse, successResponse } from '@/lib/server/response-helpers'
+import { requireAuth } from '@/lib/auth-helpers'
 import type { Release } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
@@ -29,6 +30,10 @@ export async function GET(_req: NextRequest) {
 
 // POST: Add a new release
 export async function POST(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const releasesData = await getReleases()
     await ensureDirectoryExists(coversDir)
@@ -101,6 +106,10 @@ export async function POST(req: NextRequest) {
 
 // PUT: Update an existing release, optionally updating/replacing the cover image
 export async function PUT(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const releasesData = await getReleases()
     await ensureDirectoryExists(coversDir)
@@ -189,6 +198,10 @@ export async function PUT(req: NextRequest) {
 
 // DELETE: Delete a release and its associated cover image
 export async function DELETE(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const { searchParams } = new URL(req.url)
     const rymIdToDelete = searchParams.get('rymId')

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getArtists, updateArtists } from '@/lib/server'
 import { errorResponse, successResponse } from '@/lib/server/response-helpers'
+import { requireAuth } from '@/lib/auth-helpers'
 import type { Artist } from '@/lib/data'
 
 interface PutResponsePayload {
@@ -24,6 +25,10 @@ export async function GET(_req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const newArtistsData: Artist | Artist[] = await req.json()
     const artistsToAdd = Array.isArray(newArtistsData) ? newArtistsData : [newArtistsData]
@@ -98,6 +103,10 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const updateData: Artist | Artist[] = await req.json()
     const artistsToUpdate = Array.isArray(updateData) ? updateData : [updateData]
@@ -168,6 +177,10 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const { searchParams } = new URL(req.url)
     const rymIdToDelete = searchParams.get('rymId')

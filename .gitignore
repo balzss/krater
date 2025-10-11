@@ -45,3 +45,8 @@ coverage/
 .playwright-mcp/
 
 .claude/settings.local.json
+
+# Better Auth database
+krater.db
+krater.db-shm
+krater.db-wal

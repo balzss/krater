@@ -1,11 +1,17 @@
 import fs from 'fs'
 import path from 'path'
+import { NextRequest } from 'next/server'
 import { getLibraryData, type HealthIssues } from '@/lib/server'
 import { errorResponse, successResponse } from '@/lib/server/response-helpers'
+import { requireAuth } from '@/lib/auth-helpers'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(req)
+  if (authResponse) return authResponse
+
   try {
     const libraryData = await getLibraryData()
     const { releases, artists } = libraryData

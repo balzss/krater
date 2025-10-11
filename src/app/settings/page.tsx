@@ -1,6 +1,6 @@
 'use client'
 
-import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { MouseEvent, useEffect, useRef, useState, FormEvent } from 'react'
 import {
   Check,
   TriangleAlert,
@@ -10,11 +10,11 @@ import {
   FileUp,
   FilePenLine,
   RefreshCcw,
-  Server,
   CloudOff,
   LayoutGrid,
   Grid3x3,
   Music2,
+  LogIn,
 } from 'lucide-react'
 import { MenuItem, PageHeader, ActionButton, JsonEditorModal } from '@/components'
 import { useTheme } from 'next-themes'
@@ -22,6 +22,7 @@ import { useLibraryData, useAuth, useHealthCheck, useLayout, useMediaPreference 
 import { MEDIA_PLAYERS, MediaPlayer } from '@/lib/constants'
 import { SiLastdotfm } from '@icons-pack/react-simple-icons'
 import { API_BASE_URL } from '@/lib/constants'
+import { signIn } from '@/lib/auth-client'
 
 const apiRoot = API_BASE_URL
 
@@ -67,9 +68,13 @@ export default function SettingsPage() {
   const [libraryData, setLibraryDataState] = useState<Awaited<
     ReturnType<typeof getLibraryData>
   > | null>(null)
+  const [email, setEmail] = useState('admin@krater.local')
+  const [password, setPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
   const { theme, setTheme } = useTheme()
   const { getLibraryData, setLibraryData } = useLibraryData()
-  const { isAdmin, login, logout, isLoading } = useAuth()
+  const { isAdmin, logout, isLoading } = useAuth()
   const { healthData, refetchHealthData } = useHealthCheck()
   const { layout, toggleLayout } = useLayout()
   const { preferredPlayer, setPreference } = useMediaPreference()
@@ -176,6 +181,31 @@ export default function SettingsPage() {
     }
   }
 
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoginError('')
+    setIsLoggingIn(true)
+
+    try {
+      const { error: signInError } = await signIn.email({
+        email,
+        password,
+      })
+
+      if (signInError) {
+        setLoginError(signInError.message || 'Failed to sign in')
+      } else {
+        // Force a full page reload to update auth state
+        window.location.reload()
+      }
+    } catch (err) {
+      setLoginError('An unexpected error occurred')
+      console.error('Login error:', err)
+    } finally {
+      setIsLoggingIn(false)
+    }
+  }
+
   if (isLoading) {
     return
   }
@@ -214,19 +244,78 @@ export default function SettingsPage() {
               Edit library
             </MenuItem>
             <MenuItem startIcon={CloudOff} onClick={() => logout()}>
-              Disconnect from server
+              Logout
             </MenuItem>
           </>
         ) : (
-          <MenuItem
-            startIcon={Server}
-            onClick={() => {
-              const adminSecret = prompt('Please enter your admin key') || ''
-              login(adminSecret)
-            }}
-          >
-            Connect server
-          </MenuItem>
+          <div className="w-full p-4 border border-(--border) rounded-lg bg-(--card)">
+            <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
+              <LogIn size={20} />
+              Admin Login
+            </h2>
+            <p className="text-sm text-(--foreground) opacity-70 mb-4">
+              Sign in to access library management features.
+            </p>
+
+            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+              {loginError && (
+                <div className="p-3 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 rounded border border-rose-200 dark:border-rose-800 text-sm">
+                  {loginError}
+                </div>
+              )}
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-1 text-(--foreground)"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  disabled={isLoggingIn}
+                  autoComplete="email"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium mb-1 text-(--foreground)"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 border border-(--border) rounded-md bg-(--background) text-(--foreground) focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                  disabled={isLoggingIn}
+                  autoComplete="current-password"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoggingIn}
+                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              >
+                {isLoggingIn ? 'Signing in...' : 'Sign In'}
+              </button>
+
+              <p className="text-xs text-(--foreground) opacity-60">
+                Default credentials: admin@krater.local /{' '}
+                {process.env.NODE_ENV === 'development' ? 'admin123' : '[set via env]'}
+              </p>
+            </form>
+          </div>
         )}
         <MenuItem startIcon={layout === 'compact' ? LayoutGrid : Grid3x3} onClick={toggleLayout}>
           {layout === 'compact' ? 'Switch to standard view' : 'Switch to compact view'}

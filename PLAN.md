@@ -241,11 +241,27 @@ Add `cursor-pointer` class to both buttons.
 
 ---
 
-## Task 4: Investigate - Self-Hosting with Docker
+## Task 4: Investigate - Self-Hosting with Docker ✅
 
+**Status:** ✅ COMPLETED (Better Auth integration)
 **Priority:** High
 **Complexity:** Complex
-**Files:** Create `Dockerfile`, `docker-compose.yml`, `.dockerignore`, modify `next.config.ts`, `src/middleware.ts`
+**Files:** Created `src/lib/auth.ts`, `src/lib/auth-client.ts`, `src/lib/auth-helpers.ts`, `src/app/api/auth/[...all]/route.ts`, modified `src/app/settings/page.tsx`, `src/app/api/auth/me/route.ts`, `src/hooks/use-auth.ts`
+
+**Completed Components:**
+- ✅ Better Auth with SQLite database integration
+- ✅ Email/password authentication (admin@krater.local)
+- ✅ Session management with cookies
+- ✅ Inline login form in settings page (no separate page needed)
+- ✅ Auth checks on all protected API routes (POST, PUT, DELETE operations)
+- ✅ Client-side auth state management with useAuth hook
+- ✅ Automatic page refresh after login/logout
+- ✅ Database initialization scripts (init-db.ts, create-admin.ts)
+
+**Deferred for Later:**
+- ⏸️ Docker/docker-compose setup (can be added when deploying)
+- ⏸️ Rate limiting implementation
+- ⏸️ Self-hosting documentation
 
 ### Problem
 Project supports local dev (with API) and static export (no API). Need full-stack self-hosted deployment option.

@@ -1,5 +1,7 @@
 import { getLibraryData, setLibraryData } from '@/lib/server'
 import { errorResponse, successResponse } from '@/lib/server/response-helpers'
+import { requireAuth } from '@/lib/auth-helpers'
+import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +18,11 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // Check authentication
+  const { response: authResponse } = await requireAuth(request)
+  if (authResponse) return authResponse
+
   try {
     const receivedData = await request.json()
 
