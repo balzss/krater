@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
+import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
+import '@/styles/json-editor-custom.css'
 import { BASE_PATH } from '@/lib/constants'
 
 export const metadata: Metadata = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { MouseEvent, useEffect, useRef } from 'react'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 import {
   Check,
   TriangleAlert,
@@ -16,7 +16,7 @@ import {
   Grid3x3,
   Music2,
 } from 'lucide-react'
-import { MenuItem, PageHeader, ActionButton } from '@/components'
+import { MenuItem, PageHeader, ActionButton, JsonEditorModal } from '@/components'
 import { useTheme } from 'next-themes'
 import { useLibraryData, useAuth, useHealthCheck, useLayout, useMediaPreference } from '@/hooks'
 import { MEDIA_PLAYERS, MediaPlayer } from '@/lib/constants'
@@ -63,6 +63,8 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
 
 export default function SettingsPage() {
   const importFileInputRef = useRef<HTMLInputElement>(null)
+  const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false)
+  const [libraryData, setLibraryDataState] = useState<Awaited<ReturnType<typeof getLibraryData>> | null>(null)
   const { theme, setTheme } = useTheme()
   const { getLibraryData, setLibraryData } = useLibraryData()
   const { isAdmin, login, logout, isLoading } = useAuth()
@@ -75,6 +77,13 @@ export default function SettingsPage() {
   useEffect(() => {
     document.title = 'Settings | Krater'
   }, [])
+
+  useEffect(() => {
+    // Load library data when editor opens
+    if (isJsonEditorOpen && !libraryData) {
+      getLibraryData().then(setLibraryDataState)
+    }
+  }, [isJsonEditorOpen, libraryData, getLibraryData])
 
   const handleDeleteCover = async (filename: string) => {
     if (!window.confirm(`Do you want to remove the cover file "${filename}"`)) return
@@ -140,6 +149,31 @@ export default function SettingsPage() {
     importFileInputRef.current?.click()
   }
 
+  const handleSaveLibraryData = async (data: Awaited<ReturnType<typeof getLibraryData>>) => {
+    try {
+      const response = await fetch(`${apiRoot}/library-data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'Failed to save library data')
+      }
+
+      // Refresh the library data after successful save
+      await refetchHealthData()
+      alert('Library data saved successfully!')
+    } catch (error) {
+      console.error('Failed to save library data:', error)
+      throw error
+    }
+  }
+
   if (isLoading) {
     return
   }
@@ -174,7 +208,7 @@ export default function SettingsPage() {
             <MenuItem startIcon={FileUp} onClick={handleImportClick}>
               Import from JSON
             </MenuItem>
-            <MenuItem startIcon={FilePenLine} onClick={() => alert('Coming soon...')}>
+            <MenuItem startIcon={FilePenLine} onClick={() => setIsJsonEditorOpen(true)}>
               Edit library
             </MenuItem>
             <MenuItem startIcon={CloudOff} onClick={() => logout()}>
@@ -290,6 +324,16 @@ export default function SettingsPage() {
           Connect Last.fm
         </MenuItem>
       </div>
+
+      {/* JSON Editor Modal */}
+      {isAdmin && libraryData && (
+        <JsonEditorModal
+          isOpen={isJsonEditorOpen}
+          onClose={() => setIsJsonEditorOpen(false)}
+          initialData={libraryData}
+          onSave={handleSaveLibraryData}
+        />
+      )}
     </div>
   )
 }

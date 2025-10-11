@@ -1,0 +1,89 @@
+/* Custom styles for JSON editor to match app theme */
+
+.json-editor-container {
+  border: none !important;
+}
+
+.json-editor-container .jse-main {
+  border: none !important;
+}
+
+.json-editor-container .jse-contents {
+  border: none !important;
+}
+
+.json-editor-container .jse-text-mode {
+  border: none !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.json-editor-container .cm-editor {
+  border: none !important;
+  background-color: var(--background) !important;
+}
+
+.json-editor-container .cm-scroller {
+  border: none !important;
+}
+
+.json-editor-container .jse-menu {
+  background-color: var(--card) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.json-editor-container .jse-button {
+  color: var(--foreground) !important;
+}
+
+.json-editor-container .jse-button:hover {
+  background-color: rgba(128, 128, 128, 0.1) !important;
+}
+
+.json-editor-container .jse-separator {
+  display: none !important;
+}
+
+/* Text editor area */
+.json-editor-container .jse-text-mode {
+  border: none !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.json-editor-container .cm-editor {
+  border: none !important;
+  background-color: var(--background) !important;
+}
+
+.json-editor-container .cm-gutters {
+  background-color: var(--card) !important;
+  border: none !important;
+}
+
+.json-editor-container .cm-lineNumbers .cm-gutterElement {
+  color: var(--foreground) !important;
+  opacity: 0.5;
+}
+
+/* Status bar */
+.json-editor-container .jse-status-bar {
+  background-color: var(--card) !important;
+  border-top: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+  opacity: 0.7;
+}
+
+/* Dark theme specific adjustments */
+.jse-theme-dark .jse-menu {
+  background-color: var(--card) !important;
+}
+
+.jse-theme-dark .jse-button {
+  color: var(--foreground) !important;
+}
+
+.jse-theme-dark .jse-button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
