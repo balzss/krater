@@ -16,7 +16,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Add new tasks, features, or fixes to the appropriate phase in the master plan
 - The master plan is a living document - keep it current and accurate
 - Follow the defined order of operations (implement tests → verify tests → make improvements → verify again)
-- Use `/next` command to navigate to the next incomplete task in the master plan
 
 ## Project Overview
 

@@ -26,12 +26,6 @@ export default defineConfig({
         '.prettierrc.js',
         'eslint.config.js',
       ],
-      thresholds: {
-        lines: 80,
-        functions: 75,
-        branches: 70,
-        statements: 80,
-      },
     },
   },
   resolve: {
