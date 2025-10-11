@@ -64,7 +64,9 @@ function CheckResult({ warningLabel, successLabel, warningItems, onItemClick }: 
 export default function SettingsPage() {
   const importFileInputRef = useRef<HTMLInputElement>(null)
   const [isJsonEditorOpen, setIsJsonEditorOpen] = useState(false)
-  const [libraryData, setLibraryDataState] = useState<Awaited<ReturnType<typeof getLibraryData>> | null>(null)
+  const [libraryData, setLibraryDataState] = useState<Awaited<
+    ReturnType<typeof getLibraryData>
+  > | null>(null)
   const { theme, setTheme } = useTheme()
   const { getLibraryData, setLibraryData } = useLibraryData()
   const { isAdmin, login, logout, isLoading } = useAuth()

@@ -16,7 +16,7 @@ export function JsonEditor(props: JSONEditorProps) {
     if (refContainer.current) {
       refEditor.current = createJSONEditor({
         target: refContainer.current,
-        props: {}
+        props: {},
       })
     }
 

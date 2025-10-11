@@ -15,26 +15,26 @@ export const libraryDataSchema = {
             type: 'array',
             items: { type: 'string' },
             minItems: 1,
-            description: 'Array of RateYourMusic artist IDs'
+            description: 'Array of RateYourMusic artist IDs',
           },
           title: {
             type: 'string',
             minLength: 1,
-            description: 'Release title'
+            description: 'Release title',
           },
           rymId: {
             type: 'string',
             minLength: 1,
-            description: 'RateYourMusic release ID'
+            description: 'RateYourMusic release ID',
           },
           rymUrl: {
             type: 'string',
-            description: 'RateYourMusic release URL'
+            description: 'RateYourMusic release URL',
           },
           cover: {
             type: 'string',
             minLength: 1,
-            description: 'Cover image filename'
+            description: 'Cover image filename',
           },
           media: {
             type: 'object',
@@ -43,12 +43,12 @@ export const libraryDataSchema = {
               appleMusic: { type: 'string' },
               youtubeMusic: { type: 'string' },
               tidal: { type: 'string' },
-              bandcamp: { type: 'string' }
+              bandcamp: { type: 'string' },
             },
-            description: 'Media player links'
-          }
-        }
-      }
+            description: 'Media player links',
+          },
+        },
+      },
     },
     artists: {
       type: 'array',
@@ -59,19 +59,19 @@ export const libraryDataSchema = {
           displayName: {
             type: 'string',
             minLength: 1,
-            description: 'Artist display name'
+            description: 'Artist display name',
           },
           rymId: {
             type: 'string',
             minLength: 1,
-            description: 'RateYourMusic artist ID'
+            description: 'RateYourMusic artist ID',
           },
           rymUrl: {
             type: 'string',
-            description: 'RateYourMusic artist URL'
-          }
-        }
-      }
-    }
-  }
+            description: 'RateYourMusic artist URL',
+          },
+        },
+      },
+    },
+  },
 } as const

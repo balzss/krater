@@ -11,7 +11,7 @@ import {
   type OnChangeStatus,
   type ValidationError,
   Mode,
-  type MenuItem
+  type MenuItem,
 } from 'vanilla-jsoneditor'
 import type { LibraryData } from '@/lib/data'
 
@@ -22,9 +22,14 @@ interface JsonEditorModalProps {
   onSave: (data: LibraryData) => Promise<void>
 }
 
-export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, initialData, onSave }) => {
+export const JsonEditorModal: FC<JsonEditorModalProps> = ({
+  isOpen,
+  onClose,
+  initialData,
+  onSave,
+}) => {
   const [content, setContent] = useState<Content>({
-    json: initialData
+    json: initialData,
   })
   const [hasChanges, setHasChanges] = useState(false)
   const [validationErrors, setValidationErrors] = useState<string[]>([])
@@ -51,7 +56,7 @@ export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, ini
       if ('type' in item && item.type === 'separator') {
         return false
       }
-      
+
       // Remove mode labels and unwanted menu items
       if ('text' in item && typeof item.text === 'string') {
         const text = item.text.toLowerCase()
@@ -59,7 +64,7 @@ export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, ini
           return false
         }
       }
-      
+
       // Remove transform and sort buttons by title
       if ('title' in item && typeof item.title === 'string') {
         const title = item.title.toLowerCase()
@@ -67,27 +72,31 @@ export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, ini
           return false
         }
       }
-      
+
       return true
     })
   }, [])
 
-  const handleChange = useCallback((updatedContent: Content, _previousContent: Content, status: OnChangeStatus) => {
-    setContent(updatedContent)
-    setHasChanges(true)
+  const handleChange = useCallback(
+    (updatedContent: Content, _previousContent: Content, status: OnChangeStatus) => {
+      setContent(updatedContent)
+      setHasChanges(true)
 
-    // Check for validation errors
-    if (status.contentErrors) {
-      if ('validationErrors' in status.contentErrors) {
-        const errors = status.contentErrors.validationErrors?.map((err: ValidationError) => err.message) || []
-        setValidationErrors(errors)
+      // Check for validation errors
+      if (status.contentErrors) {
+        if ('validationErrors' in status.contentErrors) {
+          const errors =
+            status.contentErrors.validationErrors?.map((err: ValidationError) => err.message) || []
+          setValidationErrors(errors)
+        } else {
+          setValidationErrors([])
+        }
       } else {
         setValidationErrors([])
       }
-    } else {
-      setValidationErrors([])
-    }
-  }, [])
+    },
+    []
+  )
 
   const handleSave = async () => {
     if (validationErrors.length > 0) {
@@ -130,7 +139,9 @@ export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, ini
           {/* Header */}
           <div className="flex items-center justify-between p-6">
             <div>
-              <Dialog.Title className="text-2xl font-bold text-(--foreground)">Edit Library Data</Dialog.Title>
+              <Dialog.Title className="text-2xl font-bold text-(--foreground)">
+                Edit Library Data
+              </Dialog.Title>
               <Dialog.Description className="text-sm text-(--foreground) opacity-70 mt-1">
                 Edit your library data in JSON format. Changes will be validated before saving.
               </Dialog.Description>
@@ -167,7 +178,9 @@ export const JsonEditorModal: FC<JsonEditorModalProps> = ({ isOpen, onClose, ini
                       {validationErrors.slice(0, 3).map((error, index) => (
                         <li key={index}>{error}</li>
                       ))}
-                      {validationErrors.length > 3 && <li>...and {validationErrors.length - 3} more</li>}
+                      {validationErrors.length > 3 && (
+                        <li>...and {validationErrors.length - 3} more</li>
+                      )}
                     </ul>
                   </div>
                 </div>
