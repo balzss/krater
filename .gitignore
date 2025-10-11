@@ -42,5 +42,6 @@ next-env.d.ts
 playwright-report/
 test-results/
 coverage/
+.playwright-mcp/
 
 .claude/settings.local.json

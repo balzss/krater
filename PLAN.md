@@ -1,1194 +1,1357 @@
 # Implementation Plan
 
-This document provides a detailed step-by-step implementation plan for the roadmap items identified in `ROADMAP.md`.
+This document provides detailed implementation guidance for roadmap items in `ROADMAP.md`. Each task includes context, files to modify, and specific implementation steps for a coding agent.
 
-## Overview
+## 🚨 Important Guidelines for AI Agents
 
-The plan covers 5 main areas:
-1. Chrome Extension Improvements (from audit)
-2. UI Bug Fix (info button positioning)
-3. JSON Editor Feature (library data editing)
-4. UI Improvement (remove redundant artist info in modal)
-5. Development Tooling (commit hook for version bumping)
+1. **Use Playwright MCP for ALL user-facing changes** - Navigate, interact, screenshot, and verify before marking tasks complete
+2. **Ask for help when stuck** - If spending >30 minutes without progress or stuck in a loop, STOP and ask the human supervisor
+3. **Watch for checkpoints** - Implementation steps marked with ⚠️ are critical points where you should pause if issues arise
+4. **Use subagents to parallelize work** - When tasks are clearly separated and independent, launch subagents to work in parallel (see guidelines below)
 
 ---
 
-## Task 1: Chrome Extension Improvements
+## Task 1: Performance Optimization - Lazy Load Images on Browse Page ✅
 
+**Status:** ✅ COMPLETED (Commit: c454fa4)
 **Priority:** High
-**Complexity:** Complex
-**Dependencies:** None
+**Complexity:** Medium
+**Files:** `src/app/browse/browse-content.tsx`, `src/lib/constants.ts`
 
-### Background
-The Chrome Extension Audit identified 15 recommendations across high, medium, and low priority. We'll focus on implementing the most impactful improvements that enhance security, UX, and reliability.
+### Problem
+Browse page loads all images simultaneously. Users should see above-the-fold images first for smoother UX.
 
-### Implementation Steps
+### Current State
+- Line 105 in `browse-content.tsx`: `priority={index < CONFIG.images.priorityLoadCount}`
+- `CONFIG.images.priorityLoadCount` is 8 (line 48 in `constants.ts`)
+- All images render immediately in grid
 
-#### 1.1 Implement API Key Authentication
-**File:** `chrome-extension/options.js`, `chrome-extension/content.js`
-
-1. **Update options.js to save/load API key:**
-   - Modify `saveOptions()` to include `apiKey` in chrome.storage.sync
-   - Modify `restoreOptions()` to load `apiKey` with empty string default
-   - Ensure API key is stored securely
-
-2. **Update content.js to use API key in headers:**
-   - Create helper function to load API key from storage
-   - Modify `checkArtistsAndRelease()` to include Authorization header
-   - Modify `addArtists()` to include Authorization header
-   - Modify `addRelease()` to include Authorization header
-   - Modify `removeRelease()` to include Authorization header
-   - Format: `Authorization: Bearer ${apiKey}` (if apiKey exists)
-
-3. **Testing:**
-   - Test with API key set
-   - Test without API key (should still work for backwards compatibility)
-   - Verify headers are sent correctly
-
-#### 1.2 Replace Alert Dialogs with Toast Notifications
-**Files:** `chrome-extension/manifest.json`, `chrome-extension/background.js`, `chrome-extension/content.js`
-
-1. **Update manifest.json:**
-   - Add `"notifications"` to permissions array
-
-2. **Enhance background.js:**
-   - Add message listener for notification requests
-   - Implement `showNotification()` handler using chrome.notifications.create()
-   - Use appropriate icon from images folder
-
-3. **Update content.js:**
-   - Create `showNotification()` helper function that sends message to background
-   - Replace all `alert()` calls with `showNotification()` calls
-   - Update error handling to use notifications instead of alerts
-   - Keep confirmation dialogs (window.confirm) for destructive actions
-
-4. **Testing:**
-   - Test success notifications (add, remove, refresh)
-   - Test error notifications (API failures, network issues)
-   - Verify notifications appear and disappear correctly
-
-#### 1.3 Add Offline Detection and Retry Logic
-**File:** `chrome-extension/content.js`
-
-1. **Create fetchWithRetry utility function:**
-   - Check `navigator.onLine` before attempting fetch
-   - Implement timeout using AbortController (10 second default)
-   - Implement retry logic with exponential backoff (3 retries default)
-   - Handle HTTP status codes appropriately
-   - Throw descriptive errors
-
-2. **Update all fetch calls:**
-   - Replace `fetch()` with `fetchWithRetry()` in:
-     - `checkArtistsAndRelease()`
-     - `addArtists()`
-     - `addRelease()`
-     - `removeRelease()`
-   - Update error handling to show user-friendly offline messages
-
-3. **Testing:**
-   - Test with network offline
-   - Test with slow network (throttling)
-   - Test retry behavior on transient failures
-   - Verify timeout behavior
-
-#### 1.4 Enforce HTTPS for API URLs
-**File:** `chrome-extension/options.js`
-
-1. **Add validation in saveOptions():**
-   - Parse API URL using URL constructor
-   - Check protocol is HTTPS
-   - Allow HTTP only for localhost/127.0.0.1
-   - Show clear error message if validation fails
-   - Prevent saving invalid URLs
-
-2. **Testing:**
-   - Test saving HTTPS URL (should succeed)
-   - Test saving HTTP non-localhost URL (should fail)
-   - Test saving HTTP localhost URL (should succeed)
-   - Test invalid URL format (should fail)
-
-#### 1.5 Dynamic UI Updates (Remove Page Reload)
-**File:** `chrome-extension/content.js`
-
-1. **Refactor button state management:**
-   - Extract button creation/update logic into reusable functions
-   - Create `updateButtonState()` function to change button without reload
-   - Update button text, class, and event handlers dynamically
-
-2. **Update action handlers:**
-   - Modify `addRelease()` success: update button to "Remove from Krater" state
-   - Modify `removeRelease()` success: update button to "Add to Krater" state
-   - Remove `location.reload()` calls
-   - Update refresh button visibility dynamically
-
-3. **Testing:**
-   - Test add operation (button should change without reload)
-   - Test remove operation (button should change without reload)
-   - Test refresh operation
-   - Verify scroll position is maintained
-   - Verify page state is preserved
-
-#### 1.6 Add JSDoc Comments
-**File:** `chrome-extension/content.js`
-
-1. **Document all functions with JSDoc:**
-   - `checkArtistsAndRelease()` - document params, return type, purpose
-   - `addArtists()` - document params, return type, purpose
-   - `addRelease()` - document params, return type, purpose
-   - `removeRelease()` - document params, return type, purpose
-   - `getArtistAndReleaseInfo()` - document return type, purpose
-   - `loadKrater()` - document purpose, behavior
-   - Helper functions (button creation, etc.)
-
-2. **Add file-level documentation:**
-   - Add header comment describing extension purpose
-   - Document key dependencies
-   - Document browser compatibility
-
-3. **Testing:**
-   - Run JSDoc generator to verify valid syntax
-   - Review generated documentation for clarity
-
-#### 1.7 Refactor Magic Numbers to Constants
-**File:** `chrome-extension/content.js`
-
-1. **Create constants object:**
-   ```javascript
-   const TIMEOUTS = {
-     SUCCESS_MESSAGE: 1500,
-     ERROR_MESSAGE: 3000,
-     API_REQUEST: 10000,
-     RETRY_DELAY_BASE: 1000
-   }
-   ```
-
-2. **Replace hardcoded values:**
-   - Replace 1500ms with `TIMEOUTS.SUCCESS_MESSAGE`
-   - Replace 3000ms with `TIMEOUTS.ERROR_MESSAGE`
-   - Use in setTimeout calls
-   - Use in fetchWithRetry function
-
-3. **Testing:**
-   - Verify timing behavior unchanged
-   - Verify all magic numbers replaced
-
-### Deliverables
-- Updated chrome-extension files with all improvements
-- No page reloads on add/remove actions
-- Toast notifications instead of alerts
-- Retry logic for network failures
-- HTTPS enforcement for security
-- API key authentication support
-- Well-documented code with JSDoc
-- Constants instead of magic numbers
-
-### Testing Checklist
-- [ ] API key authentication works
-- [ ] Toast notifications appear correctly
-- [ ] Offline detection shows appropriate message
-- [ ] Retry logic works on transient failures
-- [ ] HTTPS validation prevents insecure URLs
-- [ ] UI updates without page reload
-- [ ] All existing functionality still works
-- [ ] Extension loads on RYM pages
-- [ ] Add/remove/refresh operations succeed
-- [ ] Error handling is user-friendly
-
----
-
-## Task 2: Fix Info Button Position
-
-**Priority:** Medium
-**Complexity:** Simple
-**Dependencies:** None
-
-### Background
-The info button on release tiles is misplaced and overflowing. It should be positioned in the bottom right corner of the tile content area but is barely visible due to CSS issues.
-
-### Problem Analysis
-In `src/components/music-tile.tsx` (lines 97-104):
-- Button uses `self-end` to align to bottom
-- Button uses negative margins `-mr-2 -mb-2` which may cause overflow
-- Button is positioned relative to flex container which may not provide correct positioning
+### Solution
+Implement progressive image loading based on viewport position.
 
 ### Implementation Steps
 
-#### 2.1 Analyze Current Layout
-**File:** `src/components/music-tile.tsx`
+1. **Calculate viewport threshold:**
+   - Determine grid layout (standard vs compact)
+   - Standard: 1-4 columns depending on breakpoint
+   - Compact: 2-8 columns depending on breakpoint
+   - Estimate 1.5 viewports worth of images for priority load
 
-1. **Examine the structure:**
-   - Parent div with padding (line 74)
-   - Flex container for artist text and button (line 82)
-   - Button with self-end and negative margins (line 98-103)
-
-2. **Identify the issue:**
-   - Negative margins causing button to overflow
-   - Flex layout may not provide desired absolute positioning
-   - `self-end` aligns to end of flex container, not the tile
-
-#### 2.2 Implement Fix
-
-**Option A: Use absolute positioning**
-```tsx
-// Update the parent container (line 74)
-<div className={`${compact ? 'p-2' : 'p-4'} relative`}>
-
-  // Update button (lines 98-104)
-  <ActionButton
-    onClick={() => setIsModalOpen(true)}
-    icon={BadgeInfo}
-    className={`absolute bottom-2 right-2 text-gray-600 ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-100`}
-    size={20}
-  />
-</div>
-```
-
-**Option B: Improve flex positioning**
-```tsx
-// Keep current structure but fix margins
-<ActionButton
-  onClick={() => setIsModalOpen(true)}
-  icon={BadgeInfo}
-  className={`text-gray-600 ml-2 ${showInfoBtn || isTouchDevice ? 'opacity-100' : 'opacity-0'} transition duration-150 hover:bg-gray-100`}
-  size={20}
-/>
-```
-
-#### 2.3 Implementation Choice
-Use **Option A (absolute positioning)** because:
-- Guarantees button stays in bottom-right corner
-- Doesn't interfere with text layout
-- Matches the expected behavior described in roadmap
-- More reliable across different text lengths
-
-#### 2.4 Code Changes
-**File:** `src/components/music-tile.tsx`
-
-1. **Update parent div (line 74):**
-   - Add `relative` class to enable absolute positioning context
-
-2. **Update button (lines 98-104):**
-   - Replace `self-end -mr-2 -mb-2` with `absolute bottom-2 right-2`
-   - Keep opacity and transition classes
-   - Keep hover styles
-
-3. **Update text container (line 83):**
-   - Add `pr-8` or `pr-10` to prevent text from overlapping button area
-   - Ensure adequate spacing when button is visible
-
-#### 2.5 Testing
-
-1. **Visual testing:**
-   - Verify button appears in bottom-right corner
-   - Check button visibility on hover
-   - Test on touch devices (button should be visible)
-   - Verify button doesn't overlap artist text
-   - Test with long artist names
-   - Test with multiple artists
-
-2. **Responsive testing:**
-   - Test on mobile viewport
-   - Test on tablet viewport
-   - Test on desktop viewport
-   - Verify compact mode still works
-
-3. **Interaction testing:**
-   - Click button to open modal
-   - Verify hover state works
-   - Check opacity transition is smooth
-
-### Deliverables
-- Fixed info button positioning in bottom-right corner
-- No overflow or visibility issues
-- Text doesn't overlap with button
-- Works in both standard and compact modes
-
-### Testing Checklist
-- [ ] Button visible in bottom-right corner
-- [ ] Button appears on hover (desktop)
-- [ ] Button visible on touch devices
-- [ ] No overlap with artist text
-- [ ] Works with long artist names
-- [ ] Works in compact mode
-- [ ] Modal opens on click
-- [ ] Transition animation smooth
-
----
-
-## Task 3: JSON Editor Feature
-
-**Priority:** High
-**Complexity:** Very Complex
-**Dependencies:** None
-
-### Background
-The settings page has a placeholder for editing library data (line 177-179 in `src/app/settings/page.tsx`). We need to implement a full-featured JSON editor using svelte-jsoneditor with validation.
-
-### Library Research: svelte-jsoneditor
-
-The library supports:
-- Tree view and text view modes
-- Validation with JSON Schema
-- Search and replace
-- Undo/redo
-- Dark mode support
-- Can be used in React with wrapper
-
-**GitHub:** https://github.com/josdejong/svelte-jsoneditor
-
-### Implementation Steps
-
-#### 3.1 Install Dependencies
-
-1. **Install svelte-jsoneditor:**
-   ```bash
-   npm install svelte-jsoneditor
-   ```
-
-2. **Install peer dependencies (if needed):**
-   ```bash
-   npm install svelte
-   ```
-
-3. **Verify installation:**
-   - Check package.json for added dependencies
-   - Run `npm run build` to ensure no conflicts
-
-#### 3.2 Create JSON Schema for Validation
-
-**File:** `src/lib/schemas/library-schema.ts`
-
-1. **Define JSON Schema for LibraryData:**
+2. **Update priority load count in `src/lib/constants.ts`:**
    ```typescript
-   export const libraryDataSchema = {
-     type: 'object',
-     required: ['releases', 'artists'],
-     properties: {
-       releases: {
-         type: 'array',
-         items: {
-           type: 'object',
-           required: ['artistRymIds', 'title', 'rymId', 'cover', 'media'],
-           properties: {
-             artistRymIds: {
-               type: 'array',
-               items: { type: 'string' },
-               minItems: 1
-             },
-             title: { type: 'string', minLength: 1 },
-             rymId: { type: 'string', minLength: 1 },
-             rymUrl: { type: 'string', format: 'uri' },
-             cover: { type: 'string', minLength: 1 },
-             media: {
-               type: 'object',
-               properties: {
-                 spotify: { type: 'string', format: 'uri' },
-                 appleMusic: { type: 'string', format: 'uri' },
-                 youtubeMusic: { type: 'string', format: 'uri' },
-                 tidal: { type: 'string', format: 'uri' },
-                 bandcamp: { type: 'string', format: 'uri' }
-               }
-             }
-           }
-         }
-       },
-       artists: {
-         type: 'array',
-         items: {
-           type: 'object',
-           required: ['displayName', 'rymId'],
-           properties: {
-             displayName: { type: 'string', minLength: 1 },
-             rymId: { type: 'string', minLength: 1 },
-             rymUrl: { type: 'string', format: 'uri' }
-           }
-         }
-       }
-     }
+   images: {
+     priorityLoadCount: 16, // Increased from 8 to cover ~1.5 viewports
    }
    ```
 
-2. **Export schema for use in editor**
+3. **Verify Next.js Image lazy loading:**
+   - Non-priority images automatically use `loading="lazy"`
+   - No additional changes needed in component
+   - Next.js Image handles intersection observer internally
 
-#### 3.3 Create JSON Editor Component
+4. **Test with network throttling:**
+   - Use Chrome DevTools → Network → Slow 3G
+   - Verify priority images load first
+   - Verify below-fold images load as user scrolls
 
-**File:** `src/components/json-editor.tsx`
+### Testing
+- Test both compact and standard layouts
+- Test on mobile (320px), tablet (768px), desktop (1920px)
+- Verify scroll experience is smooth
+- Check network waterfall shows staggered loading
 
-1. **Create React wrapper for svelte-jsoneditor:**
+**Playwright MCP Verification:**
+- Use browser MCP to navigate to `/browse`
+- Take screenshots at different scroll positions
+- Verify images load progressively as you scroll
+- Test in both standard and compact layouts
+
+---
+
+## Task 2: Investigate - Optimize Layout State Fetching ✅
+
+**Status:** ✅ COMPLETED (Commit: 9bdbbba)
+**Priority:** Medium
+**Complexity:** Medium
+**Files:** Create `src/contexts/layout-context.tsx`, modify `src/app/layout.tsx`, modify `src/hooks/use-layout.ts`
+
+### Problem
+`useLayout()` hook reads from localStorage on every page load. Should initialize once at app level and provide via context.
+
+### Current State
+- `src/hooks/use-layout.ts:11-19` reads localStorage in useEffect on every mount
+- `src/app/browse/browse-content.tsx:14` calls useLayout() directly
+
+### Solution
+Create React Context Provider to manage layout state globally.
+
+### Implementation Steps
+
+1. **Create `src/contexts/layout-context.tsx`:**
    ```typescript
    'use client'
 
-   import { useEffect, useRef, useState } from 'react'
-   import { JSONEditor, Mode, Content, OnChangeStatus } from 'svelte-jsoneditor'
-   import type { JSONSchemaType } from 'svelte-jsoneditor'
+   import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react'
 
-   interface JsonEditorProps {
-     content: Content
-     onChange: (content: Content, status: OnChangeStatus) => void
-     schema?: JSONSchemaType
-     readOnly?: boolean
-     mode?: Mode
+   type LayoutMode = 'standard' | 'compact'
+
+   interface LayoutContextType {
+     layout: LayoutMode
+     setLayoutMode: (mode: LayoutMode) => void
+     toggleLayout: () => void
+     isLoaded: boolean
    }
 
-   export function JsonEditor({ content, onChange, schema, readOnly = false, mode = Mode.tree }: JsonEditorProps) {
-     const editorRef = useRef<HTMLDivElement>(null)
-     const editorInstance = useRef<JSONEditor | null>(null)
+   const LayoutContext = createContext<LayoutContextType | undefined>(undefined)
 
-     // Component implementation
+   const LAYOUT_STORAGE_KEY = 'krater-layout'
+
+   export function LayoutProvider({ children }: { children: ReactNode }) {
+     const [layout, setLayoutState] = useState<LayoutMode>('standard')
+     const [isLoaded, setIsLoaded] = useState(false)
+
+     useEffect(() => {
+       if (typeof window !== 'undefined') {
+         const stored = localStorage.getItem(LAYOUT_STORAGE_KEY)
+         if (stored === 'compact' || stored === 'standard') {
+           setLayoutState(stored)
+         }
+         setIsLoaded(true)
+       }
+     }, [])
+
+     const setLayoutMode = useCallback((mode: LayoutMode) => {
+       setLayoutState(mode)
+       if (typeof window !== 'undefined') {
+         localStorage.setItem(LAYOUT_STORAGE_KEY, mode)
+       }
+     }, [])
+
+     const toggleLayout = useCallback(() => {
+       setLayoutMode(layout === 'standard' ? 'compact' : 'standard')
+     }, [layout, setLayoutMode])
+
+     return (
+       <LayoutContext.Provider value={{ layout, setLayoutMode, toggleLayout, isLoaded }}>
+         {children}
+       </LayoutContext.Provider>
+     )
+   }
+
+   export function useLayoutContext() {
+     const context = useContext(LayoutContext)
+     if (context === undefined) {
+       throw new Error('useLayoutContext must be used within LayoutProvider')
+     }
+     return context
    }
    ```
 
-2. **Implement lifecycle methods:**
-   - Initialize editor in useEffect
-   - Handle content updates
-   - Handle theme changes
-   - Cleanup on unmount
-
-3. **Add error handling:**
-   - Catch editor initialization errors
-   - Display user-friendly error messages
-   - Handle validation errors
-
-4. **Add TypeScript types:**
-   - Import necessary types from svelte-jsoneditor
-   - Define component props interface
-   - Type editor instance
-
-#### 3.4 Create JSON Editor Modal/Page
-
-**File:** `src/components/json-editor-modal.tsx`
-
-1. **Create modal component:**
-   - Use Radix UI Dialog (consistent with ReleaseModal)
-   - Include JsonEditor component
-   - Add save/cancel buttons
-   - Show validation status
-   - Display error messages
-
-2. **Implement state management:**
-   - Track editor content
-   - Track validation status
-   - Track dirty state (unsaved changes)
-   - Handle save operation
-
-3. **Add validation feedback:**
-   - Show validation errors inline
-   - Disable save button if invalid
-   - Show warning for unsaved changes
-   - Confirm before closing with unsaved changes
-
-4. **Implement save logic:**
-   - Validate data against schema
-   - Call API to save library data
-   - Handle success/error responses
-   - Close modal on success
-   - Show error message on failure
-
-#### 3.5 Integrate into Settings Page
-
-**File:** `src/app/settings/page.tsx`
-
-1. **Import JsonEditorModal component**
-
-2. **Add state for modal:**
+2. **Update `src/app/layout.tsx`:**
    ```typescript
-   const [isEditorOpen, setIsEditorOpen] = useState(false)
+   import { LayoutProvider } from '@/contexts/layout-context'
+
+   export default function RootLayout({ children }: { children: React.ReactNode }) {
+     return (
+       <html lang="en">
+         <body>
+           <Providers>
+             <LayoutProvider>
+               {children}
+             </LayoutProvider>
+           </Providers>
+         </body>
+       </html>
+     )
+   }
    ```
 
-3. **Update "Edit library" MenuItem (line 177-179):**
+3. **Update `src/hooks/use-layout.ts`:**
    ```typescript
-   <MenuItem
-     startIcon={FilePenLine}
-     onClick={() => setIsEditorOpen(true)}
-   >
-     Edit library
-   </MenuItem>
+   'use client'
+
+   export { useLayoutContext as useLayout } from '@/contexts/layout-context'
    ```
 
-4. **Add modal to page:**
-   ```typescript
-   <JsonEditorModal
-     isOpen={isEditorOpen}
-     onClose={() => setIsEditorOpen(false)}
-     onSave={handleSaveLibraryData}
-   />
-   ```
+4. **Verify no other files import or use layout hook directly**
 
-5. **Implement handleSaveLibraryData:**
-   - Validate data
-   - Call API endpoint
-   - Refresh library data on success
-   - Show success/error notification
+5. **Test navigation between pages:**
+   - Verify localStorage read only once on app mount
+   - Verify layout state persists across navigation
+   - Verify toggle still works
 
-#### 3.6 Add CSS Styles
+### Testing
+- Navigate between pages (home → browse → settings → browse)
+- Open DevTools console to verify no repeated localStorage access
+- Test layout toggle functionality
+- Verify no hydration mismatches
 
-**File:** Create `src/styles/json-editor.css` or add to global styles
-
-1. **Import svelte-jsoneditor styles:**
-   ```css
-   @import 'svelte-jsoneditor/themes/jse-theme-default.css';
-   @import 'svelte-jsoneditor/themes/jse-theme-dark.css';
-   ```
-
-2. **Add custom styles:**
-   - Adjust editor height
-   - Style modal container
-   - Theme-specific overrides
-   - Ensure editor is fully visible
-
-3. **Import in layout or component**
-
-#### 3.7 Add API Validation (Server-side)
-
-**File:** `src/app/api/library-data/route.ts`
-
-1. **Install ajv for server-side validation:**
-   ```bash
-   npm install ajv
-   ```
-
-2. **Create validation function:**
-   ```typescript
-   import Ajv from 'ajv'
-   import addFormats from 'ajv-formats'
-   import { libraryDataSchema } from '@/lib/schemas/library-schema'
-
-   const ajv = new Ajv()
-   addFormats(ajv)
-   const validate = ajv.compile(libraryDataSchema)
-   ```
-
-3. **Validate in PUT handler:**
-   - Parse request body
-   - Run validation
-   - Return 400 with errors if invalid
-   - Proceed with save if valid
-
-4. **Add additional business logic validation:**
-   - Check for duplicate release rymIds
-   - Verify artist references exist
-   - Check cover files exist
-   - Return detailed error messages
-
-#### 3.8 Testing
-
-1. **Unit tests for validation:**
-   - Create test file: `src/__tests__/unit/library-schema.test.ts`
-   - Test valid library data passes validation
-   - Test invalid data fails validation
-   - Test edge cases (empty arrays, missing fields)
-
-2. **Component tests:**
-   - Create test file: `src/__tests__/components/json-editor.test.tsx`
-   - Test editor renders
-   - Test validation feedback
-   - Test save/cancel actions
-   - Test dirty state tracking
-
-3. **Integration tests:**
-   - Test API validation endpoint
-   - Test save operation end-to-end
-   - Test error handling
-
-4. **Manual testing:**
-   - Open editor from settings
-   - Edit valid JSON
-   - Try to save invalid JSON
-   - Verify validation errors appear
-   - Save valid changes
-   - Verify data persists
-   - Test theme switching
-   - Test undo/redo
-   - Test search functionality
-
-### Deliverables
-- Fully functional JSON editor integrated into settings page
-- Client-side and server-side validation
-- JSON Schema for library data structure
-- User-friendly error messages
-- Save/cancel/unsaved changes handling
-- Dark mode support
-- Search, undo/redo functionality
-- Comprehensive test coverage
-
-### Testing Checklist
-- [ ] Editor opens from settings page
-- [ ] Editor loads current library data
-- [ ] Validation works (rejects invalid data)
-- [ ] Validation errors are clear and helpful
-- [ ] Can edit releases array
-- [ ] Can edit artists array
-- [ ] Can add new releases/artists
-- [ ] Can remove releases/artists
-- [ ] Save button disabled when invalid
-- [ ] Save operation persists changes
-- [ ] API validates data server-side
-- [ ] Error handling works
-- [ ] Unsaved changes warning works
-- [ ] Dark mode supported
-- [ ] Search works
-- [ ] Undo/redo works
-- [ ] Modal can be closed
-- [ ] No data loss on cancel
+**Playwright MCP Verification:**
+- Navigate between pages and verify layout persists
+- Toggle layout in settings
+- Navigate to browse page and verify layout changed
+- Check browser console for localStorage access patterns
 
 ---
 
-## Task 4: Remove Redundant Artist Info
+## Task 3: Improvement - Add Pointer Cursor to Modal Action Buttons ✅
 
+**Status:** ✅ COMPLETED (Already implemented)
 **Priority:** Low
 **Complexity:** Simple
-**Dependencies:** None
+**Files:** `src/components/release-modal.tsx`
 
-### Background
-The release modal displays artist names in two places:
-1. Line 74-76: In the Dialog.Description (below title)
-2. Lines 90-108: In the details section (as "Artists:" field)
+### Problem
+Action buttons in release info modal don't show pointer cursor on hover.
 
-This is redundant and clutters the UI. We should only keep the artist information in the details section where it's clickable and properly formatted.
+### Current State
+- Lines 155-160: Close button missing `cursor-pointer`
+- Lines 162-171: Remove button missing `cursor-pointer` (has `disabled:cursor-not-allowed`)
+
+### Solution
+Add `cursor-pointer` class to both buttons.
 
 ### Implementation Steps
 
-#### 4.1 Analyze Current Implementation
-**File:** `src/components/release-modal.tsx`
-
-1. **Identify redundant section (lines 74-76):**
+1. **Update Close button at line 157:**
    ```tsx
-   <Dialog.Description className="text-base text-(--foreground) opacity-70">
-     {artistNames}
-   </Dialog.Description>
+   className="px-4 py-2 text-sm font-medium text-(--foreground) bg-(--card) border border-(--border) rounded-md hover:bg-(--item) focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors cursor-pointer"
    ```
 
-2. **Identify section to keep (lines 90-108):**
+2. **Update Remove button at line 166:**
    ```tsx
-   <dt className="font-semibold text-(--foreground) opacity-70">Artists:</dt>
-   <dd className="text-(--foreground)">
-     {artists.map((artist, index) => (
-       // clickable links to artist pages
-     ))}
-   </dd>
+   className="px-4 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer inline-flex items-center justify-center gap-2"
    ```
 
-#### 4.2 Implement Changes
+3. **Verify disabled state still shows not-allowed cursor**
 
-1. **Remove redundant Dialog.Description (lines 74-76):**
-   - Delete the entire block
-   - Remove `artistNames` variable if no longer used (line 39)
+### Testing
+- Open release modal
+- Hover over Close button → verify pointer cursor
+- Hover over Remove button (if admin) → verify pointer cursor
+- Verify disabled Remove button shows not-allowed cursor
 
-2. **Adjust spacing:**
-   - Check if gap between header and cover needs adjustment
-   - Modal gap is set at line 62: `flex flex-col gap-4`
-   - Should look natural without the description
+**Playwright MCP Verification:**
+- Navigate to `/browse`
+- Click on a release tile info button
+- Take screenshot of modal
+- Hover over Close button and verify cursor changes
+- Hover over Remove button (if admin) and verify cursor changes
+- Use browser snapshot to inspect button elements
 
-3. **Verify no accessibility issues:**
-   - Dialog.Title is still present (good for screen readers)
-   - Artist information is still in the DOM (in details section)
-   - Links are accessible and keyboard-navigable
+---
 
-#### 4.3 Code Changes
-**File:** `src/components/release-modal.tsx`
+## Task 4: Investigate - Self-Hosting with Docker
 
-```tsx
-// Remove line 39 (if artistNames not used elsewhere):
-// const artistNames = artists.map((a) => a?.displayName || 'Unknown').join(', ')
+**Priority:** High
+**Complexity:** Complex
+**Files:** Create `Dockerfile`, `docker-compose.yml`, `.dockerignore`, modify `next.config.ts`, `src/middleware.ts`
 
-// Remove lines 74-76:
-// <Dialog.Description className="text-base text-(--foreground) opacity-70">
-//   {artistNames}
-// </Dialog.Description>
+### Problem
+Project supports local dev (with API) and static export (no API). Need full-stack self-hosted deployment option.
 
-// Keep header section (lines 64-72):
-<div className="flex items-start justify-between">
-  <Dialog.Title className="text-2xl font-bold text-(--foreground) pr-8">
-    {release.title}
-  </Dialog.Title>
-  <Dialog.Close>
-    {/* ... */}
-  </Dialog.Close>
-</div>
+### Current Architecture Gaps
+- `src/middleware.ts:11` hardcoded `isDevelopment = false`
+- API routes removed during static export (`.github/workflows/deploy.yml:54`)
+- No production authentication
+- No persistent session management
 
-// Cover image follows immediately (lines 78-86)
-// Details section with artist links remains (lines 89-108)
+### Solution Components
+
+#### 4.1 Docker Setup
+
+**Create `Dockerfile`:**
+```dockerfile
+# Stage 1: Dependencies
+FROM node:lts-alpine AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+# Stage 2: Builder
+FROM node:lts-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# Stage 3: Runner
+FROM node:lts-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+RUN chown -R nextjs:nodejs ./public
+USER nextjs
+EXPOSE 3000
+ENV PORT=3000
+CMD ["npm", "start"]
 ```
 
-#### 4.4 Testing
+**Create `docker-compose.yml`:**
+```yaml
+version: '3.8'
+services:
+  krater:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./public/covers:/app/public/covers
+      - ./public/data:/app/public/data
+      - ./krater.db:/app/krater.db
+    environment:
+      - NODE_ENV=production
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - DATABASE_URL=file:./krater.db
+    restart: unless-stopped
+```
 
-1. **Visual testing:**
-   - Open release modal
-   - Verify title displays correctly
-   - Verify cover art displays
-   - Verify artists section below cover has clickable links
-   - Check spacing looks natural
-   - Test with single artist
-   - Test with multiple artists
+**Create `.dockerignore`:**
+```
+node_modules
+.next
+build
+.git
+.env.local
+*.log
+```
 
-2. **Responsive testing:**
-   - Test on mobile viewport
-   - Test on tablet viewport
-   - Test on desktop viewport
-   - Verify modal layout remains centered
+#### 4.2 Authentication Implementation with Better Auth
 
-3. **Accessibility testing:**
-   - Test keyboard navigation
-   - Test screen reader (title should be announced)
-   - Verify artist links are focusable
-   - Check color contrast for artist links
+**Install Better Auth:**
+```bash
+npm install better-auth
+```
 
-### Deliverables
-- Cleaner release modal with artist info only in details section
-- No visual or functional regressions
-- Maintained accessibility
+**Set up environment variables in `.env`:**
+```
+BETTER_AUTH_SECRET=your_random_secret_key_here
+BETTER_AUTH_URL=http://localhost:3000
+ADMIN_PASSWORD=your_secure_admin_password
+DATABASE_URL=file:./krater.db
+```
 
-### Testing Checklist
-- [ ] Modal opens correctly
-- [ ] Title displays at top
-- [ ] No redundant artist text below title
-- [ ] Cover image displays correctly
-- [ ] Artists section below cover shows clickable links
-- [ ] Links navigate to correct artist filter
-- [ ] Spacing looks natural
-- [ ] Works on all screen sizes
-- [ ] Keyboard navigation works
-- [ ] Screen reader announces title
+**Create auth configuration `src/lib/auth.ts`:**
+```typescript
+import { betterAuth } from 'better-auth'
+import Database from 'better-sqlite3'
 
----
+export const auth = betterAuth({
+  database: new Database('./krater.db'),
+  emailAndPassword: {
+    enabled: true,
+    minPasswordLength: 8,
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // 1 day
+  },
+})
+```
 
-## Task 5: Version Bump Commit Hook
+**Create API route handler `src/app/api/auth/[...all]/route.ts`:**
+```typescript
+import { auth } from '@/lib/auth'
+import { toNextJsHandler } from 'better-auth/next-js'
 
-**Priority:** Medium
-**Complexity:** Moderate
-**Dependencies:** None
+export const { GET, POST } = toNextJsHandler(auth)
+```
 
-### Background
-We need an automated commit hook that analyzes changes and intelligently bumps the version number in package.json according to semantic versioning principles. The hook will also run linting checks to ensure code quality before allowing the version bump to proceed.
+**Create auth client `src/lib/auth-client.ts`:**
+```typescript
+import { createAuthClient } from 'better-auth/react'
 
-### Semantic Versioning Review
-- **MAJOR (x.0.0):** Breaking changes, incompatible API changes
-- **MINOR (0.x.0):** New features, backwards-compatible functionality
-- **PATCH (0.0.x):** Bug fixes, backwards-compatible fixes
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+})
+```
 
-### Linting Integration
-The version bump script will run `npm run lint` before prompting for version bump:
-- **Purpose:** Ensure all code passes linting before version is incremented
-- **Behavior:** If lint fails, version bump is aborted and commit is cancelled
-- **Skip option:** Can be bypassed with `--no-lint` flag or configuration
-- **User feedback:** Clear error messages showing which linting rules failed
+**Generate database schema:**
+```bash
+npx @better-auth/cli generate
+npx @better-auth/cli migrate
+```
+
+**Create login page `src/app/login/page.tsx`:**
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { authClient } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
+
+export default function LoginPage() {
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const { error } = await authClient.signIn.email({
+      email: 'admin@krater.local',
+      password,
+    })
+
+    if (error) {
+      setError(error.message)
+    } else {
+      router.push('/settings')
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <form onSubmit={handleLogin} className="w-full max-w-md p-8 bg-white rounded-lg shadow">
+        <h1 className="text-2xl font-bold mb-6">Admin Login</h1>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+            required
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700"
+        >
+          Sign In
+        </button>
+      </form>
+    </div>
+  )
+}
+```
+
+**Update `src/middleware.ts`:**
+```typescript
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
+
+const isDevelopment = process.env.NODE_ENV === 'development'
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Protect admin endpoints
+  if (pathname.startsWith('/api/') && requiresAuth(pathname)) {
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    })
+
+    if (!session) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+  }
+
+  return NextResponse.next()
+}
+
+function requiresAuth(pathname: string): boolean {
+  const protectedPaths = ['/api/releases', '/api/artists', '/api/library-data', '/api/health']
+  return protectedPaths.some(path => pathname.startsWith(path)) &&
+         !pathname.match(/^\/api\/(releases|artists)$/) // Allow GET requests to list endpoints
+}
+
+export const config = {
+  matcher: ['/api/:path*']
+}
+```
+
+**Add session hook for client-side `src/hooks/use-auth.ts`:**
+```typescript
+'use client'
+
+import { authClient } from '@/lib/auth-client'
+
+export function useAuth() {
+  const { data: session, isPending, error } = authClient.useSession()
+
+  return {
+    isAuthenticated: !!session,
+    isAdmin: !!session,
+    isLoading: isPending,
+    error,
+    signOut: () => authClient.signOut(),
+  }
+}
+```
+
+**Create setup script to initialize admin user `scripts/create-admin.ts`:**
+```typescript
+import { auth } from '../src/lib/auth'
+
+async function createAdmin() {
+  const adminPassword = process.env.ADMIN_PASSWORD
+
+  if (!adminPassword) {
+    console.error('ADMIN_PASSWORD environment variable not set')
+    process.exit(1)
+  }
+
+  try {
+    // Create admin user
+    const user = await auth.api.signUpEmail({
+      body: {
+        email: 'admin@krater.local',
+        password: adminPassword,
+        name: 'Admin',
+      },
+    })
+
+    console.log('Admin user created successfully:', user.data?.user.email)
+  } catch (error) {
+    console.error('Error creating admin user:', error)
+    process.exit(1)
+  }
+}
+
+createAdmin()
+```
+
+**Add npm script in `package.json`:**
+```json
+{
+  "scripts": {
+    "setup:admin": "tsx scripts/create-admin.ts"
+  }
+}
+```
+
+#### 4.3 Configuration Updates
+
+**Update `next.config.ts`:**
+```typescript
+const nextConfig = {
+  output: process.env.NEXT_OUTPUT_MODE === 'export' ? 'export' : 'standalone',
+  // ... rest of config
+}
+```
+
+**Update `package.json`:**
+```json
+{
+  "scripts": {
+    "docker:build": "docker build -t krater .",
+    "docker:run": "docker-compose up",
+    "docker:stop": "docker-compose down"
+  }
+}
+```
+
+#### 4.4 Security Enhancements
+
+**Add rate limiting to API routes:**
+```bash
+npm install express-rate-limit
+```
+
+**Create `src/lib/rate-limit.ts`:**
+```typescript
+const rateLimitMap = new Map()
+
+export function rateLimit(limit = 10, window = 60000) {
+  return (identifier: string) => {
+    const now = Date.now()
+    const userLimit = rateLimitMap.get(identifier)
+
+    if (!userLimit) {
+      rateLimitMap.set(identifier, { count: 1, resetTime: now + window })
+      return true
+    }
+
+    if (now > userLimit.resetTime) {
+      rateLimitMap.set(identifier, { count: 1, resetTime: now + window })
+      return true
+    }
+
+    if (userLimit.count >= limit) {
+      return false
+    }
+
+    userLimit.count++
+    return true
+  }
+}
+```
+
+#### 4.5 Documentation
+
+**Create `docs/SELF_HOSTING.md`:**
+```markdown
+# Self-Hosting Krater
+
+## Prerequisites
+- Docker and Docker Compose installed
+- Git
+
+## Setup
+
+1. Clone the repository
+2. Create `.env` file with:
+   ```
+   BETTER_AUTH_SECRET=your_random_secret_key_here
+   BETTER_AUTH_URL=http://your-domain.com
+   ADMIN_PASSWORD=your_secure_admin_password
+   DATABASE_URL=file:./krater.db
+   ```
+3. Generate a secure secret:
+   ```bash
+   openssl rand -base64 32
+   ```
+4. Build and run:
+   ```bash
+   docker-compose up -d
+   ```
+5. Initialize database and create admin user (first time only):
+   ```bash
+   # Access the container
+   docker exec -it krater_krater_1 sh
+
+   # Generate and run migrations
+   npx @better-auth/cli generate
+   npx @better-auth/cli migrate
+
+   # Create admin user
+   npm run setup:admin
+   ```
+6. Access at http://localhost:3000
+7. Login at http://localhost:3000/login
+   - Email: `admin@krater.local`
+   - Password: (from your `.env` ADMIN_PASSWORD)
+
+## Configuration
+- `BETTER_AUTH_SECRET`: Secret key for auth encryption
+- `BETTER_AUTH_URL`: Base URL of your deployment
+- `ADMIN_PASSWORD`: Password for admin access
+- `DATABASE_URL`: SQLite database path (use file:./krater.db for local file)
+- `PORT`: Server port (default 3000)
+
+## Data Persistence
+- Cover images: `./public/covers` (mounted as volume)
+- Library data: `./public/data` (mounted as volume)
+- Auth database: `./krater.db` (mounted as volume)
+
+## Backup
+```bash
+tar -czf krater-backup.tar.gz public/covers public/data krater.db
+```
+
+## Troubleshooting
+
+**Cannot login:**
+- Ensure admin user is created in the database
+- Check `ADMIN_PASSWORD` matches in `.env` and database
+- Verify `BETTER_AUTH_SECRET` is set and consistent
+
+**Session expires immediately:**
+- Check `BETTER_AUTH_URL` matches your actual URL
+- Verify cookies are being set (check browser DevTools)
+```
 
 ### Implementation Steps
 
-#### 5.1 Design Hook Strategy
+1. Install Better Auth: `npm install better-auth better-sqlite3`
+2. Create auth configuration (`src/lib/auth.ts`)
+3. Create API route handler (`src/app/api/auth/[...all]/route.ts`)
+4. Create auth client (`src/lib/auth-client.ts`)
+5. Generate database schema: `npx @better-auth/cli generate`
+6. Run migration: `npx @better-auth/cli migrate`
+   - **⚠️ CHECKPOINT:** If migration fails or tables exist, ask for help before proceeding
+7. Create login page (`src/app/login/page.tsx`)
+8. Update middleware with Better Auth session checks
+9. Create `useAuth` hook for client-side
+10. Test basic auth flow locally (login/logout)
+    - **⚠️ CHECKPOINT:** If auth doesn't work after 30 min, ask for help
+11. Create Dockerfile
+12. Create docker-compose.yml with database volume
+13. Create .dockerignore
+14. Update next.config.ts for standalone output
+15. Add rate limiting to API routes
+16. Create self-hosting documentation
+17. Test Docker build and run locally
+    - **⚠️ CHECKPOINT:** If Docker build fails multiple times, ask for help
+18. Create admin user in database
+19. Test authentication flow (login/logout)
+20. Verify API routes are protected
+21. Verify file uploads persist to volumes
+22. Test Chrome extension with auth
+    - **⚠️ CHECKPOINT:** If extension can't connect, ask for help with CORS/auth config
 
-**Decision Points:**
-1. **Which hook to use:**
-   - `prepare-commit-msg` - runs before commit message editor (allows analysis of staged changes)
-   - `pre-commit` - runs before commit is created (existing hook in project)
-   - **Choice:** `prepare-commit-msg` - can analyze changes and prompt user if needed
+### Testing
+- Build Docker image successfully
+- Run container and access app
+- Test authentication (login/logout)
+- Test API endpoints with auth
+- Upload file and verify persistence
+- Restart container and verify data persists
+- Test Chrome extension connection to self-hosted instance
+- Test rate limiting
 
-2. **Bump strategy:**
-   - **Automatic:** Analyze commit message/files changed to determine bump type
-   - **Interactive:** Prompt user to select bump type
-   - **Hybrid:** Suggest bump type based on analysis, allow override
-   - **Choice:** Hybrid approach - smart suggestions with user confirmation
+**Playwright MCP Verification:**
+- Navigate to `/login`
+- Fill in password field and submit form
+- Verify redirect to dashboard/settings after login
+- Test protected routes require authentication
+- Navigate to settings and verify admin features visible
+- Test logout functionality
+- Verify redirect to login after logout
+- Take screenshots of login flow
 
-3. **Analysis method:**
-   - Analyze commit message for keywords (feat:, fix:, BREAKING CHANGE:)
-   - Analyze file changes (API routes = minor, bug fixes = patch)
-   - Combine both signals for best accuracy
+---
 
-#### 5.2 Create Version Bump Script
+## Task 5: Investigate - Last.fm Integration
 
-**File:** `scripts/bump-version.js`
+**Priority:** Medium
+**Complexity:** Complex
+**Files:** Create `src/lib/lastfm/`, `src/app/stats/`, `src/hooks/use-lastfm.ts`, `src/app/api/lastfm/`
 
-1. **Create Node.js script:**
-   ```javascript
-   #!/usr/bin/env node
+### Problem
+Add Last.fm integration to show listening stats and suggest albums based on scrobble history.
 
-   const fs = require('fs')
-   const { execSync } = require('child_process')
-   const readline = require('readline')
+### Architecture Overview
 
-   // Script implementation
+#### 5.1 Last.fm API Setup
+
+**Register app at https://www.last.fm/api/account/create**
+- Get API key and shared secret
+- Set callback URL for OAuth
+
+**Add environment variables:**
+```
+LASTFM_API_KEY=your_api_key
+LASTFM_API_SECRET=your_api_secret
+```
+
+#### 5.2 Data Matching Strategy
+
+**Approach: Artist + Album Name Fuzzy Matching**
+
+**Create `src/lib/lastfm/matching.ts`:**
+```typescript
+import Fuse from 'fuse.js'
+import type { Release } from '@/lib/data'
+
+interface LastFmAlbum {
+  name: string
+  artist: string
+  playcount: number
+  mbid?: string
+}
+
+function normalizeString(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .trim()
+}
+
+export function matchReleaseToLastFm(
+  release: Release,
+  artists: Artist[],
+  lastFmAlbums: LastFmAlbum[]
+): LastFmAlbum | null {
+  const releaseTitle = normalizeString(release.title)
+  const releaseArtists = release.artistRymIds
+    .map(id => artists.find(a => a.rymId === id))
+    .filter(Boolean)
+    .map(a => normalizeString(a.displayName))
+
+  // First try exact match
+  for (const lfAlbum of lastFmAlbums) {
+    const lfTitle = normalizeString(lfAlbum.name)
+    const lfArtist = normalizeString(lfAlbum.artist)
+
+    if (releaseTitle === lfTitle && releaseArtists.some(a => a === lfArtist)) {
+      return lfAlbum
+    }
+  }
+
+  // Fall back to fuzzy match with Fuse.js
+  const fuse = new Fuse(lastFmAlbums, {
+    keys: ['name', 'artist'],
+    threshold: 0.3,
+  })
+
+  const query = `${release.title} ${releaseArtists.join(' ')}`
+  const results = fuse.search(query)
+
+  return results.length > 0 ? results[0].item : null
+}
+```
+
+#### 5.3 API Routes
+
+**Create `src/app/api/lastfm/connect/route.ts`:**
+```typescript
+export async function GET(request: Request) {
+  const authUrl = `http://www.last.fm/api/auth/?api_key=${process.env.LASTFM_API_KEY}&cb=${callbackUrl}`
+  return NextResponse.redirect(authUrl)
+}
+```
+
+**Create `src/app/api/lastfm/callback/route.ts`:**
+```typescript
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const token = searchParams.get('token')
+
+  // Exchange token for session key
+  const sessionKey = await getSessionKey(token)
+
+  // Store in encrypted cookie or database
+  // Redirect to settings
+}
+```
+
+**Create `src/app/api/lastfm/stats/route.ts`:**
+```typescript
+export async function GET(request: Request) {
+  const sessionKey = await getLastFmSession(request)
+
+  // Fetch user's top albums from Last.fm
+  const topAlbums = await fetchUserTopAlbums(sessionKey)
+
+  // Fetch library data
+  const { releases, artists } = await getLibraryData()
+
+  // Match Last.fm albums to library releases
+  const matchedStats = releases.map(release => {
+    const match = matchReleaseToLastFm(release, artists, topAlbums)
+    return {
+      release,
+      playcount: match?.playcount || 0,
+      lastScrobbled: match?.lastScrobbled,
+    }
+  })
+
+  // Sort by playcount
+  const mostPlayed = matchedStats
+    .filter(s => s.playcount > 0)
+    .sort((a, b) => b.playcount - a.playcount)
+    .slice(0, 20)
+
+  const leastPlayed = matchedStats
+    .filter(s => s.playcount === 0)
+
+  return NextResponse.json({ mostPlayed, leastPlayed })
+}
+```
+
+**Create `src/app/api/lastfm/suggestions/route.ts`:**
+```typescript
+export async function GET(request: Request) {
+  const sessionKey = await getLastFmSession(request)
+  const { releases } = await getLibraryData()
+
+  // Fetch user's top albums from Last.fm
+  const topAlbums = await fetchUserTopAlbums(sessionKey, { limit: 100 })
+
+  // Filter out albums already in library
+  const suggestions = topAlbums
+    .filter(lfAlbum => {
+      return !releases.some(release => {
+        const match = matchReleaseToLastFm(release, artists, [lfAlbum])
+        return match !== null
+      })
+    })
+    .slice(0, 20)
+
+  return NextResponse.json({ suggestions })
+}
+```
+
+#### 5.4 Frontend Components
+
+**Create `src/app/stats/page.tsx`:**
+```tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useLastFmStats } from '@/hooks/use-lastfm'
+import { MusicTile } from '@/components'
+import { PageHeader } from '@/components'
+
+export default function StatsPage() {
+  const [timeRange, setTimeRange] = useState<'1month' | '3month' | 'overall'>('1month')
+  const { mostPlayed, leastPlayed, isLoading, error } = useLastFmStats(timeRange)
+
+  return (
+    <div className="container mx-auto p-4">
+      <PageHeader title="Listening Stats" />
+
+      <div className="mb-4">
+        <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
+          <option value="1month">Last Month</option>
+          <option value="3month">Last 3 Months</option>
+          <option value="overall">All Time</option>
+        </select>
+      </div>
+
+      <section>
+        <h2>Most Played from Library</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {mostPlayed.map(({ release, playcount }) => (
+            <div key={release.rymId}>
+              <MusicTile {...release} />
+              <p className="text-sm text-gray-600">{playcount} plays</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <h2>Not Yet Played</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {leastPlayed.map(({ release }) => (
+            <MusicTile key={release.rymId} {...release} />
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+```
+
+**Create `src/hooks/use-lastfm.ts`:**
+```typescript
+import useSWR from 'swr'
+
+export function useLastFmStats(timeRange: string) {
+  const { data, error, isLoading } = useSWR(
+    `/api/lastfm/stats?timeRange=${timeRange}`,
+    fetcher
+  )
+
+  return {
+    mostPlayed: data?.mostPlayed || [],
+    leastPlayed: data?.leastPlayed || [],
+    isLoading,
+    error
+  }
+}
+
+export function useLastFmSuggestions() {
+  const { data, error, isLoading } = useSWR('/api/lastfm/suggestions', fetcher)
+
+  return {
+    suggestions: data?.suggestions || [],
+    isLoading,
+    error
+  }
+}
+
+export function useLastFmConnection() {
+  const { data, error, mutate } = useSWR('/api/lastfm/user', fetcher)
+
+  const connect = () => {
+    window.location.href = '/api/lastfm/connect'
+  }
+
+  const disconnect = async () => {
+    await fetch('/api/lastfm/disconnect', { method: 'POST' })
+    mutate()
+  }
+
+  return {
+    user: data?.user,
+    isConnected: !!data?.user,
+    connect,
+    disconnect,
+    error
+  }
+}
+```
+
+#### 5.5 Settings Integration
+
+**Update `src/app/settings/page.tsx`:**
+```tsx
+import { useLastFmConnection } from '@/hooks/use-lastfm'
+
+// Inside component:
+const { user, isConnected, connect, disconnect } = useLastFmConnection()
+
+// In render:
+<section>
+  <h2>Last.fm Integration</h2>
+  {isConnected ? (
+    <div>
+      <p>Connected as: {user.username}</p>
+      <button onClick={disconnect}>Disconnect</button>
+    </div>
+  ) : (
+    <button onClick={connect}>Connect Last.fm</button>
+  )}
+</section>
+```
+
+#### 5.6 Main Menu Integration
+
+**Update `src/app/page.tsx`:**
+Add new menu option:
+```tsx
+<MenuItem href="/stats" startIcon={BarChart}>
+  Listening Stats
+</MenuItem>
+```
+
+### Implementation Steps
+
+1. Register Last.fm API application
+   - **⚠️ CHECKPOINT:** If API registration unclear, ask for credentials/guidance
+2. Install dependencies: `npm install fuse.js`
+3. Create Last.fm API client (`src/lib/lastfm/api.ts`)
+4. Create matching utility (`src/lib/lastfm/matching.ts`)
+5. Implement OAuth flow (connect/callback routes)
+   - **⚠️ CHECKPOINT:** If OAuth flow stuck after 45 min, ask for help
+6. Test OAuth connection manually before proceeding
+7. Implement stats API route
+8. Implement suggestions API route
+9. Create stats page
+10. Create Last.fm hooks
+11. Update settings page with connection UI
+12. Update main menu with stats link
+13. Test connection flow
+14. Test matching algorithm accuracy
+    - **⚠️ CHECKPOINT:** If matching accuracy <70%, ask for algorithm review
+15. Test stats display
+
+### Testing
+- Connect Last.fm account
+- Verify OAuth flow works
+- Test matching algorithm with various album names
+- Check stats page displays correctly
+- Verify time range filter works
+- Test suggestions show albums not in library
+- Test disconnect functionality
+- Handle API rate limits gracefully
+
+**Playwright MCP Verification:**
+- Navigate to `/settings`
+- Verify Last.fm connection section exists
+- Click "Connect Last.fm" button
+- Verify OAuth redirect (or mock for testing)
+- Navigate to `/stats` after connection
+- Take screenshot of stats page
+- Test time range selector dropdown
+- Verify most played and least played sections render
+- Take screenshots of different time ranges
+
+---
+
+## Task 6: Chore - Remove `/next` Claude Command ✅
+
+**Status:** ✅ COMPLETED (File already removed)
+**Priority:** Low
+**Complexity:** Simple
+**Files:** Delete `.claude/commands/next.md`, potentially update `CLAUDE.md`
+
+### Problem
+`/next` command no longer needed.
+
+### Implementation Steps
+
+1. Delete `.claude/commands/next.md`
+2. Check if `CLAUDE.md` references the command (search for "next" or "/next")
+3. Remove any references if found
+4. Commit with message: "chore: remove /next claude command"
+
+### Testing
+- Verify file deleted
+- Try using `/next` command → should not exist
+
+---
+
+## Task 7: Test - Make CI Coverage Non-Blocking ✅
+
+**Status:** ✅ COMPLETED (Commit: 5281427)
+**Priority:** Low
+**Complexity:** Simple
+**Files:** `vitest.config.ts`, potentially `.github/workflows/*.yml`
+
+### Problem
+CI fails when coverage thresholds not met. Coverage should be informational, not blocking.
+
+### Current State
+- `vitest.config.ts:29-34` defines thresholds
+- Thresholds cause test command to exit with non-zero code when not met
+
+### Solution
+Remove coverage thresholds from config.
+
+### Implementation Steps
+
+1. **Update `vitest.config.ts`:**
+   ```typescript
+   export default defineConfig({
+     plugins: [react()],
+     test: {
+       environment: 'happy-dom',
+       globals: true,
+       setupFiles: ['./vitest.setup.ts'],
+       exclude: ['**/e2e/**', '**/node_modules/**'],
+       coverage: {
+         provider: 'v8',
+         reporter: ['text', 'json', 'html'],
+         exclude: [
+           'node_modules/',
+           'build/',
+           '.next/',
+           '*.config.ts',
+           '*.config.js',
+           '*.config.mjs',
+           '**/*.d.ts',
+           'src/app/manifest.ts',
+           'chrome-extension/**',
+           'src/__tests__/**',
+           '.prettierrc.js',
+           'eslint.config.js',
+         ],
+         // Remove thresholds object entirely
+       },
+     },
+     resolve: {
+       alias: {
+         '@': path.resolve(__dirname, './src'),
+       },
+     },
+   })
    ```
 
-2. **Implement version bump logic:**
-   - Read current version from package.json
-   - Parse semantic version (major.minor.patch)
-   - Implement bump functions (bumpMajor, bumpMinor, bumpPatch)
-   - Write updated version back to package.json
+2. **If CI workflow exists (`.github/workflows/test.yml`):**
+   - No changes needed if using `npm test`
+   - Coverage report still generated but doesn't fail build
 
-3. **Implement change analysis:**
-   - Get staged files: `git diff --cached --name-only`
-   - Get commit message (if provided)
-   - Analyze commit message for conventional commit keywords:
-     - `BREAKING CHANGE:` or `!` → major
-     - `feat:` → minor
-     - `fix:` → patch
-   - Analyze files changed:
-     - API route changes → potentially minor
-     - Test-only changes → patch
-     - Documentation → patch
-     - Component changes → depends on context
-
-4. **Implement suggestion logic:**
-   ```javascript
-   function suggestBumpType(commitMsg, files) {
-     // Check commit message first
-     if (commitMsg.includes('BREAKING CHANGE') || commitMsg.includes('!:')) {
-       return 'major'
-     }
-     if (commitMsg.startsWith('feat:') || commitMsg.startsWith('feat(')) {
-       return 'minor'
-     }
-     if (commitMsg.startsWith('fix:') || commitMsg.startsWith('fix(')) {
-       return 'patch'
-     }
-
-     // Analyze files
-     const hasApiChanges = files.some(f => f.includes('api/'))
-     const hasNewComponents = files.some(f => f.includes('components/') && isNewFile(f))
-
-     if (hasNewComponents) return 'minor'
-     if (hasApiChanges) return 'minor'
-
-     return 'patch' // default
-   }
-   ```
-
-5. **Implement interactive prompt:**
-   ```javascript
-   async function promptUser(suggestion) {
-     const rl = readline.createInterface({
-       input: process.stdin,
-       output: process.stdout
-     })
-
-     return new Promise((resolve) => {
-       rl.question(
-         `Suggested version bump: ${suggestion}\nSelect bump type (major/minor/patch/skip) [${suggestion}]: `,
-         (answer) => {
-           rl.close()
-           resolve(answer.trim() || suggestion)
-         }
-       )
-     })
-   }
-   ```
-
-6. **Implement main flow:**
-   - Parse command line arguments
-   - Get staged changes
-   - Analyze changes
-   - Prompt user (if interactive)
-   - Bump version
-   - Stage package.json
-   - Exit with appropriate code
-
-7. **Handle edge cases:**
-   - No staged changes
-   - Invalid bump type
-   - User cancels (skip)
-   - package.json doesn't exist
-   - Git not available
-   - Non-interactive mode (CI)
-
-#### 5.3 Add Linting Check to Version Bump Script
-
-**File:** `scripts/bump-version.js`
-
-1. **Add lint check function:**
-   ```javascript
-   function runLint() {
-     console.log('Running lint check...')
-     try {
-       execSync('npm run lint', { stdio: 'inherit' })
-       return true
-     } catch (error) {
-       console.error('\n❌ Lint check failed!')
-       console.error('Please fix linting errors before committing.')
-       console.error('You can run "npm run lint" to see all errors.')
-       return false
-     }
-   }
-   ```
-
-2. **Integrate lint check into main flow:**
-   - Run lint check before prompting for version bump
-   - If lint fails, abort the version bump process
-   - Provide option to skip lint via CLI flag: `--no-lint`
-   - Add configuration in package.json to enable/disable lint check
-
-3. **Add CLI argument parsing:**
-   ```javascript
-   const args = process.argv.slice(2)
-   const skipLint = args.includes('--no-lint')
-   const commitMsg = args.find(arg => !arg.startsWith('--'))
-   ```
-
-4. **Update main flow:**
-   ```javascript
-   async function main() {
-     // Check if linting should run
-     if (!skipLint && config.lintBeforeBump !== false) {
-       const lintPassed = runLint()
-       if (!lintPassed) {
-         console.error('\nVersion bump cancelled due to lint errors.')
-         process.exit(1)
-       }
-       console.log('✅ Lint check passed!\n')
-     }
-
-     // Continue with version bump logic...
-   }
-   ```
-
-#### 5.4 Create Git Hook
-
-**File:** `.husky/prepare-commit-msg`
-
-1. **Create prepare-commit-msg hook:**
+3. **Test locally:**
    ```bash
-   #!/usr/bin/env sh
-   . "$(dirname -- "$0")/_/husky.sh"
-
-   # Get commit message file
-   COMMIT_MSG_FILE=$1
-   COMMIT_SOURCE=$2
-
-   # Skip if this is an amend, merge, or rebase
-   if [ "$COMMIT_SOURCE" = "merge" ] || [ "$COMMIT_SOURCE" = "squash" ]; then
-     exit 0
-   fi
-
-   # Only run on regular commits
-   if [ -z "$COMMIT_SOURCE" ]; then
-     # Read commit message (if provided via -m)
-     COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
-
-     # Run version bump script (includes linting)
-     node scripts/bump-version.js "$COMMIT_MSG"
-
-     # If script failed, abort commit
-     if [ $? -ne 0 ]; then
-       echo "Version bump failed or was cancelled"
-       exit 1
-     fi
-   fi
+   # Temporarily add code that lowers coverage
+   # Run tests
+   npm run test:coverage
+   # Verify tests pass even with lower coverage
+   # Verify coverage report still generated
+   # Revert test changes
    ```
 
-2. **Make hook executable:**
-   ```bash
-   chmod +x .husky/prepare-commit-msg
-   ```
-
-3. **Note on existing pre-commit hook:**
-   - The project already has a pre-commit hook
-   - Consider whether linting should run in pre-commit or prepare-commit-msg
-   - **Recommendation:** Keep linting in prepare-commit-msg as part of version bump
-   - This ensures code is clean before version is bumped
-   - If linting is already in pre-commit, make it optional in version bump script
-
-#### 5.5 Add Configuration
-
-**File:** `package.json`
-
-1. **Add version bump configuration:**
-   ```json
-   {
-     "versionBump": {
-       "enabled": true,
-       "interactive": true,
-       "lintBeforeBump": true,
-       "skipPaths": [
-         "README.md",
-         "docs/**",
-         "**/*.test.ts",
-         "**/*.test.tsx"
-       ]
-     }
-   }
-   ```
-
-2. **Add npm scripts:**
-   ```json
-   {
-     "scripts": {
-       "version:bump": "node scripts/bump-version.js",
-       "version:bump:no-lint": "node scripts/bump-version.js --no-lint",
-       "version:major": "node scripts/bump-version.js major",
-       "version:minor": "node scripts/bump-version.js minor",
-       "version:patch": "node scripts/bump-version.js patch"
-     }
-   }
-   ```
-
-3. **Configuration options:**
-   - `enabled`: Enable/disable version bumping
-   - `interactive`: Prompt user or use automatic detection
-   - `lintBeforeBump`: Run linting before version bump (default: true)
-   - `skipPaths`: Files that don't trigger version bump
-
-#### 5.6 Update Documentation
-
-**File:** `CLAUDE.md`
-
-1. **Add section on version management:**
-   ```markdown
-   ## Version Management
-
-   The project uses automated version bumping via git hooks. When you commit:
-
-   1. The hook runs linting to ensure code quality
-   2. Analyzes your changes and commit message
-   3. Suggests a version bump type (major/minor/patch)
-   4. Prompts for confirmation
-   5. Updates package.json automatically
-
-   **Conventional Commit Format:**
-   - `feat: description` → minor bump
-   - `fix: description` → patch bump
-   - `feat!: description` or with `BREAKING CHANGE:` → major bump
-
-   **Manual version bumping:**
-   ```bash
-   npm run version:major       # 1.0.0 → 2.0.0
-   npm run version:minor       # 1.0.0 → 1.1.0
-   npm run version:patch       # 1.0.0 → 1.0.1
-   npm run version:bump:no-lint # Skip lint check
-   ```
-
-   **Skipping version bump:**
-   - Select "skip" when prompted
-   - Or use `git commit --no-verify`
-
-   **Skipping lint check:**
-   - Use `npm run version:bump:no-lint` for manual bumps
-   - Or set `lintBeforeBump: false` in package.json config
-   ```
-
-2. **Update development guidelines:**
-   - Recommend using conventional commit format
-   - Explain when to use major/minor/patch
-   - Document lint check behavior
-   - Explain skip options
-
-#### 5.7 Testing
-
-1. **Unit tests for bump script:**
-   - Create test file: `scripts/__tests__/bump-version.test.js`
-   - Test version parsing
-   - Test bump functions (major, minor, patch)
-   - Test suggestion logic
-   - Test lint check function
-   - Test CLI argument parsing
-   - Test edge cases
-
-2. **Integration tests:**
-   - Test hook triggers on commit
-   - Test with different commit messages
-   - Test with different file changes
-   - Test skip functionality
-   - Test manual npm scripts
-   - Test lint check integration
-   - Test --no-lint flag
-
-3. **Manual testing:**
-   - Make a feat commit (should run lint then suggest minor)
-   - Make a fix commit (should run lint then suggest patch)
-   - Make a breaking change commit (should suggest major)
-   - Test with failing lint (should abort)
-   - Test skipping version bump
-   - Test skipping lint check (--no-lint)
-   - Test --no-verify bypass
-   - Verify package.json updated correctly
-   - Verify version in git log
-   - Test lint check feedback is clear
-
-### Deliverables
-- Automated version bumping on commit
-- Integrated linting before version bump
-- Intelligent analysis of changes
-- Interactive prompts with suggestions
-- Support for conventional commits
-- Configuration options (including lint toggle)
-- Manual bump scripts with lint options
-- Updated documentation
-- Test coverage
-
-### Testing Checklist
-- [ ] Hook triggers on regular commits
-- [ ] Hook skips on merge/rebase commits
-- [ ] Lint check runs before version bump
-- [ ] Lint failures prevent version bump
-- [ ] Lint check can be skipped with --no-lint
-- [ ] Analyzes commit message correctly
-- [ ] Suggests appropriate bump type
-- [ ] Interactive prompt works
-- [ ] User can override suggestion
-- [ ] User can skip bump
-- [ ] package.json updated correctly
-- [ ] Changes staged automatically
-- [ ] --no-verify bypasses hook
-- [ ] Manual npm scripts work
-- [ ] Manual scripts support --no-lint flag
-- [ ] Configuration options work (lintBeforeBump)
-- [ ] Documentation clear and complete
-- [ ] Works in non-interactive mode (CI)
-- [ ] Lint error messages are helpful
+### Testing
+- Run `npm run test:coverage`
+- Verify tests pass regardless of coverage percentage
+- Verify coverage report still generated in terminal and HTML
+- Check CI pipeline passes
 
 ---
 
-## Implementation Order
+## Implementation Priority Order
 
-**Recommended sequence to minimize conflicts and dependencies:**
+Recommended sequence:
 
-1. **Task 4: Remove Redundant Artist Info** (Simple, isolated change)
-2. **Task 2: Fix Info Button Position** (Simple UI fix)
-3. **Task 5: Version Bump Commit Hook** (Enables proper versioning for remaining tasks)
-4. **Task 3: JSON Editor Feature** (Complex feature, can test version bumping)
-5. **Task 1: Chrome Extension Improvements** (Complex, can be done in parallel)
+1. **Task 6** - Remove command (30 seconds)
+2. **Task 7** - Coverage config (2 minutes)
+3. **Task 3** - Cursor fix (5 minutes)
+4. **Task 1** - Image loading (30 minutes)
+5. **Task 2** - Layout optimization (1-2 hours)
+6. **Task 4** - Docker/self-hosting (4-6 hours)
+7. **Task 5** - Last.fm integration (8-12 hours)
 
-**Parallel work opportunities:**
-- Task 1 (Chrome Extension) and Task 3 (JSON Editor) can be worked on simultaneously as they don't overlap
-- Tasks 2 and 4 can be combined in a single commit if desired
+### Parallelization Opportunities
 
----
+**Phase 1: Quick wins (can run in parallel)**
+- Task 6 + Task 7 + Task 3 (all independent, simple changes)
+- Estimated time: 5 minutes (vs 37+ minutes sequential)
 
-## Post-Implementation
+**Phase 2: UI improvements (do sequentially)**
+- Task 1 then Task 2 (both affect layout/rendering, best done one at a time)
+- Estimated time: 2-3 hours
 
-### Verification Steps
-1. Run full test suite: `npm run test:all`
-2. Run linting: `npm run lint`
-3. Build production: `npm run build`
-4. Manual testing of all changed features
-5. Update MASTER_PLAN.md task statuses
-6. Update ROADMAP.md to mark completed items
+**Phase 3: Major features (do sequentially)**
+- Task 4 then Task 5 (both add infrastructure, Task 5 may need auth from Task 4)
+- Estimated time: 12-18 hours
 
-### Documentation Updates
-1. Update CLAUDE.md with new features
-2. Add JSON editor usage to README
-3. Document chrome extension improvements
-4. Update version management docs
-5. Add any new development guidelines
-
-### Release Preparation
-1. Test static export: `npm run export`
-2. Verify all changes work in production build
-3. Create release notes summarizing changes
-4. Tag release with new version
-5. Deploy to production
+**Aggressive parallelization (advanced):**
+If you're confident in your ability to manage conflicts:
+- Run Phase 1 tasks in parallel (Tasks 3, 6, 7)
+- While Phase 2 is running, begin research/planning for Phase 3
+- Task 4 and Task 5 could potentially run in parallel if Task 5 doesn't need auth initially
 
 ---
 
-## Notes
+## General Guidelines
 
-- All changes should follow the testing strategy established in Phase 1
-- Maintain 80%+ test coverage for new code
-- Run pre-commit hooks before committing
-- Use conventional commit messages
-- Update MASTER_PLAN.md as tasks progress
-- Document any deviations from this plan
+### Using Subagents for Parallel Work
+
+**Strategy:** Use subagents to speed up development when tasks are clearly separated and don't have dependencies or conflicts.
+
+**When to use subagents in parallel:**
+- ✅ Implementing completely separate features (e.g., Task 1 + Task 5)
+- ✅ Working on different files with no overlap (e.g., different API routes)
+- ✅ Simple, isolated tasks that can be done independently (e.g., Tasks 6 + 7)
+- ✅ UI components in different parts of the application
+- ✅ Tests for different modules simultaneously
+
+**When NOT to use subagents in parallel:**
+- ❌ Tasks that modify the same files (will cause merge conflicts)
+- ❌ Tasks with dependencies (one must complete before the other starts)
+- ❌ Tasks that share configuration or setup steps
+- ❌ Tasks that modify core infrastructure (middleware, auth, database schema)
+- ❌ When unclear about file overlaps or dependencies
+
+**Example parallelization opportunities from this plan:**
+
+**Good parallel combinations:**
+```
+# These are completely independent
+Task 6 (Remove /next command) + Task 7 (Coverage config)
+
+# These work on different parts of the codebase
+Task 1 (Image loading - constants + browse page) + Task 3 (Cursor fix - modal component)
+
+# Simple isolated changes
+Task 3 (Modal cursor) + Task 6 (Remove command) + Task 7 (Coverage config)
+```
+
+**Bad parallel combinations:**
+```
+# Both modify middleware and auth system
+Task 4 (Docker/Auth) + Task 5 (Last.fm) ❌
+
+# Task 2 affects layout throughout app, Task 1 affects browse page
+Task 1 (Image loading) + Task 2 (Layout optimization) ❌
+
+# Both modify core infrastructure
+Task 2 (Layout context) + Task 4 (Auth system) ❌
+```
+
+**How to use subagents:**
+1. Identify truly independent tasks from the priority order
+2. Launch subagents with clear, specific instructions for each task
+3. Specify which files each agent should work on
+4. Tell agents to report back when complete
+5. Review all changes for conflicts before integrating
+6. If conflicts arise, resolve them manually or ask for help
+
+**Subagent communication:**
+- Each subagent works autonomously and reports back once
+- Cannot communicate with each other during execution
+- Main agent is responsible for coordination and conflict resolution
+- If subagent gets stuck, it should report the issue rather than wait indefinitely
+
+### When to Ask for Help
+
+**IMPORTANT:** If you encounter any of the following situations, STOP and ask the human supervisor for help or instructions:
+
+1. **Stuck in a loop** - Attempting the same solution repeatedly without progress
+2. **Taking too long** - Spending more than 30 minutes on a single step without meaningful progress
+3. **Implementation uncertainty** - Multiple valid approaches and unclear which to choose
+4. **Breaking changes** - Changes that might break existing functionality
+5. **Missing information** - Required credentials, API keys, or configuration details not available
+6. **Unexpected errors** - Errors that don't have clear solutions or documentation
+7. **Architecture questions** - Decisions that affect the overall system design
+8. **Scope creep** - Task expanding beyond the original plan
+
+**How to ask for help:**
+- Clearly describe what you're trying to accomplish
+- Explain what you've tried so far
+- Show relevant error messages or logs
+- Ask specific questions about the path forward
+- Suggest possible solutions if you have ideas
+
+**Example:**
+> "I've been trying to implement Better Auth database initialization for 30 minutes. I've tried running the migration command 3 times but keep getting 'table already exists' errors. I've looked at the Better Auth docs but they don't cover this scenario. Should I:
+> 1. Drop the existing tables and re-run migration?
+> 2. Use a different database adapter?
+> 3. Skip migration and manually create tables?
+>
+> What would you recommend?"
+
+### Code Quality
+- Follow existing patterns in codebase
+- Use TypeScript strictly (no `any`)
+- Prefer functional components with hooks
+- Memoize expensive computations
+- Add JSDoc comments to utilities
+
+### Testing Requirements
+- Unit tests for new utilities
+- Integration tests for API routes
+- Component tests for UI changes
+- Maintain >80% coverage on new code
+
+### Playwright MCP for User-Facing Changes
+**Important:** All user-facing changes MUST be verified using Playwright MCP before completion.
+
+The Playwright MCP provides browser automation tools that allow you to:
+- Navigate to pages and take screenshots
+- Interact with UI elements (click, type, hover)
+- Verify visual changes and behavior
+- Test responsive layouts
+- Capture page snapshots for accessibility testing
+
+**When to use Playwright MCP:**
+- After implementing UI changes
+- After fixing visual bugs
+- Before marking UI-related tasks as complete
+- To verify responsive behavior
+- To test user flows (login, navigation, forms)
+
+**Example Playwright MCP workflow:**
+1. Start dev server: `npm run dev`
+2. Use `mcp__playwright__browser_navigate` to open page
+3. Use `mcp__playwright__browser_snapshot` to inspect elements
+4. Use `mcp__playwright__browser_click` to interact with UI
+5. Use `mcp__playwright__browser_take_screenshot` to capture state
+6. Verify expected behavior matches actual behavior
+
+**Common Playwright MCP tools:**
+- `browser_navigate` - Navigate to URL
+- `browser_snapshot` - Get accessibility tree snapshot
+- `browser_take_screenshot` - Capture visual state
+- `browser_click` - Click elements
+- `browser_type` - Fill form fields
+- `browser_hover` - Hover over elements
+- `browser_resize` - Test responsive layouts
+
+### Performance
+- Profile before/after with React DevTools
+- Use React.memo for expensive components
+- Lazy load heavy dependencies
+- Optimize images with Next.js Image
+
+### Documentation
+- Update CLAUDE.md if architecture changes
+- Update README.md for user-facing features
+- Add inline comments for complex logic
+- Update ROADMAP.md when tasks completed
 
 ---
 
-**Document Version:** 1.0
+**Document Version:** 3.0
 **Last Updated:** 2025-10-11
-**Status:** Ready for implementation
+**Covers:** ROADMAP.md tasks
+**Key Updates in v3.0:**
+- Replaced NextAuth with Better Auth for self-hosting (Task 4)
+- Added Playwright MCP verification requirements for all user-facing changes
+- Added "When to Ask for Help" guidelines and checkpoints throughout implementation steps
+- Added comprehensive subagent parallelization strategy with examples of good/bad combinations
+- Included parallelization phases in implementation priority order

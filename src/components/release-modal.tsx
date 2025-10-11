@@ -154,7 +154,7 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
             <div className="flex flex-col sm:flex-row gap-2 sm:justify-end mt-4">
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-sm font-medium text-(--foreground) bg-(--card) border border-(--border) rounded-md hover:bg-(--item) focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-(--foreground) bg-(--card) border border-(--border) rounded-md hover:bg-(--item) focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors cursor-pointer"
               >
                 Close
               </button>
@@ -163,7 +163,7 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
                 <button
                   onClick={handleRemove}
                   disabled={isRemoving}
-                  className="px-4 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+                  className="px-4 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer inline-flex items-center justify-center gap-2"
                 >
                   <Trash2 className="h-4 w-4" />
                   {isRemoving ? 'Removing...' : 'Remove from Library'}
