@@ -9,7 +9,7 @@ export const mockArtists: Artist[] = [
   {
     displayName: 'Aphex Twin',
     rymId: 'aphex-twin',
-    rymUrl: 'https://rateyourmusic.com/artist/aphex_twin',
+    rymUrl: 'https://rateyourmusic.com/artist/aphex-twin',
   },
   {
     displayName: 'Nine Inch Nails',

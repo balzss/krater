@@ -26,9 +26,9 @@ This project is **highly opinionated** and built around the way I like to organi
 
 - Showcase Your Collection – Browse your albums visually, just like a record shelf.
 - Random Discovery – Not sure what to listen to? Get a random recommendation.
-- Static & Fast – Generate a static site that loads instantly with no backend required.
-- RYM Integration – Add albums from [Rate Your Music](https://rateyourmusic.com/) with a Chrome extension.
-- Effortless Hosting – Easily deploy on GitHub Pages, Netlify, or Vercel.
+- Static & Fast – A plain static site with no backend. The whole library is one JSON file.
+- RYM Integration – Add albums from [Rate Your Music](https://rateyourmusic.com/) with a browser extension (Chrome or Firefox). It adds them to your local clone and you commit the result.
+- Free Hosting – Published with GitHub Pages by a GitHub Actions workflow.
 
 ## Live Demo
 
@@ -36,86 +36,92 @@ You can see an example of a deployed collection here: [https://krater.bsaros.com
 
 ## Project Status
 
-**Krater is an evolving project!**
+**Krater is a personal project.** It is built for one person's collection, so there are no accounts, logins, or servers. The repository is public because the site is public.
 
-- Expect frequent updates and improvements.
-- Some features are still in development.
-- Breaking changes may happen as it matures.
-- See [ROADMAP](ROADMAP.md) for planned features
+- See [ROADMAP](ROADMAP.md) for what is planned and [PLAN](PLAN.md) for the current work.
 
 ## How It Works
 
-1.  **Data Storage:** All release and artist information is stored in JSON files:
-    * `public/data/releases.json`
-    * `public/data/artists.json`
-2.  **Adding Releases:** You add releases manually by editing the data files. To simplify this, a Chrome extension is provided.
-3.  **Chrome Extension:** Allows you to visit a release page on Rate Your Music and click a button to send the data (artist, title, cover image) to your *local* Krater dev server, which then attempts to add it to your `releases.json` file.
-4.  **Static Site Generation:** The project uses Next.js to build into a set of static HTML, CSS, and JavaScript files suitable for static hosting.
-5.  **Deployment:** These static files can be hosted anywhere.
+1.  **Data:** The whole library lives in `public/data/libraryData.json` (releases and artists). Cover images are in `public/covers/`.
+2.  **Adding releases:** The browser extension reads a Rate Your Music release page and sends the release, its artists, and a WebP cover to your local dev server, which edits those files in your clone. It never runs git, so you review the change and commit it yourself.
+3.  **Publishing:** Every push to `main` runs `.github/workflows/deploy.yml`, which validates the data, runs the tests, builds the site, and publishes it to GitHub Pages.
+4.  **The site:** A [Vite](https://vite.dev) + React app that loads the JSON file in the browser.
 
 ## Getting Started
 
 ### Prerequisites
 
-* Node.js and npm (or pnpm/yarn) installed.
-* Git (for cloning).
-* Google Chrome (for the extension).
+* Node.js and npm.
+* Git.
+* Google Chrome or Firefox (for the extension).
 
-### Installation & Local Development
+### Local Development
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/balzss/krater.git # Replace with your repo URL if you fork it
-    cd krater
-    ```
-2.  **Install dependencies:**
-    ```bash
-    npm install # or pnpm install / yarn install
-    ```
-3.  **Create local env file:**
-    ```bash
-    echo NEXT_PUBLIC_IS_LOCALHOST=true >> .env.local # in the project root
-    ```
-4.  **Run the development server:**
+```bash
+git clone https://github.com/balzss/krater.git # or your own copy
+cd krater
+npm install
+npm run dev # http://127.0.0.1:5173
+```
+
+### Setting Up the Extension
+
+1.  **Load the extension.**
+    * Chrome: open `chrome://extensions/`, turn on **Developer mode**, click **Load unpacked**, and select the `extension` folder.
+    * Firefox: open `about:debugging#/runtime/this-firefox`, click **Load Temporary Add-on**, and select `extension/manifest.json`. Then open `about:addons`, select the extension, and allow its site access under **Permissions**. Temporary add-ons are removed when Firefox restarts.
+2.  **Check the address.** Click the Krater toolbar icon. The default, `http://127.0.0.1:5173`, is where `npm run dev` listens. The extension only talks to a dev server on this machine.
+
+There is no token and no account. The dev server only edits files in your clone.
+
+### Adding Releases
+
+1.  In your clone, start the dev server and leave it running:
     ```bash
     npm run dev
     ```
-    This will start the server at `http://localhost:3000/krater`.
+2.  Open a release page on `rateyourmusic.com` and click **Add to Krater**. If the button says **Krater dev server offline**, `npm run dev` isn't running. Start it and click the button again.
+3.  The release and its cover are now in `public/data/libraryData.json` and `public/covers/`. A Krater tab that is already open reloads by itself and shows the new release.
+4.  Review the change, then commit and push:
+    ```bash
+    git status
+    git add -A && git commit -m "Add Alfredo 2" && git push
+    ```
+    The deploy workflow publishes it.
+5.  The same button reads **Remove from Krater** for releases already in the library. Removing a release also removes its cover and any artist no other release uses. **Refresh data** re-reads the page and updates the entry.
 
-### Adding the Extension to Chrome
-
-1.  Open Google Chrome.
-2.  Go to `chrome://extensions/`.
-3.  Enable **"Developer mode"** using the toggle switch (usually in the top-right corner).
-4.  Click **"Load unpacked"**.
-5.  Navigate to the `chrome-extension` folder *within your cloned Krater project directory* and select it.
-6.  The Krater extension icon should appear in your browser toolbar.
-
-### Adding Releases using the Extension
-
-1.  **IMPORTANT:** Ensure your local development server (`npm run dev` at `http://localhost:3000`) is running. The extension sends data to this local server.
-2.  Navigate to a release page on `rateyourmusic.com`.
-3.  Click "Add to Krater" above the release title. It should attempt to extract the data and send it.
-4.  Check your `public/data/releases.json` file – the new release should be appended.
-5.  You can also remove releases with the extension if already added
+The extension's endpoint (`/__krater`) exists only while the dev server runs, never in the built site. It refuses any edit that would leave the library invalid, and it only accepts requests from the extension, not from web pages.
 
 ### Manual Data Entry
 
-You can always directly edit `public/data/releases.json` and `public/data/artists.json` following the existing data structure.
+You can edit `public/data/libraryData.json` directly. Artists are keyed by the slug of their Rate Your Music URL (`/artist/the-alchemist-2` becomes `the-alchemist-2`). Check your changes with:
 
-### Cover arts
+```bash
+npm run validate
+```
 
-Cover arts are located at `public/covers/` and a reference is stored for each release. The chrome extension also downloads the image present in rateyourmusic but feel free to use something from a different source. Just make sure the file name is matching with the reference.
+It reports unknown artists, missing covers, duplicate IDs, and invalid links. The deploy workflow runs the same check, so a broken library is never published.
+
+### Cover Art
+
+Covers are in `public/covers/` and each release references its file by name. The extension converts the Rate Your Music cover to WebP. If you add one by hand, the file name must match the reference exactly (case-sensitive, Unicode-normalized).
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server (also what the extension talks to) |
+| `npm run build` | Type check and build the site into `dist/` |
+| `npm run preview` | Serve the built site |
+| `npm run validate` | Check the library data and covers |
+| `npm test` | Run unit and component tests |
+| `npm run test:e2e` | Run the Playwright tests |
+| `npm run lint` | Check formatting with Prettier |
 
 ### Deployment
 
-1.  **Build the static site:**
-    ```bash
-    npm run build
-    ```
-2.  **Deploy the output:** The static files will be generated in the `build` directory by default but can be changed in `next.config.js` if needed.
-3.  Deploy the contents of the output directory (e.g., `build`) to your preferred static hosting provider (GitHub Pages, Netlify, Vercel, etc.).
-4.  For an example of deploying to GitHub Pages using GitHub Actions, see the `.github/workflows/deploy.yml` file in this repository.
+1.  In the repository settings, set **Pages > Source** to **GitHub Actions**.
+2.  Push to `main`. The workflow publishes the contents of `dist/`.
+3.  The site is built for the root of a domain (a custom domain, or `<user>.github.io`). To serve it from a subpath such as `/krater/`, set `VITE_BASE=/krater/` in the workflow's build step.
 
 ## Contributing
 

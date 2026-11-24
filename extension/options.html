@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Krater Extension Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body { font-family: sans-serif; padding: 10px; min-width: 350px; display: flex; justify-content: center; font-size: 100%; }
+      label { display: block; font-weight: bold;}
+      /* --- Modified to include password type --- */
+      input[type="text"], input[type="password"] {
+         width: 95%; padding: 5px; margin-top: 3px;
+      }
+      /* --- End Modification --- */
+      #status { margin-top: 4px; font-size: 0.8rem; color: green;}
+      button { margin-top: 16px; padding: 8px 15px; cursor: pointer;}
+      .container {
+        max-width: 600px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .switch-container { display: flex; align-items: center; margin-top: 16px; gap: 4px}
+      .switch-container label { margin-right: 10px; margin-top: 0; font-weight: bold; }
+      .hint { font-size: 0.8em; color: #555; margin-top: 4px; }
+      .switch-container > input {margin: 0}
+
+      .docs-link-container {
+        text-align: center; /* Center the link text */
+        font-size: 0.8em; /* Make it slightly smaller */
+      }
+      .docs-link-container a {
+         color: #007bff; /* Standard link blue, or choose your own */
+         text-decoration: none; /* Optional: remove underline */
+      }
+       .docs-link-container a:hover {
+         text-decoration: underline; /* Add underline on hover */
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Krater Extension Settings</h2>
+
+      <div>
+        <label for="helperUrl">Krater dev server:</label>
+        <input type="text" id="helperUrl" placeholder="http://127.0.0.1:5173">
+        <div class="hint">
+          The address of <code>npm run dev</code> in your Krater clone. Leave the dev server
+          running while you add releases. It must run on this machine.
+        </div>
+        <div class="switch-container">
+          <input type="checkbox" id="isEnabled">
+          <label for="isEnabled">Enable Extension</label>
+        </div>
+        <div class="hint">Show the Krater button on RateYourMusic release pages</div>
+      </div>
+
+      <div>
+        <label>Site access:</label>
+        <div id="access" class="hint">Checking...</div>
+        <button id="grant" type="button">Allow site access</button>
+        <div class="hint">
+          Firefox asks for this separately from installing. The extension needs it to read RateYourMusic
+          pages and to reach your local Krater dev server.
+        </div>
+      </div>
+
+      <div>
+        <button id="save">Save Settings</button>
+        <div id="status">&nbsp;</div>
+      </div>
+
+    </div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

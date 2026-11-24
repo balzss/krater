@@ -12,6 +12,6 @@ test.describe('Smoke Test', () => {
     await page.goto('/')
 
     // Check for version number in footer
-    await expect(page.locator('text=/v0\\.1/i')).toBeVisible()
+    await expect(page.locator('text=/v\\d+\\.\\d+/i')).toBeVisible()
   })
 })

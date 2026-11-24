@@ -1,11 +1,11 @@
 import { useState, useEffect, Fragment, useMemo, memo } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
 import type { Artist, Media } from '@/lib/data'
 import { BadgeInfo } from 'lucide-react'
-import { ActionButton, ReleaseModal } from '@/components'
+import { ActionButton } from './action-button'
+import { AppLink } from './app-link'
+import { ReleaseModal } from './release-modal'
 import { COVERS_PATH } from '@/lib/constants'
-import { useRemoveRelease, useMediaPreference } from '@/hooks'
+import { useMediaPreference } from '@/hooks'
 import { getPreferredMediaUrl } from '@/lib/media-utils'
 
 interface MusicTileProps {
@@ -34,7 +34,6 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
   const [showInfoBtn, setShowInfoBtn] = useState<boolean>(false)
   const [isTouchDevice, setIsTouchDevice] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { removeRelease, isAdmin } = useRemoveRelease()
   const { preferredPlayer, isLoaded } = useMediaPreference()
 
   const mediaUrl = useMemo(
@@ -46,10 +45,6 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
     setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches)
   }, [])
 
-  const handleRemove = async () => {
-    await removeRelease(rymId)
-  }
-
   return (
     <div
       data-testid="music-tile"
@@ -57,35 +52,36 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
       onMouseEnter={() => setShowInfoBtn(true)}
       onMouseLeave={() => setShowInfoBtn(false)}
     >
-      <Link
+      <AppLink
         className="flex relative w-full aspect-square cursor-pointer"
         href={mediaUrl || '#'}
         target="_blank"
         tabIndex={-1}
       >
-        <Image
-          fill
+        <img
           src={`${COVERS_PATH}/${cover}`}
           alt={title}
-          className="transform transition hover:scale-101 ease-in-out duration-300"
-          priority={priority}
+          className="absolute inset-0 w-full h-full object-cover transform transition hover:scale-101 ease-in-out duration-300"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
         />
-      </Link>
+      </AppLink>
       <div className={`${compact ? 'p-2' : 'p-4'} relative`}>
-        <Link
+        <AppLink
           className={`font-bold text-gray-900 cursor-pointer hover:underline ${compact ? 'text-sm' : 'text-lg'}`}
           href={mediaUrl || '#'}
           target="_blank"
         >
           {title}
-        </Link>
+        </AppLink>
         <p className={`text-gray-600 ${compact ? 'text-xs pr-6' : 'text-sm pr-8'}`}>
           {artists.map((artist, index) => (
             <Fragment key={artist?.rymId || index}>
               {artist ? (
-                <Link className="hover:text-gray-500" href={`/browse?artist=${artist?.rymId}`}>
+                <AppLink className="hover:text-gray-500" href={`/browse?artist=${artist?.rymId}`}>
                   {artist?.displayName}
-                </Link>
+                </AppLink>
               ) : (
                 <span>Unknown</span>
               )}
@@ -113,8 +109,6 @@ const MusicTileComponent: React.FC<MusicTileProps> = ({
           media,
         }}
         artists={artists}
-        onRemove={handleRemove}
-        isAdmin={isAdmin}
       />
     </div>
   )

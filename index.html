@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Krater</title>
+    <meta name="description" content="Music Collection and Recommendations" />
+    <meta name="theme-color" content="#1a1a1a" />
+    <link rel="icon" href="/library-64.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      // Set the theme class before first paint to avoid a flash of the wrong theme
+      try {
+        var theme = localStorage.getItem('color-theme')
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        document.documentElement.classList.add(theme)
+      } catch (_e) {}
+    </script>
+  </head>
+  <body class="antialiased min-h-screen flex flex-col">
+    <div id="root" class="flex flex-col flex-1"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

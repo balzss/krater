@@ -2,6 +2,29 @@
 
 This directory contains utility scripts for the project.
 
+## library-helper.js
+
+The part of the dev server the browser extension talks to. It edits `public/data/libraryData.json` and `public/covers/` in this clone and never runs git. `vite.config.ts` mounts it at `/__krater` through `kraterHelperPlugin`, so it exists only while `npm run dev` is running.
+
+Endpoints (all `POST`, JSON): `/status`, `/save`, `/remove`. Requests need the `X-Krater: 1` header, must come from a `chrome-extension://` or `moz-extension://` origin (or have none), and must use a `127.0.0.1` or `localhost` host. Edits are validated with `validate-library.js` before anything is written, covers must be WebP, and open browser tabs are told to reload after a successful write.
+
+## validate-library.js
+
+Checks `public/data/libraryData.json` and `public/covers/` and exits with 1 on errors.
+
+- Errors: duplicate IDs, releases that reference unknown artists, missing cover files, invalid links, artist keys that don't match the slug in their `rymUrl`
+- Warnings: artists and covers that no release uses
+
+```bash
+npm run validate
+```
+
+The deploy workflow runs it before building, so a broken library is never published.
+
+## migrate-artist-slugs.js
+
+One-off migration from `[ArtistNNN]` artist IDs to RYM URL slugs. Dry run by default, `--write` applies it and requires a clean git state for the file. It does nothing when the library already uses slugs.
+
 ## bump-version.js
 
 Automated version bumping script that runs as a git hook.

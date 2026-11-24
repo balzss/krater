@@ -9,183 +9,102 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Focus on task descriptions, priorities, and dependencies instead
 - Use relative complexity indicators if needed (e.g., "simple", "complex", "requires careful consideration")
 
-**Master Plan:**
-- `MASTER_PLAN.md` is the single source of truth for all development activities
-- Always consult the master plan before starting work
+**Plan:**
+- `PLAN.md` is the single source of truth for development activities
+- Always consult the plan before starting work
 - Update task statuses as work progresses: `[ ]` TODO, `[~]` IN PROGRESS, `[x]` COMPLETED, `[!]` BLOCKED, `[-]` SKIPPED
-- Add new tasks, features, or fixes to the appropriate phase in the master plan
-- The master plan is a living document - keep it current and accurate
+- Add new tasks, features, or fixes to the plan; keep it current and accurate
 - Follow the defined order of operations (implement tests → verify tests → make improvements → verify again)
 
 ## Project Overview
 
-Krater is a Next.js-based static website generator for showcasing music collections. It mimics browsing a physical vinyl collection with a visual, album-focused interface. The project is highly opinionated: albums only (no tracks/playlists), minimalist data storage, and designed for static deployment.
+Krater is a static website for showcasing a music collection. It mimics browsing a physical vinyl collection with a visual, album-focused interface. The project is highly opinionated and **personal**: albums only (no tracks/playlists), minimal data, one user, public hosting on GitHub Pages.
 
 **Key Philosophy:**
 - Vinyl analogy for browsing experience
 - Albums only, no individual tracks or playlists
-- Minimal data: release name, artist, cover art, and Spotify link
-- Static site generation for fast, backend-free hosting
+- Minimal data: release name, artist, cover art, and listening links
+- No backend, no accounts. The repository is the database.
 
 ## Development Commands
 
 ```bash
-# Local development server (runs on http://localhost:3000/krater)
-npm run dev
-
-# Build for production (outputs to build/)
-npm run build
-
-# Build for static export (for GitHub Pages, Netlify, etc.)
-npm run export
-
-# Linting
-npm run lint
+npm run dev          # Vite dev server on http://127.0.0.1:5173 (port is pinned), also serves the extension helper
+npm run build        # Type check + production build into dist/ (also writes dist/404.html)
+npm run preview      # Serve the production build
+npm run typecheck    # tsc --noEmit
+npm run validate     # Validate public/data/libraryData.json and public/covers
+npm run lint         # Prettier check
+npm test             # Vitest (watch mode)
+npm run test:e2e     # Playwright (builds and previews the site itself)
 ```
-
-**Local Development Setup:**
-1. Create `.env.local` with: `NEXT_PUBLIC_IS_LOCALHOST=true`
-2. Run `npm run dev`
-3. Load the Chrome extension from `chrome-extension/` directory (Developer mode)
 
 ## Architecture
 
+### Stack
+
+Vite + React 19 + TypeScript + Tailwind CSS 4, routed with `wouter`. Output is a plain static site. No server code ships or runs.
+
 ### Data Model
 
-The application uses a dual-storage architecture:
+Everything lives in `public/data/libraryData.json` and `public/covers/`.
 
-**Static Mode (Production):** Data served from JSON files:
-- `public/data/libraryData.json` - Combined releases and artists data
-- `public/data/releases.json` - Legacy releases data
-- `public/data/artists.json` - Legacy artists data
-- `public/covers/` - Cover art images
-
-**Development Mode:** REST API endpoints manage data:
-- `/api/library-data` - Read/write libraryData.json
-- `/api/releases` - CRUD operations for releases (GET, POST, PUT, DELETE)
-- `/api/artists` - CRUD operations for artists (GET, POST, PUT, DELETE)
-- `/api/covers` - Cover image upload/management
-- `/api/health` - Health check for unused covers, artists, missing files
-- `/api/check` - Verify if release exists
-- `/api/auth/*` - Authentication endpoints for admin features
-
-Core types (`src/lib/data/index.ts`):
 ```typescript
 type Release = {
-  artistRymIds: string[]
+  artistRymIds: string[] // slugs of the artists, see below
   title: string
-  rymId: string
+  rymId: string // "[Album123]" from the RYM release page
   rymUrl?: string
-  cover: string
-  media: { spotify?: string }
+  cover: string // file name in public/covers/
+  media: { spotify?: string; appleMusic?: string; ... }
 }
 
 type Artist = {
   displayName: string
-  rymId: string
+  rymId: string // the slug of rymUrl, e.g. "the-alchemist-2"
   rymUrl?: string
 }
 
-type LibraryData = {
-  releases: Release[]
-  artists: Artist[]
-}
+type LibraryData = { releases: Release[]; artists: Artist[] }
 ```
 
-Server utilities (`src/lib/server/index.ts`) handle file I/O with proper error handling and Unicode normalization for cover filenames.
+**Artist keys are RYM URL slugs.** RYM no longer exposes numeric artist IDs on release pages. The field is still called `rymId` to keep the type stable. `scripts/validate-library.js` enforces that it matches the slug in `rymUrl`.
 
-### Chrome Extension Integration
+### Browser Extension and Dev-Server Helper
 
-The Chrome extension (`chrome-extension/`) allows adding releases from RateYourMusic.com:
-- Extracts release data (artist, title, cover) from RYM pages
-- Sends data to local dev server at `http://localhost:3000`
-- Downloads and uploads cover images automatically
-- Can also remove releases if already added
+`extension/` is a Manifest V3 extension for Chrome and Firefox. It never touches git or GitHub.
+- `content.js` reads a RYM release page and renders the Add/Remove/Refresh buttons.
+- `background.js` downloads the cover, converts it to WebP, and calls the helper. All network work is here so page CORS rules don't apply.
+- `lib/helper.js` is the client. It only accepts a loopback URL (default `http://127.0.0.1:5173`) and posts to `/__krater/*`.
+- `lib/library.js` holds the pure edit logic (add, remove, serialize), shared with the helper.
+- `scripts/library-helper.js` is the server side: `createHelperHandler` (the routes `/status`, `/save`, `/remove`) and `kraterHelperPlugin`, a Vite plugin that mounts it at `/__krater` on the dev server (`apply: 'serve'`, so it never exists in a build). `vite.config.ts` pins the dev server to `127.0.0.1:5173` with `strictPort` so the extension's address never moves.
+- The helper edits `public/data/libraryData.json` and `public/covers/` in the clone, validates the library before writing, and tells Vite to full-reload open tabs after a write. The user reviews and commits the result.
+- Settings (dev server URL, enabled) are in `chrome.storage.local`.
+- Tests: `src/__tests__/unit/extension/` and `src/__tests__/unit/scripts/library-helper.test.ts` (including one that runs the plugin inside a real Vite dev server).
 
-**Requirements:** Local dev server must be running for the extension to work.
+### Frontend
 
-### Frontend Architecture
+**Pages** (`src/pages/`): home, `/browse` (filter by `?artist=slug`), `/artists`, `/random`, `/card`, `/settings` (theme, layout, preferred media player).
 
-Built with Next.js 15 (App Router) + React 19 + TypeScript + Tailwind CSS 4.
+**Hooks** (`src/hooks/`): `useLibraryData` (fetches the JSON once and shares it), `useTheme`, `useLayout`, `useMediaPreference`, `useSearch`, `usePageTitle`.
 
-**Key Pages:**
-- `/` - Main landing page (welcome screen)
-- `/browse` - Browse all releases with filtering
-- `/artists` - Artist directory
-- `/random` - Random release discovery
-- `/card` - Individual release card view
-- `/settings` - Application settings (theme, library data management)
-
-**Custom Hooks:**
-- `useLibraryData()` - Fetch and manage library data with sorting options (asc/desc/random)
-- `useAuth()` - Authentication state management
-- `useHealthCheck()` - Check data integrity issues
-- `useTheme()` - Theme management wrapper around next-themes
-
-**UI Components** (`src/components/`):
-- `music-tile.tsx` - Release tile with cover art
-- `spotify-play-button.tsx` - Spotify integration
-- `search-input.tsx`, `clearable-tag.tsx` - Filtering UI
-- `action-button.tsx`, `menu-item.tsx` - Common UI elements
+**Components** (`src/components/`): `MusicTile`, `ReleaseModal`, `SearchInput`, `ActionButton`, `MenuItem`, `ClearableTag`, `PageHeader`, `SpotifyPlayButton`, and `AppLink` (client-side navigation for app routes, plain anchors for external links).
 
 ### Configuration
 
-**Next.js Config (`next.config.ts`):**
-- Custom `distDir: 'build'` (not default `.next`)
-- Supports both standard build and static export via `NEXT_OUTPUT_MODE=export`
-- CORS headers configured for API routes
-- Images set to `unoptimized: true` for static hosting compatibility
-- `basePath` configurable via env (currently empty string)
-
-**Middleware (`src/middleware.ts`):**
-- Admin session verification for `/api/health` endpoint
-- Cookie-based auth check (`admin-session` cookie)
-- Currently `isDevelopment` is hardcoded to `false`
+- `vite.config.ts` holds the build and Vitest config. `base` comes from `VITE_BASE` (default `/`).
+- GitHub Pages has no SPA fallback, so the build copies `index.html` to `404.html`.
+- `index.html` sets the theme class before first paint (storage key `color-theme`).
 
 ### Deployment
 
-The project supports static deployment to GitHub Pages, Netlify, or Vercel:
-
-1. Run `npm run export` to generate static files in `build/`
-2. Deploy the `build/` directory contents
-3. See `.github/workflows/deploy.yml` for GitHub Pages example
-
-**Important:** Cover images must exist in `public/covers/` and match filenames in the data JSON exactly (case-sensitive, Unicode-normalized).
+`.github/workflows/deploy.yml` runs on every push to `main`: validate data, run tests, build, publish `dist/` to GitHub Pages. Pushing the changes the helper made triggers it. Pull requests run `.github/workflows/test.yml`.
 
 ## Data Management
 
-**Adding Releases Manually:**
-Edit `public/data/libraryData.json` following the existing structure. Ensure:
-- Cover image exists at `public/covers/{cover-filename}`
-- Artists referenced by `artistRymIds` exist in the artists array
-- `rymId` is unique
-
-**Cover Art Management:**
-- Place images in `public/covers/`
-- Filenames are Unicode-normalized (NFC) and should match exactly
-- Extension handles downloading from RYM automatically
-
-**Data Integrity:**
-Use the `/api/health` endpoint to check for:
-- Unused cover files
-- Unused artists (not referenced by any release)
-- Missing cover files (referenced but not found)
-- Missing artists (referenced but not defined)
-
-## Current Development Status
-
-The project has completed Phase 1 (Testing Infrastructure) and Phase 2 (Code Improvements):
-- ✅ Comprehensive test suite implemented (192 tests passing)
-- ✅ Code refactored with improved organization and reduced duplication
-- ✅ CI/CD pipeline configured with GitHub Actions
-- ✅ Pre-commit hooks established
-
-See `MASTER_PLAN.md` for detailed status and `ROADMAP.md` for planned features.
-
-**Current Focus:**
-- Preparing for 0.1 release on GitHub
-- Library data editing in settings page
-- Address remaining E2E test issues
+- Add releases with the extension (run `npm run dev` first), or edit `public/data/libraryData.json` by hand and run `npm run validate`.
+- Cover filenames are case-sensitive and Unicode-normalized (NFC) and must match the `cover` field exactly.
+- `scripts/migrate-artist-slugs.js` was the one-off migration from `[ArtistNNN]` IDs to slugs.
 
 ## Version Management
 
@@ -239,51 +158,21 @@ The version bump behavior is configured in `package.json`:
 
 ## Testing
 
-The project has comprehensive test coverage across multiple levels:
+- Vitest for unit and component tests, Playwright for E2E, MSW for the data request, React Testing Library for components.
+- E2E tests run against the production build and the real library data.
 
-**Test Infrastructure:**
-- Vitest for unit, integration, and component tests
-- Playwright for E2E tests
-- MSW (Mock Service Worker) for API mocking
-- React Testing Library for component testing
-- Coverage reporting with @vitest/coverage-v8
-
-**Test Commands:**
-```bash
-npm test                 # Run tests in watch mode
-npm run test:coverage    # Generate coverage report
-npm run test:e2e         # Run E2E tests
-npm run test:all         # Run all tests (unit + integration + component + E2E)
-```
-
-**Test Coverage:**
-- 192 unit/integration/component tests (100% passing)
-- 35 E2E tests (31/37 passing, 84%)
-- Server utilities: 97.7% coverage
-- Custom hooks: 90.78% average coverage
-- Tested components: 100% coverage
-- API routes: 70-100% coverage (critical routes at 100%)
-
-**Test Structure:**
 ```
 src/__tests__/
-  ├── unit/          # Unit tests for lib and hooks
-  ├── integration/   # API route integration tests
-  ├── components/    # React component tests
-  ├── mocks/         # MSW handlers and test data
-  └── utils/         # Test utilities and helpers
-e2e/                 # Playwright E2E tests
+  ├── unit/          # hooks, scripts, extension lib
+  ├── components/    # component tests
+  ├── mocks/         # MSW handler and test data
+  └── utils/         # test utilities
+e2e/                 # Playwright tests
 ```
-
-**CI/CD:**
-- GitHub Actions workflow configured
-- Pre-commit hooks with Husky
-- Test execution time: ~2-3 seconds for unit/integration/component tests
-- Coverage badges in README
 
 ## Important Constraints
 
-- **RateYourMusic-centric:** Data model assumes RYM IDs and URLs
-- **Spotify-only:** Media player links currently hardcoded for Spotify
-- **No backend in production:** Static export means no API routes in deployed version
-- **Case-sensitive filenames:** Cover art filename matching is case-sensitive and Unicode-normalized
+- **RateYourMusic-centric:** the data model assumes RYM URLs and the extension scrapes RYM pages, so it breaks when RYM changes its markup.
+- **No backend:** anything that needs a secret must run locally, never in the site.
+- **Case-sensitive filenames:** cover art matching is exact.
+- **Dev-server helper:** anything that can reach the dev server could edit the library, so the helper requires `X-Krater: 1`, rejects any non-extension `Origin`, and checks `Host`. Keep those checks, and keep the dev server on loopback, when changing it.

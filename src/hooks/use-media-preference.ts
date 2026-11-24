@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, useEffect } from 'react'
 import { CONFIG, MEDIA_PLAYERS, MediaPlayer } from '@/lib/constants'
 

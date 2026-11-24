@@ -1,13 +1,10 @@
-'use client'
-
-import { FC, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import type { FC } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { X, ExternalLink, Trash2 } from 'lucide-react'
+import { X, ExternalLink } from 'lucide-react'
 import type { Artist, Media } from '@/lib/data'
 import { COVERS_PATH, MEDIA_PLAYERS } from '@/lib/constants'
 import { getAvailableMediaPlayers } from '@/lib/media-utils'
+import { AppLink } from './app-link'
 
 interface ReleaseModalProps {
   isOpen: boolean
@@ -21,37 +18,10 @@ interface ReleaseModalProps {
     media: Media
   }
   artists: (Artist | undefined)[]
-  onRemove?: () => Promise<void>
-  isAdmin?: boolean
 }
 
-export const ReleaseModal: FC<ReleaseModalProps> = ({
-  isOpen,
-  onClose,
-  release,
-  artists,
-  onRemove,
-  isAdmin = false,
-}) => {
-  const [isRemoving, setIsRemoving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
+export const ReleaseModal: FC<ReleaseModalProps> = ({ isOpen, onClose, release, artists }) => {
   const availablePlayers = getAvailableMediaPlayers(release.media)
-
-  const handleRemove = async () => {
-    if (!onRemove || !isAdmin) return
-
-    try {
-      setIsRemoving(true)
-      setError(null)
-      await onRemove()
-      onClose()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to remove release')
-    } finally {
-      setIsRemoving(false)
-    }
-  }
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
@@ -72,11 +42,11 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
 
             {/* Cover Image */}
             <div className="relative w-full aspect-square max-w-[400px] mx-auto rounded-lg overflow-hidden shadow-md">
-              <Image
-                fill
+              <img
                 src={`${COVERS_PATH}/${release.cover}`}
                 alt={release.title}
-                className="object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
+                decoding="async"
               />
             </div>
 
@@ -87,13 +57,13 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
                 {artists.map((artist, index) => (
                   <span key={artist?.rymId || index}>
                     {artist ? (
-                      <Link
+                      <AppLink
                         href={`/browse?artist=${artist.rymId}`}
                         className="hover:underline text-blue-600 dark:text-blue-400"
                         onClick={onClose}
                       >
                         {artist.displayName}
-                      </Link>
+                      </AppLink>
                     ) : (
                       'Unknown'
                     )}
@@ -143,13 +113,6 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
               )}
             </dl>
 
-            {/* Error Message */}
-            {error && (
-              <div className="rounded-md bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 p-3 text-sm">
-                {error}
-              </div>
-            )}
-
             {/* Footer Actions */}
             <div className="flex flex-col sm:flex-row gap-2 sm:justify-end mt-4">
               <button
@@ -158,17 +121,6 @@ export const ReleaseModal: FC<ReleaseModalProps> = ({
               >
                 Close
               </button>
-
-              {isAdmin && onRemove && (
-                <button
-                  onClick={handleRemove}
-                  disabled={isRemoving}
-                  className="px-4 py-2 text-sm font-medium text-white bg-rose-500 hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer inline-flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="h-4 w-4" />
-                  {isRemoving ? 'Removing...' : 'Remove from Library'}
-                </button>
-              )}
             </div>
           </div>
         </Dialog.Content>

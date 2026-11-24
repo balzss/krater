@@ -1,8 +1,8 @@
-export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || ''
-export const API_BASE_URL = `${BASE_PATH}/api`
+// Vite sets BASE_URL with a trailing slash; strip it so paths read as `${BASE_PATH}/covers`
+export const BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '')
 export const COVERS_PATH = `${BASE_PATH}/covers`
 export const DATA_PATH = `${BASE_PATH}/data`
-export const IS_STATIC_EXPORT = process.env.NEXT_OUTPUT_MODE === 'export'
+export const APP_VERSION = __APP_VERSION__
 
 export const MEDIA_PLAYERS = {
   spotify: {
@@ -47,10 +47,6 @@ export type MediaPlayer = keyof typeof MEDIA_PLAYERS
 export const CONFIG = {
   images: {
     priorityLoadCount: 16, // Increased from 8 to cover ~1.5 viewports
-  },
-  auth: {
-    cookieMaxAge: 7 * 24 * 60 * 60, // 7 days in seconds
-    cookieName: 'admin-session',
   },
   spotify: {
     codeVerifierLength: 128,

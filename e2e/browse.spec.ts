@@ -88,7 +88,7 @@ test.describe('Browse Page', () => {
 
   test('should clear artist filter when clicking X on tag', async ({ page }) => {
     // Navigate directly to artist filter
-    await page.goto('/browse?artist=[Artist1]')
+    await page.goto('/browse?artist=the-alchemist-2')
 
     // Wait for page to load
     await page.waitForTimeout(500)
@@ -120,10 +120,7 @@ test.describe('Browse Page', () => {
     const tiles = page.locator('[data-testid="music-tile"]')
     const tileCount = await tiles.count()
 
-    // Check first 8 tiles (or all tiles if less than 8)
-    const tilesToCheck = Math.min(8, tileCount)
-
-    // Count images with high priority (Next.js uses both fetchpriority and loading attrs)
+    // Count images with high priority (eager loading and high fetch priority)
     const priorityImages = await page
       .locator('img[fetchpriority="high"], img:not([loading="lazy"])')
       .count()

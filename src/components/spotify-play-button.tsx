@@ -5,9 +5,10 @@ import { CONFIG } from '@/lib/constants'
 
 // --- Configuration Constants ---
 const CLIENT_ID = CONFIG.spotify.clientId
-const isLocalhost = process.env.NEXT_PUBLIC_IS_LOCALHOST === 'true' // Check if running locally
 // The URL Spotify redirects the WebView back to after authorization.
-const REDIRECT_URI = isLocalhost ? 'http://localhost:3000/card' : 'https://krater.bsaros.com/card'
+const REDIRECT_URI = import.meta.env.DEV
+  ? `${window.location.origin}/card`
+  : 'https://krater.bsaros.com/card'
 const SPOTIFY_AUTHORIZE_ENDPOINT = 'https://accounts.spotify.com/authorize' // Spotify's authorization page URL
 const SPOTIFY_TOKEN_ENDPOINT = 'https://accounts.spotify.com/api/token' // Spotify's token exchange URL
 const SPOTIFY_API_BASE_URL = 'https://api.spotify.com/v1' // Base URL for Spotify Web API calls

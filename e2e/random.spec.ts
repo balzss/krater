@@ -17,10 +17,6 @@ test.describe('Random Page', () => {
     // Wait for initial release to load
     await page.waitForSelector('[data-testid="music-tile"]', { timeout: 10000 })
 
-    // Get initial release title
-    const initialTile = page.locator('[data-testid="music-tile"]')
-    const initialTitle = await initialTile.textContent()
-
     // Click roll button
     const rollButton = page.getByRole('button', { name: /roll/i })
     await rollButton.click()

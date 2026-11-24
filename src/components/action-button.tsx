@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { AppLink } from './app-link'
 import type { FC, ComponentProps } from 'react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -32,9 +32,9 @@ export const ActionButton: FC<ActionButtonProps> = ({
 
   if ('href' in rest && typeof rest.href === 'string') {
     return (
-      <Link {...rest} className={combinedClasses}>
+      <AppLink {...rest} className={combinedClasses}>
         <Icon size={size} />
-      </Link>
+      </AppLink>
     )
   }
 

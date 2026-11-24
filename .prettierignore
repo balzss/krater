@@ -2,9 +2,6 @@
 node_modules
 
 # Build output
-build
-.next
-out
 dist
 
 # Environment files
@@ -14,9 +11,6 @@ dist
 # Config files
 .prettierrc.js
 tsconfig.json
-next.config.ts
-tailwind.config.ts
-vitest.config.ts
 .prettierignore
 .gitignore
 
@@ -26,12 +20,9 @@ vitest.config.ts
 .husky
 
 # Docker
-.dockerignore
-Dockerfile
-docker-compose.yml
 
 # Chrome extension
-chrome-extension
+extension
 
 # IDE
 .vscode
@@ -60,7 +51,6 @@ public/*.ico
 public/*.webp
 
 # E2E test fixtures
-e2e/fixtures
 
 # Shell scripts
 *.sh
@@ -70,6 +60,7 @@ e2e/fixtures
 
 # JSON and YAML (keep as-is)
 *.json
+*.webmanifest
 *.yaml
 *.yml
 
